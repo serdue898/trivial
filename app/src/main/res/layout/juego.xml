@@ -20,7 +20,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
@@ -54,19 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="326dp"
-        android:layout_height="338dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="33dp"
-        android:text="TABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLERO"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <TextView
         android:id="@+id/textView2"
         android:layout_width="91dp"
         android:layout_height="100dp"
@@ -76,5 +63,17 @@
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gr_tablero"
+        android:layout_width="347dp"
+        android:layout_height="321dp"
+        app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.483">
+
+    </androidx.gridlayout.widget.GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

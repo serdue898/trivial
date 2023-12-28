@@ -1,4 +1,4 @@
-package com.example.trivialnavidad
+package com.example.trivialnavidad.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import com.example.trivialnavidad.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +50,12 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.mItm_instrucciones-> {
+            R.id.mItm_instrucciones -> {
                 verInstrucciones()
                 true
             }
 
-            R.id.mItm_acerca-> {
+            R.id.mItm_acerca -> {
                 acercaDe()
                 true
             }
