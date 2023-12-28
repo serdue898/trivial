@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val b_derecho = findViewById<Button>(R.id.b_derecho)
 
         val b_izquierdo = findViewById<Button>(R.id.b_izquierdo)
-
+ // rama
     }
 
 
