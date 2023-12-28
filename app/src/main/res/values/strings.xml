@@ -13,6 +13,9 @@
     <string name="t_tunroJugador">Turno del jugador: </string>
 
     <!-- botones de la vista principal -->
-    <string name="b_izquierdo">boton rojo</string>
-    <string name="b_derecho">boton negro</string>
+    <string name="bt_dado">tirar</string>
+    <string name="bt_clasificacion">clasificacion</string>
+    <string name="nombre_juego">Trivial</string>
+    <string name="bt_offline">offline</string>
+    <string name="bt_online">online</string>
 </resources>
