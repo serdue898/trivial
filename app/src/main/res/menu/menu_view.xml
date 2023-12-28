@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mItm_juegoNuevo"
+        android:title="@string/mItm_juegoNuevo" />
+    <item
+        android:id="@+id/mItm_guardar"
+        android:title="@string/mItm_guardar" />
+    <item
+        android:id="@+id/mItm_numJugadores"
+        android:title="@string/mItm_numJugadores" />
+    <item
+        android:id="@+id/mItm_instrucciones"
+        android:title="@string/mItm_instrucciones" />
+    <item
+        android:id="@+id/mItm_acerca"
+        android:title="@string/mItm_acerca" />
+</menu>

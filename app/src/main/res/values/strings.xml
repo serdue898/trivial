@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TrivialNavidad</string>
+    <!-- textos del menu-->
+    <string name="mItm_juegoNuevo">Partida Nueva</string>
+    <string name="mItm_guardar">Guardar Partida</string>
+    <string name="mItm_numJugadores">Elegir el número de jugadores</string>
+    <string name="mItm_instrucciones">Intrucciones del juego</string>
+    <string name="intrucciones">Mira que bien explicado esta el juego</string>
+    <string name="mItm_acerca">Acerca de...</string>
+    <string name="acercaDe">Juego desarrollado por Sergio Ramiro y Carlos Montequi</string>
+
+    <!-- campos de texto -->
+    <string name="t_tunroJugador">Turno del jugador: </string>
+
+    <!-- botones de la vista principal -->
+    <string name="b_izquierdo">boton rojo</string>
+    <string name="b_derecho">boton negro</string>
+</resources>
