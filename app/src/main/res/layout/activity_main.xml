@@ -6,75 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".app.MainActivity">
 
-    <TextView
-        android:id="@+id/t_tunroJugador"
-        android:layout_width="157dp"
-        android:layout_height="35dp"
-        android:text="@string/t_tunroJugador"
+    <FrameLayout
+        android:id="@+id/contenedor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.857"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/b_izquierdo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="524dp"
-        android:text="@string/b_izquierdo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <Button
-        android:id="@+id/b_derecho"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="524dp"
-        android:text="@string/b_derecho"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.725"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="326dp"
-        android:layout_height="338dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="33dp"
-        android:text="TABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLEROTABLERO"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="91dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="400dp"
-        android:text="AVATAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".app.MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/t_tunroJugador"
         android:layout_width="157dp"
@@ -18,51 +31,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.639" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+    <Button
+        android:id="@+id/bt_dado"
+        android:layout_width="72dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="84dp"
+        android:drawableEnd="@drawable/baseline_casino_24"
+        android:text="1 "
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.297"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/t_tunroJugador" />
 
     <Button
-        android:id="@+id/b_izquierdo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="524dp"
-        android:text="@string/b_izquierdo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        android:id="@+id/bt_clasificacion"
+        android:layout_width="63dp"
+        android:layout_height="53dp"
+        android:drawableEnd="@drawable/baseline_format_list_numbered_24"
 
-    <Button
-        android:id="@+id/b_derecho"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="524dp"
-        android:text="@string/b_derecho"
+        android:text="1 "
+        app:layout_constraintBottom_toBottomOf="@+id/bt_dado"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.725"
+        app:layout_constraintHorizontal_bias="0.613"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/bt_dado" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="91dp"
         android:layout_height="100dp"
-        android:layout_marginTop="400dp"
         android:text="AVATAR"
+        app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador" />
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gr_tablero"
@@ -71,8 +74,7 @@
         app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.483">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.gridlayout.widget.GridLayout>
 
