@@ -1,8 +1,8 @@
-package com.example.trivialnavidad.core.feature.principal
+package com.example.trivialnavidad.core.feature.principal.viewModel
 
 import android.content.Context
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.feature.juego.Juego
+import com.example.trivialnavidad.core.feature.juego.view.Juego
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trivialnavidad.app.MainActivity
 

@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.clasificacion
+package com.example.trivialnavidad.core.feature.clasificacion.view
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.t8_ej03_persistenciaapi.ui.adapter.ListaAdapter
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.clasificacion.viewModel.Comunicador
+import com.example.trivialnavidad.core.feature.clasificacion.viewModel.Metodos
 
 class Clasifiaccion : Fragment() {
     private var comunicador: Comunicador? = Metodos()

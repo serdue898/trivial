@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.content.Context
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida

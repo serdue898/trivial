@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.widget.ImageView
 import com.example.trivialnavidad.R

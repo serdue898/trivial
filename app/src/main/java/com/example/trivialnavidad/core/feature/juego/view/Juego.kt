@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.juego.view
 
 import android.content.Context
 import android.os.Bundle
@@ -15,11 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
-import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
+import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
+import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
+import com.example.trivialnavidad.core.feature.juego.viewModel.Metodos
 
 class Juego : Fragment() {
     private var comunicador: ComunicadorJuego? = Metodos()

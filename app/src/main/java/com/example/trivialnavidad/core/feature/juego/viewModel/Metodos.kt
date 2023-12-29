@@ -1,13 +1,12 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.clasificacion.Clasifiaccion
+import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
 
-class Metodos : ComunicadorJuego{
+class Metodos : ComunicadorJuego {
     override fun abrirClasificacion (jugadores: List<JugadorEnPartida>, context :Context){
 
 

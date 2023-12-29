@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.clasificacion
+package com.example.trivialnavidad.core.feature.clasificacion.viewModel
 
 import android.content.Context
 

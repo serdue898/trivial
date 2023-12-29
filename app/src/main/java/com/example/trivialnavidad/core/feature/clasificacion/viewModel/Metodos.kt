@@ -1,10 +1,10 @@
-package com.example.trivialnavidad.core.feature.clasificacion
+package com.example.trivialnavidad.core.feature.clasificacion.viewModel
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
-import com.example.trivialnavidad.core.feature.juego.Juego
+import com.example.trivialnavidad.core.feature.juego.view.Juego
 
 class Metodos: Comunicador {
     override fun volver( context: Context) {

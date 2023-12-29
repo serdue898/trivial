@@ -3,15 +3,9 @@ package com.example.trivialnavidad.app
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.conexion.onffline.BaseDatos
-import com.example.trivialnavidad.core.feature.juego.Juego
-import com.example.trivialnavidad.core.feature.principal.Principal
+import com.example.trivialnavidad.core.feature.juego.view.Juego
+import com.example.trivialnavidad.core.feature.principal.view.Principal
 
 class MainActivity : AppCompatActivity() {
     companion object {

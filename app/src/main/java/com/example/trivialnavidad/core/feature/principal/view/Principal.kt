@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.principal
+package com.example.trivialnavidad.core.feature.principal.view
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
+import com.example.trivialnavidad.core.feature.principal.viewModel.Metodos
 
 class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = Metodos()
