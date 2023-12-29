@@ -7,23 +7,27 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 
-class Conexion(context: Context) {
-    private val dbHelper: BaseDatos = BaseDatos(context)
+class Conexion(Context: Context) {
+    private val dbHelper: BaseDatos = BaseDatos(Context)
     companion object {
         private const val TABLE_JUGADORES = "jugador"
-        private const val KEY_ID_J = "id"
+        private const val KEY_ID_J = "id_jugador"
         private const val KEY_NOMBRE_J = "nombre"
         private const val KEY_AVATAR_J = "avatar"
 
         private const val TABLE_PARTIDA = "partida"
-        private const val KEY_ID_P = "id"
+        private const val KEY_ID_P = "id_partida"
         private const val KEY_NOMBRE_P = "nombre"
 
         private const val TABLE_JUGADOR_EN_PARTIDA = "jugador_en_partida"
         private const val KEY_CASILLA_ACTUAL = "casilla_actual"
         private const val KEY_JUGADOR_ACTUAL = "jugador_actual"
+        private const val KEY_juego1 = "juego1"
+        private const val KEY_juego2 = "juego2"
+        private const val KEY_juego3 = "juego3"
+        private const val KEY_juego4 = "juego4"
     }
-    fun agregarJugador(jugador: Jugador) {
+    fun agregarJugador(jugador: Jugador ) {
         val db = dbHelper.writableDatabase
 
         // Comprobar si el nombre del jugador ya existe en la base de datos
@@ -37,7 +41,6 @@ class Conexion(context: Context) {
             jugador.id = jugadorId.toInt()
         }
 
-        db.close()
     }
 
     private fun existeJugador(nombreJugador: String): Boolean {
@@ -49,7 +52,6 @@ class Conexion(context: Context) {
         val existe = cursor.count > 0
 
         cursor.close()
-        db.close()
 
         return existe
     }
@@ -61,7 +63,6 @@ class Conexion(context: Context) {
         }
         val partidaId = db.insert(TABLE_PARTIDA, null, values)
         partida.id = partidaId.toInt()
-        db.close()
     }
 
     fun agregarJugadorEnPartida(jugadorEnPartida: JugadorEnPartida) {
@@ -72,7 +73,6 @@ class Conexion(context: Context) {
             put(KEY_CASILLA_ACTUAL, jugadorEnPartida.casillaActual)
         }
         db.insert(TABLE_JUGADOR_EN_PARTIDA, null, values)
-        db.close()
     }
     fun obtenerPartidas(): List<Partida> {
         val db = dbHelper.readableDatabase
@@ -95,7 +95,6 @@ class Conexion(context: Context) {
         }
 
         cursor.close()
-        db.close()
 
         return listaPartidas
     }
@@ -106,29 +105,37 @@ class Conexion(context: Context) {
         val listaJugadoresEnPartida = mutableListOf<JugadorEnPartida>()
 
         val query = "SELECT * FROM $TABLE_JUGADOR_EN_PARTIDA " +
-                "WHERE $KEY_ID_P = ? "
+                "WHERE $KEY_ID_P = $partidaId "
 
-        val cursor: Cursor = db.rawQuery(query, arrayOf(partidaId.toString()))
+        val cursor: Cursor = db.rawQuery(query, null)
 
         while (cursor.moveToNext()) {
             val idJugadorIndex = cursor.getColumnIndex(KEY_ID_J)
             val idPartidaIndex = cursor.getColumnIndex(KEY_ID_P)
             val casillaActualIndex = cursor.getColumnIndex(KEY_CASILLA_ACTUAL)
             val jugadorActualIndex = cursor.getColumnIndex(KEY_JUGADOR_ACTUAL)
+            val juego1Index = cursor.getColumnIndex(KEY_juego1)
+            val juego2Index = cursor.getColumnIndex(KEY_juego2)
+            val juego3Index = cursor.getColumnIndex(KEY_juego3)
+            val juego4Index = cursor.getColumnIndex(KEY_juego4)
 
             if (idJugadorIndex != -1 && idPartidaIndex != -1 && casillaActualIndex != -1 && jugadorActualIndex != -1) {
                 val idJugador = cursor.getInt(idJugadorIndex)
                 val idPartida = cursor.getInt(idPartidaIndex)
                 val casillaActual = cursor.getInt(casillaActualIndex)
                 val jugadorActual = cursor.getInt(jugadorActualIndex) == 1
+                val juego1 = cursor.getInt(juego1Index)==1
+                val juego2 = cursor.getInt(juego2Index)==1
+                val juego3 = cursor.getInt(juego3Index)==1
+                val juego4 = cursor.getInt(juego4Index)==1
+                val juegos = mutableListOf<Boolean>( juego1, juego2, juego3, juego4)
                 val jugador = obtenerJugador(idJugador)
-                val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, casillaActual, jugadorActual)
+                val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, casillaActual, jugadorActual, juegos)
                 listaJugadoresEnPartida.add(jugadorEnPartida)
             }
         }
 
         cursor.close()
-        db.close()
 
         return listaJugadoresEnPartida
     }
@@ -152,7 +159,6 @@ class Conexion(context: Context) {
         }
 
         cursor.close()
-        db.close()
 
         return jugador
 
@@ -164,9 +170,17 @@ class Conexion(context: Context) {
         val partidaId = jugadorEnPartida.partida
         val nuevaCasilla = jugadorEnPartida.casillaActual
         val jugadorActual = if (jugadorEnPartida.jugadorActual) 1 else 0
+        val juego1 = if (jugadorEnPartida.juegos[0]) 1 else 0
+        val juego2 = if (jugadorEnPartida.juegos[1]) 1 else 0
+        val juego3 = if (jugadorEnPartida.juegos[2]) 1 else 0
+        val juego4 = if (jugadorEnPartida.juegos[3]) 1 else 0
         val values = ContentValues().apply {
             put(KEY_CASILLA_ACTUAL, nuevaCasilla)
             put(KEY_JUGADOR_ACTUAL, jugadorActual)
+            put(KEY_juego1, juego1)
+            put(KEY_juego2, juego2)
+            put(KEY_juego3, juego3)
+            put(KEY_juego4, juego4)
         }
         db.update(
             TABLE_JUGADOR_EN_PARTIDA,
@@ -175,6 +189,5 @@ class Conexion(context: Context) {
             arrayOf(jugadorId.toString(), partidaId.toString())
         )
 
-        db.close()
     }
 }
