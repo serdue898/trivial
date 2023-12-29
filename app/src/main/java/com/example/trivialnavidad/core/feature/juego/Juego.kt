@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.jugabilidad.Dado
 
 class Juego : Fragment() {
     private var comunicador: Comunicador? = null
@@ -32,16 +34,24 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         val boton = view.findViewById<Button>(R.id.bt_clasificacion)
+        val bt_dado = view.findViewById<Button>(R.id.bt_dado)
+        val dado = view.findViewById<ImageView>(R.id.dado)
+        val handler = Dado(dado)
 
 
 
-        boton.setOnClickListener {
 
+
+        bt_dado.setOnClickListener {
+            handler.tiradaDado()
         }
 
         // Se devuelve la vista inflada.
         return view
     }
+
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
             inflater.inflate(R.menu.menu_view, menu)// OJO- se pasa la vista que se quiere inflar
