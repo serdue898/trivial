@@ -6,7 +6,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
 
-class Metodos : ComunicadorJuego {
+class MetodosJuego : ComunicadorJuego {
     override fun abrirClasificacion (jugadores: List<JugadorEnPartida>, context :Context){
 
 

@@ -6,7 +6,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 
-class Metodos: Comunicador {
+class MetodosClasifiacion: ComunicadorClasificacion {
     override fun volver( context: Context) {
         if (context is AppCompatActivity) {
             val juego = MainActivity.juego as Juego

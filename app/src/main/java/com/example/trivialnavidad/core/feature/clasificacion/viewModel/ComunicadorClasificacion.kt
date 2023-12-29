@@ -5,6 +5,6 @@ import android.content.Context
 /**
  * Interfaz para comunicar los datos desde un fragmento a otro
  */
-interface Comunicador {
+interface ComunicadorClasificacion {
     fun volver(context: Context)
 }

@@ -18,10 +18,10 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
-import com.example.trivialnavidad.core.feature.juego.viewModel.Metodos
+import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 
 class Juego : Fragment() {
-    private var comunicador: ComunicadorJuego? = Metodos()
+    private var comunicador: ComunicadorJuego? = MetodosJuego()
     private var contexto: Context? = null
 
 

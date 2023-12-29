@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.trivialnavidad.app.MainActivity
 
 
-class Metodos: ComunicadorPrincipal {
+class MetodosPrincipal: ComunicadorPrincipal {
 
     override fun abrir_juego(datos: String, context: Context) {
         if (context is AppCompatActivity) {
