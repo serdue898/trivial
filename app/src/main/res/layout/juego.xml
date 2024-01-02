@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/t_tunroJugador" />
 
-    <androidx.gridlayout.widget.GridLayout
+    <GridLayout
         android:id="@+id/gr_tablero"
         android:layout_width="347dp"
         android:layout_height="321dp"
@@ -74,7 +74,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.gridlayout.widget.GridLayout>
+    </GridLayout>
 
     <ImageView
         android:id="@+id/dado"

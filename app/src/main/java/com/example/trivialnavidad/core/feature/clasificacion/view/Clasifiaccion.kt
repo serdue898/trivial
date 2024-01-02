@@ -15,10 +15,9 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.ComunicadorClasificacion
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.MetodosClasifiacion
 
-class Clasifiaccion : Fragment() {
+class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment() {
     private var comunicador: ComunicadorClasificacion? = MetodosClasifiacion()
     private var contexto: Context? = null
-    private var jugadoresEnPartida: List<JugadorEnPartida>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.clasificacion, container, false)
@@ -29,10 +28,7 @@ class Clasifiaccion : Fragment() {
             comunicador?.volver(contexto!!)
         }
 
-        // Verifica si la lista de jugadores ya está disponible
-        jugadoresEnPartida?.let {
-            actualizarLista(it)
-        }
+
 
         return view
     }
@@ -40,13 +36,12 @@ class Clasifiaccion : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Puedes llamar a actualizarLista aquí para garantizar que la vista ya se haya creado
-        jugadoresEnPartida?.let {
-            actualizarLista(it)
-        }
+
+            actualizarLista(jugadoresEnPartida)
+
     }
 
     fun actualizarLista(jugadoresEnPartida: List<JugadorEnPartida>) {
-        this.jugadoresEnPartida = jugadoresEnPartida
         val lista = view?.findViewById<RecyclerView>(R.id.rv_jugadores)
         val adapter = ListaAdapter(jugadoresEnPartida)
         lista?.layoutManager = LinearLayoutManager(contexto)

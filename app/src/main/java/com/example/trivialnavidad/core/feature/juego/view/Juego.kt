@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
+import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
 
 class Juego : Fragment() {
     private var comunicador: ComunicadorJuego? = MetodosJuego()
@@ -32,6 +34,9 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         //cambiar en el futuro , es de pruebas la siguiente linea
         val conexion = Conexion(contexto!!)
+        val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
+        val metodosTablero=Tablero(tablero)
+        metodosTablero.crearTablero(contexto!!)
         /*
         val partida = Partida(1,"prueba")
         conexion.agregarPartida(partida)
