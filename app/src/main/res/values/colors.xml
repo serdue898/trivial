@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- colores botones-->
+    <color name="negro">#DD000000</color>
+    <color name="magenta">#8B008B</color>
+    <color name="azul">#1E90FF</color>
+    <color name="amarillo">#FFD700</color>
+    <color name="verde">#008000</color>
+    <color name="rojo">#DC143C</color>
 </resources>
