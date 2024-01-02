@@ -52,6 +52,9 @@ class Tablero (var gridTablero: GridLayout) {
                         botonTablero.setBackgroundColor(ContextCompat.getColor(contexto, R.color.azul))
                     }else if (tableroVersionUno[i][j].equals("3")){
                         botonTablero.setBackgroundColor(ContextCompat.getColor(contexto, R.color.amarillo))
+                    }else if (tableroVersionUno[i][j].equals("4")){
+                        botonTablero.setBackgroundColor(ContextCompat.getColor(contexto, R.color.rojo))
+
                     }else if (tableroVersionUno[i][j].equals("5")){
                         botonTablero.setBackgroundColor(ContextCompat.getColor(contexto, R.color.magenta))
                     } else {
