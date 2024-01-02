@@ -37,7 +37,7 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment()
         super.onViewCreated(view, savedInstanceState)
         // Puedes llamar a actualizarLista aquí para garantizar que la vista ya se haya creado
 
-            actualizarLista(jugadoresEnPartida)
+            actualizarLista(jugadoresEnPartida.sortedByDescending { it.puntosJugador() })
 
     }
 

@@ -44,7 +44,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
 
         val createJugadorEnPartidaTable = ("CREATE TABLE " + TABLE_JUGADOR_EN_PARTIDA + " ( "
                 + KEY_ID_J + " INTEGER, " + KEY_ID_P + " INTEGER, "
-                + KEY_CASILLA_ACTUAL + " INTEGER, "
+                + KEY_CASILLA_ACTUAL + " TEXT, "
                 + KEY_JUGADOR_ACTUAL + " INTEGER, "
                 + KEY_juego1 + " INTEGER, "
                 + KEY_juego2 + " INTEGER, "

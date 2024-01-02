@@ -17,10 +17,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
+import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class Juego : Fragment() {
     private var comunicador: ComunicadorJuego? = MetodosJuego()
@@ -32,47 +36,44 @@ class Juego : Fragment() {
         contexto = container?.context
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
-        //cambiar en el futuro , es de pruebas la siguiente linea
         val conexion = Conexion(contexto!!)
         val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
-        val metodosTablero=Tablero(tablero)
-        metodosTablero.crearTablero(contexto!!)
+        val metodosTablero=Tablero(tablero,contexto!!)
+        var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
+        metodosTablero.crearTablero(jugadoresEnPartida)
         /*
         val partida = Partida(1,"prueba")
         conexion.agregarPartida(partida)
-        var jug1 = Jugador(1,"prueba","prue")
-        var jug2 =Jugador(2,"prueba2","prue2")
+
+        var jug1 = Jugador(3,"prueba3","dado3")
+        var jug2 =Jugador(4,"prueba4","dado4")
         conexion.agregarJugador(jug1)
         conexion.agregarJugador(jug2)
         val juegos = List<Boolean> (4){false}
-        var jugadorPartida = JugadorEnPartida(jug1,partida.id,0,false, juegos)
-        var jugadorPartida2 = JugadorEnPartida(jug2,partida.id,0,false, juegos)
+        var jugadorPartida = JugadorEnPartida(jug1,1,0,false, juegos)
+        var jugadorPartida2 = JugadorEnPartida(jug2,1,0,false, juegos)
         conexion.agregarJugadorEnPartida(jugadorPartida)
         conexion.agregarJugadorEnPartida(jugadorPartida2)
         */
 
 
 
-
-
-
-
-        //hasta aqui
-
         val bt_clasificacion = view.findViewById<Button>(R.id.bt_clasificacion)
         val bt_dado = view.findViewById<Button>(R.id.bt_dado)
         val dado = view.findViewById<ImageView>(R.id.dado)
         val handler = Dado(dado)
         bt_dado.setOnClickListener {
-            handler.tiradaDado()
+            GlobalScope.launch {
+                // Llama a la función y obtén el último número aleatorio
+                val movimientos = handler.cambiarImagenCadaSegundo()
+
+                metodosTablero.moverJugador(jugadoresEnPartida[0],movimientos.toString().toInt())
+            }
+
+
         }
         bt_clasificacion.setOnClickListener {
-
-            var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
-            var listaOrdenada = jugadoresEnPartida.sortedByDescending { it.puntosJugador() }
-            comunicador?.abrirClasificacion(listaOrdenada, contexto!!)
-
-
+            comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)
         }
         return view
     }

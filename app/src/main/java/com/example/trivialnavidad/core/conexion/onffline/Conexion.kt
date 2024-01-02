@@ -122,7 +122,7 @@ class Conexion(Context: Context) {
             if (idJugadorIndex != -1 && idPartidaIndex != -1 && casillaActualIndex != -1 && jugadorActualIndex != -1) {
                 val idJugador = cursor.getInt(idJugadorIndex)
                 val idPartida = cursor.getInt(idPartidaIndex)
-                val casillaActual = cursor.getInt(casillaActualIndex)
+                val casillaActual = cursor.getString(casillaActualIndex)
                 val jugadorActual = cursor.getInt(jugadorActualIndex) == 1
                 val juego1 = cursor.getInt(juego1Index)==1
                 val juego2 = cursor.getInt(juego2Index)==1

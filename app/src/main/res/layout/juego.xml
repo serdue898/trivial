@@ -24,10 +24,10 @@
         android:text="@string/t_tunroJugador"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintVertical_bias="0.689" />
 
     <Button
         android:id="@+id/bt_dado"
@@ -61,18 +61,21 @@
         android:text="AVATAR"
         app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
+        app:layout_constraintHorizontal_bias="0.921"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador" />
+        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.261" />
 
     <GridLayout
         android:id="@+id/gr_tablero"
-        android:layout_width="347dp"
-        android:layout_height="321dp"
+        android:layout_width="0dp"
+        android:layout_height="401dp"
         app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.0">
 
     </GridLayout>
 

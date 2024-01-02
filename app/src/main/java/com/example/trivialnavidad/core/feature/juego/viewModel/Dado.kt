@@ -2,6 +2,8 @@ package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.widget.ImageView
 import com.example.trivialnavidad.R
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -13,31 +15,30 @@ class Dado(private val imageViewDado: ImageView) {
 
     fun tiradaDado() {
         lastRandomNumber = 0
-        cambiarImagenCadaSegundo()
+
     }
 
-    private fun cambiarImagenCadaSegundo() {
-        val job = GlobalScope.launch(Dispatchers.Main) {
+    suspend fun cambiarImagenCadaSegundo(): Int {
+        val deferred = CompletableDeferred<Int>()
+
+        GlobalScope.launch(Dispatchers.Main) {
             repeat(10) {
                 val randomImageName = "dado${(1..6).random()}"
-                // Asigna la imagen al ImageView
                 val resourceId = obtenerResourceId(randomImageName)
                 imageViewDado.setImageResource(resourceId)
 
-                lastRandomNumber = randomImageName.last().toString().toInt()
+                val lastRandomNumber = randomImageName.last().toString().toInt()
                 delay(300)
                 imageViewDado.visibility = ImageView.VISIBLE
+
+                deferred.complete(lastRandomNumber)
             }
 
-            // Cuando termina el tiempo, devuelve el último número aleatorio
-            // Puedes hacer lo que necesites con este número
-            // En este ejemplo, simplemente lo imprimo
-            println("Último número aleatorio: $lastRandomNumber")
             imageViewDado.visibility = ImageView.INVISIBLE
         }
 
-        // Puedes cancelar el trabajo si es necesario (por ejemplo, si el usuario sale de la pantalla)
-        // job.cancel()
+        // Espera a que la corrutina termine y obtén el último número aleatorio
+        return deferred.await()
     }
 
     private fun obtenerResourceId(imageName: String): Int {
