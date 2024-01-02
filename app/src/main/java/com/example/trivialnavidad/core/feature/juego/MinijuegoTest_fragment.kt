@@ -12,11 +12,6 @@ import com.example.trivialnavidad.R
 class MinijuegoTest_fragment: Fragment() {
     private var comunicador: Comunicador? =null;
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        comunicador = context as? Comunicador
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -65,6 +60,6 @@ class MinijuegoTest_fragment: Fragment() {
         b_opcionD.setOnClickListener(listener)
 
 
-        return view
+        return vista_test
     }
 }

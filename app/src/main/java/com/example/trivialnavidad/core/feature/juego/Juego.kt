@@ -36,7 +36,8 @@ class Juego : Fragment() {
 
 
         boton.setOnClickListener {
-
+            var metodos = metodosMinijuego()
+            metodos.abrirJuego(contexto as AppCompatActivity)
         }
 
         // Se devuelve la vista inflada.
