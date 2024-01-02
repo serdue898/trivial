@@ -1,14 +1,11 @@
-package com.example.trivialnavidad.core.jugabilidad
+package com.example.trivialnavidad.core.feature.juego.viewModel
 
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageView
 import com.example.trivialnavidad.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class Dado(private val imageViewDado: ImageView) {
 

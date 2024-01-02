@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.principal
+package com.example.trivialnavidad.core.feature.principal.viewModel
 
 import android.content.Context
 

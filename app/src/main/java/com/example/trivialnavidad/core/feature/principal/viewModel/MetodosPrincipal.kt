@@ -1,17 +1,19 @@
-package com.example.trivialnavidad.core.feature.principal
+package com.example.trivialnavidad.core.feature.principal.viewModel
 
 import android.content.Context
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.feature.juego.Juego
+import com.example.trivialnavidad.core.feature.juego.view.Juego
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trivialnavidad.app.MainActivity
 
 
-class Metodos: ComunicadorPrincipal {
+class MetodosPrincipal: ComunicadorPrincipal {
 
     override fun abrir_juego(datos: String, context: Context) {
         if (context is AppCompatActivity) {
             if (datos == "offline") {
-                val juego = Juego()
+                MainActivity.juego = Juego()
+                val juego = MainActivity.juego as Juego
                 val fragmentManager = context.supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(R.id.contenedor, juego)

@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.principal
+package com.example.trivialnavidad.core.feature.principal.view
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
+import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrincipal
 
 class Principal : Fragment() {
-    private var comunicador: ComunicadorPrincipal? = Metodos()
+    private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
     private var contexto: Context? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
