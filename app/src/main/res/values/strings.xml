@@ -18,4 +18,6 @@
     <string name="nombre_juego">Trivial</string>
     <string name="bt_offline">offline</string>
     <string name="bt_online">online</string>
+    <string name="acierto">has acertado la pregunta</string>
+    <string name="fallo">fallaste la pregunta</string>
 </resources>
