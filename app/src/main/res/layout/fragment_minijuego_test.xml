@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/t_mini_text_enunciado"
+        android:layout_width="580dp"
+        android:layout_height="454dp"
+        android:layout_marginTop="148dp"
+        android:text="soy un enunciado de pregunta del minijuego de respuesta ultiple, tememe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/b_opcionA"
+        android:layout_width="218dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="108dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.206"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_mini_text_enunciado" />
+
+    <Button
+        android:id="@+id/b_opcionD"
+        android:layout_width="218dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="340dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.828"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_mini_text_enunciado" />
+
+    <Button
+        android:id="@+id/b_opcionC"
+        android:layout_width="218dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="340dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.206"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_mini_text_enunciado" />
+
+    <Button
+        android:id="@+id/b_opcionB"
+        android:layout_width="218dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="108dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.828"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_mini_text_enunciado" />
+</androidx.constraintlayout.widget.ConstraintLayout>
