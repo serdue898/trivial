@@ -8,23 +8,29 @@ import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.widget.GridLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
+import com.example.trivialnavidad.core.feature.juego.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores: List<JugadorEnPartida>) {
     private var JugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
+    val preguntas = preguntas()
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
         arrayOf("3","0","0","0","3","0","0","0","1"),
@@ -54,6 +60,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
     }
 
     fun  crearTablero(){
+        preguntas.cogerpreguntas()
         gridTablero.rowCount=9
         gridTablero.columnCount=9
         ////
@@ -76,7 +83,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                    casilla.dificultad = dificultad
+                    casilla.dificultad = dificultad.toInt()
                     if (tableroVersionUno[i][j] == "1"){
                         casilla.color = ContextCompat.getColor(contexto, R.color.verde)
                     }else if (tableroVersionUno[i][j] == "2"){
@@ -94,8 +101,29 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                 casilla.setOnClickListener {
                     moverVista( casilla)
                     conexion.actualizarCasillaActual(JugadorActual!!)
+                    val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
+                    val pregunta = preguntasMinijuego?.random()
+                    var minijuego : Fragment? = null
+                    if (casilla.dificultad==1){
+                        minijuego = Adivina(pregunta!!)
+                    }else{
+
+                    }
+                    if(minijuego!=null) {
+                        if (contexto is AppCompatActivity) {
+                            val fragmentManager =
+                                (contexto as AppCompatActivity).supportFragmentManager
+                            fragmentManager.beginTransaction()
+                                .replace(R.id.contenedor, minijuego!!)
+                                .commit()
+
+                        }
+                    }
+
+
                     var posicion = jugadores.indexOf(JugadorActual)+1
                     juego.actualizarJugador(jugadores[if (posicion >= 3) 0 else posicion])
+
                 }
                 casilla.isEnabled = false
 
@@ -114,7 +142,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         val x  = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
         JugadorActual = jugador
-        val movimientos = 6
+        val movimientos = 1
         PosiblesMovimientos(x, y, movimientos,"",jugador)
     }
 
