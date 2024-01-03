@@ -24,10 +24,10 @@
         android:text="@string/t_tunroJugador"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.161"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.689" />
+        app:layout_constraintVertical_bias="0.715" />
 
     <Button
         android:id="@+id/bt_dado"
@@ -54,18 +54,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bt_dado" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="91dp"
-        android:layout_height="100dp"
-        android:text="AVATAR"
-        app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.921"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
-        app:layout_constraintVertical_bias="0.261" />
-
     <GridLayout
         android:id="@+id/gr_tablero"
         android:layout_width="0dp"
@@ -90,5 +78,16 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
         app:srcCompat="@drawable/baseline_casino_24"
         android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/i_avatar"
+        android:layout_width="92dp"
+        android:layout_height="81dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.26"
+        app:srcCompat="@drawable/baseline_casino_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

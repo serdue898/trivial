@@ -10,8 +10,10 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.juego.view.Juego
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,6 +23,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
     private var JugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     private val conexion = Conexion(contexto)
+    val juego = MainActivity.juego as Juego
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
         arrayOf("3","0","0","0","3","0","0","0","1"),
@@ -90,6 +93,8 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                 casilla.setOnClickListener {
                     moverVista( casilla)
                     conexion.actualizarCasillaActual(JugadorActual!!)
+                    var posicion = jugadores.indexOf(JugadorActual)+1
+                    juego.actualizarJugador(jugadores[if (posicion >= 3) 0 else posicion])
                 }
                 casilla.isEnabled = false
 
@@ -157,7 +162,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
     fun comprobarCasilla(fila :Int, columna:Int):Boolean{
         val casilla = gridTablero.getChildAt(fila * gridTablero.columnCount + columna) as Casilla
         val colorDeFondo = (casilla.background as? ColorDrawable)?.color
-            return colorDeFondo == ContextCompat.getColor(contexto, R.color.negro)
+        return colorDeFondo == ContextCompat.getColor(contexto, R.color.negro)
     }
 
     fun moverVista(casillaNueva: Casilla){
@@ -172,6 +177,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
 
         JugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
         reiniciarMovimientos()
+
     }
     fun reiniciarMovimientos(){
         GlobalScope.launch(Dispatchers.Default) {

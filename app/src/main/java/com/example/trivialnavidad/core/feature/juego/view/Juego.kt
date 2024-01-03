@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,12 +24,17 @@ import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Juego : Fragment() {
     private var comunicador: ComunicadorJuego? = MetodosJuego()
     private var contexto: Context? = null
+    private var jugador:Int = 0
+    private var jugadorActual : JugadorEnPartida? = null
+    private var jugadoresEnPartida = listOf<JugadorEnPartida>()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,16 +50,21 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
         val handler = Dado(dado)
-        var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
+        jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
         val metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
         metodosTablero.crearTablero()
         metodosTablero.asignarJugadores()
 
+
         bt_dado.setOnClickListener {
             GlobalScope.launch {
-                // Llama a la función y obtén el último número aleatorio
-                val movimientos = handler.cambiarImagenCadaSegundo()
-                metodosTablero.moverJugador(jugadoresEnPartida[0],movimientos.toString().toInt())
+                withContext(Dispatchers.Main) {
+                    jugadorActual = jugadoresEnPartida[jugador]
+                    val movimientos = handler.cambiarImagenCadaSegundo()
+                    metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())
+                    jugador++
+                    if (jugador == jugadoresEnPartida.size) jugador = 0
+                }
 
             }
 
@@ -63,6 +74,12 @@ class Juego : Fragment() {
             comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)
         }
         return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        jugadorActual = jugadoresEnPartida[jugador]
+        actualizarJugador(jugadorActual)
+
     }
 
 
@@ -115,6 +132,23 @@ class Juego : Fragment() {
         val acercaDe = R.string.acercaDe
         msnEmergente.setMessage(getString(R.string.acercaDe))
         msnEmergente.show()
+    }
+     fun actualizarJugador( jugador: JugadorEnPartida? ){
+        val nombre = view?.findViewById<TextView>(R.id.t_tunroJugador)
+        val avatar = view?.findViewById<ImageView>(R.id.i_avatar)
+
+            nombre?.text = "turno del jugador:"+jugador?.jugador?.nombre
+
+        val jugadorAvatar = ImageView(contexto)
+        val resourceId = contexto!!.resources.getIdentifier(
+            jugador!!.jugador.avatar,
+            "drawable",
+            contexto!!.packageName
+        )
+        jugadorAvatar.setImageResource(resourceId)
+        avatar?.setImageDrawable(jugadorAvatar.drawable)
+        // Llama a la función y obtén el último número aleatorio
+
     }
 
 
