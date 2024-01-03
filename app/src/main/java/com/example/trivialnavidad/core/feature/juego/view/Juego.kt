@@ -68,8 +68,8 @@ class Juego : Fragment() {
             GlobalScope.launch {
                 // Llama a la función y obtén el último número aleatorio
                 val movimientos = handler.cambiarImagenCadaSegundo()
-
                 metodosTablero.moverJugador(jugadoresEnPartida[0],movimientos.toString().toInt())
+
             }
 
 

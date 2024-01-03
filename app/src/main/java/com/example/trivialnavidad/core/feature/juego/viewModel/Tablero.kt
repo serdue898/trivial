@@ -10,6 +10,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +20,7 @@ import kotlinx.coroutines.withContext
 class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores: List<JugadorEnPartida>) {
     private var JugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
+    private val conexion = Conexion(contexto)
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
         arrayOf("3","0","0","0","3","0","0","0","1"),
@@ -87,6 +89,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
                     moverVista( casilla)
+                    conexion.actualizarCasillaActual(JugadorActual!!)
                 }
                 casilla.isEnabled = false
 
