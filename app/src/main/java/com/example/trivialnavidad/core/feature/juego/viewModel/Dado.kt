@@ -1,15 +1,18 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
+import android.content.DialogInterface
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import com.example.trivialnavidad.R
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.appcompat.app.AlertDialog.Builder
 
-class Dado(private val imageViewDado: ImageView) {
+class Dado(private val imageViewDado: ImageView ) {
 
     private var lastRandomNumber = 0
 
@@ -18,7 +21,7 @@ class Dado(private val imageViewDado: ImageView) {
 
     }
 
-    suspend fun cambiarImagenCadaSegundo(): Int {
+    suspend fun cambiarImagenCadaSegundo(alertDialog: Builder,view: View): Int {
         val deferred = CompletableDeferred<Int>()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -27,15 +30,15 @@ class Dado(private val imageViewDado: ImageView) {
                 val resourceId = obtenerResourceId(randomImageName)
                 imageViewDado.setImageResource(resourceId)
 
-                val lastRandomNumber = randomImageName.last().toString().toInt()
+                lastRandomNumber = randomImageName.last().toString().toInt()
                 delay(300)
-                imageViewDado.visibility = ImageView.VISIBLE
-
-                deferred.complete(lastRandomNumber)
             }
+            view.findViewById<Button>(R.id.bt_salir).visibility = View.VISIBLE
+            alertDialog.setView(view)
+            deferred.complete(lastRandomNumber)
 
-            imageViewDado.visibility = ImageView.INVISIBLE
         }
+
 
         // Espera a que la corrutina termine y obtén el último número aleatorio
         return deferred.await()

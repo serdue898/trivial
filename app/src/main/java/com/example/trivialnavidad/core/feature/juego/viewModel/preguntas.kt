@@ -14,8 +14,6 @@ class preguntas {
             preguntas = pregntasOptenidas
             Log.d("Preguntas", respuesta.toString())
         }
-
-
     }
     fun preguntasDificultad(dificultad:Int):List<Pregunta>?{
         var preguntasDificultad:List<Pregunta>? = null

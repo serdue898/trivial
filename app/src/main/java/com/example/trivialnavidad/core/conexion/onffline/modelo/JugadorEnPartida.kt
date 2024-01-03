@@ -1,11 +1,11 @@
 package com.example.trivialnavidad.core.conexion.onffline.modelo
 
 data class JugadorEnPartida(
-    val jugador: Jugador,
-    val partida: Int,
+    var jugador: Jugador,
+    var partida: Int,
     var casillaActual: String,
-    val jugadorActual: Boolean,
-    val juegos: List<Boolean>
+    var jugadorActual: Boolean,
+    var juegos: MutableList<Boolean>
 ) {
     fun puntosJugador(): Int {
         var puntos = 0

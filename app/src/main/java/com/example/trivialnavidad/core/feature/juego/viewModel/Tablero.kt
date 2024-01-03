@@ -105,7 +105,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     val pregunta = preguntasMinijuego?.random()
                     var minijuego : Fragment? = null
                     if (casilla.dificultad==1){
-                        minijuego = Adivina(pregunta!!)
+                        minijuego = Adivina(pregunta!!, JugadorActual!!)
                     }else{
 
                     }
@@ -119,10 +119,6 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
 
                         }
                     }
-
-
-                    var posicion = jugadores.indexOf(JugadorActual)+1
-                    juego.actualizarJugador(jugadores[if (posicion >= 3) 0 else posicion])
 
                 }
                 casilla.isEnabled = false
@@ -142,7 +138,6 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         val x  = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
         JugadorActual = jugador
-        val movimientos = 1
         PosiblesMovimientos(x, y, movimientos,"",jugador)
     }
 

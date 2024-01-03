@@ -18,12 +18,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,6 +35,7 @@ class Juego : Fragment() {
     private var jugador:Int = 0
     private var jugadorActual : JugadorEnPartida? = null
     private var jugadoresEnPartida = listOf<JugadorEnPartida>()
+    private lateinit var metodosTablero: Tablero
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,14 +45,14 @@ class Juego : Fragment() {
         val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
         val bt_clasificacion = view.findViewById<Button>(R.id.bt_clasificacion)
         val bt_dado = view.findViewById<Button>(R.id.bt_dado)
-        val dado = view.findViewById<ImageView>(R.id.dado)
+
 
         val conexion = Conexion(contexto!!)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
-        val handler = Dado(dado)
+
         jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
-        val metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
+         metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
         metodosTablero.crearTablero()
         metodosTablero.asignarJugadores()
 
@@ -59,14 +60,8 @@ class Juego : Fragment() {
         bt_dado.setOnClickListener {
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
-                    jugadorActual = jugadoresEnPartida[jugador]
-                    val movimientos = handler.cambiarImagenCadaSegundo()
-                    metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())
-                    jugador++
-                    if (jugador == jugadoresEnPartida.size) jugador = 0
-                }
-
-            }
+                    tirarDado()
+                }}
 
 
         }
@@ -75,14 +70,22 @@ class Juego : Fragment() {
         }
         return view
     }
+    fun tirada(movimientos: Int, alertDialog: AlertDialog){
+        alertDialog.dismiss()
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                jugadorActual = jugadoresEnPartida[jugador]
+                metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())
+            }
+
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         jugadorActual = jugadoresEnPartida[jugador]
         actualizarJugador(jugadorActual)
 
     }
-
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
@@ -117,8 +120,6 @@ class Juego : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
     private fun verInstrucciones() {
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         val acercaDe = R.string.intrucciones
@@ -148,6 +149,47 @@ class Juego : Fragment() {
         jugadorAvatar.setImageResource(resourceId)
         avatar?.setImageDrawable(jugadorAvatar.drawable)
         // Llama a la función y obtén el último número aleatorio
+
+    }
+    suspend fun tirarDado(){
+        val resultado = CompletableDeferred<Int>()
+        val view = LayoutInflater.from(contexto).inflate(R.layout.dado_lyout, null)
+        val dado = view.findViewById<ImageView>(R.id.dado)
+        val boton = view.findViewById<Button>(R.id.bt_salir)
+
+
+        val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
+        msnEmergente.setCancelable(false)
+        msnEmergente.setView(view)
+        msnEmergente.setTitle("Tira el dado")
+        val construido = msnEmergente.create()
+        construido.show()
+
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val movimientos = Dado(dado).cambiarImagenCadaSegundo(
+                    msnEmergente,view)
+                resultado.complete(movimientos)
+                boton.setOnClickListener {
+                    tirada(movimientos,construido)
+                }
+
+            }
+
+
+        }
+
+
+
+
+    }
+    fun resultadoMiniJuego(ganado :Boolean){
+        if (!ganado){
+            jugador++
+            val jugadorActual = jugadoresEnPartida[jugador]
+            actualizarJugador(jugadorActual)
+
+        }
 
     }
 
