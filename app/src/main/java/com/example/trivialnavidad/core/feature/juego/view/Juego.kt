@@ -35,35 +35,20 @@ class Juego : Fragment() {
         val view = inflater.inflate(R.layout.juego, container, false)
         contexto = container?.context
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
-        (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
-        val conexion = Conexion(contexto!!)
         val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
+        val bt_clasificacion = view.findViewById<Button>(R.id.bt_clasificacion)
+        val bt_dado = view.findViewById<Button>(R.id.bt_dado)
+        val dado = view.findViewById<ImageView>(R.id.dado)
 
+        val conexion = Conexion(contexto!!)
+        (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
+
+        val handler = Dado(dado)
         var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
         val metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
         metodosTablero.crearTablero()
         metodosTablero.asignarJugadores()
-        /*
-        val partida = Partida(1,"prueba")
-        conexion.agregarPartida(partida)
 
-        var jug1 = Jugador(3,"prueba3","dado3")
-        var jug2 =Jugador(4,"prueba4","dado4")
-        conexion.agregarJugador(jug1)
-        conexion.agregarJugador(jug2)
-        val juegos = List<Boolean> (4){false}
-        var jugadorPartida = JugadorEnPartida(jug1,1,0,false, juegos)
-        var jugadorPartida2 = JugadorEnPartida(jug2,1,0,false, juegos)
-        conexion.agregarJugadorEnPartida(jugadorPartida)
-        conexion.agregarJugadorEnPartida(jugadorPartida2)
-        */
-
-
-
-        val bt_clasificacion = view.findViewById<Button>(R.id.bt_clasificacion)
-        val bt_dado = view.findViewById<Button>(R.id.bt_dado)
-        val dado = view.findViewById<ImageView>(R.id.dado)
-        val handler = Dado(dado)
         bt_dado.setOnClickListener {
             GlobalScope.launch {
                 // Llama a la función y obtén el último número aleatorio
