@@ -3,7 +3,7 @@ package com.example.trivialnavidad.core.conexion.onffline.modelo
 data class JugadorEnPartida(
     val jugador: Jugador,
     val partida: Int,
-    val casillaActual: String,
+    var casillaActual: String,
     val jugadorActual: Boolean,
     val juegos: List<Boolean>
 ) {

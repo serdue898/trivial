@@ -38,9 +38,11 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         val conexion = Conexion(contexto!!)
         val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
-        val metodosTablero=Tablero(tablero,contexto!!)
+
         var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
-        metodosTablero.crearTablero(jugadoresEnPartida)
+        val metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
+        metodosTablero.crearTablero()
+        metodosTablero.asignarJugadores()
         /*
         val partida = Partida(1,"prueba")
         conexion.agregarPartida(partida)
