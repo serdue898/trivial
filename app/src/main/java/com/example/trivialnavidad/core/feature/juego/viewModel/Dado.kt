@@ -21,7 +21,7 @@ class Dado(private val imageViewDado: ImageView ) {
 
     }
 
-    suspend fun cambiarImagenCadaSegundo(alertDialog: Builder,view: View): Int {
+    suspend fun cambiarImagenCadaSegundo(view: View): Int {
         val deferred = CompletableDeferred<Int>()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -34,7 +34,6 @@ class Dado(private val imageViewDado: ImageView ) {
                 delay(300)
             }
             view.findViewById<Button>(R.id.bt_salir).visibility = View.VISIBLE
-            alertDialog.setView(view)
             deferred.complete(lastRandomNumber)
 
         }

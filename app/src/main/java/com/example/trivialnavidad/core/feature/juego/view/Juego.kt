@@ -152,11 +152,9 @@ class Juego : Fragment() {
 
     }
     suspend fun tirarDado(){
-        val resultado = CompletableDeferred<Int>()
         val view = LayoutInflater.from(contexto).inflate(R.layout.dado_lyout, null)
         val dado = view.findViewById<ImageView>(R.id.dado)
         val boton = view.findViewById<Button>(R.id.bt_salir)
-
 
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
@@ -167,21 +165,12 @@ class Juego : Fragment() {
 
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                val movimientos = Dado(dado).cambiarImagenCadaSegundo(
-                    msnEmergente,view)
-                resultado.complete(movimientos)
+                val movimientos = Dado(dado).cambiarImagenCadaSegundo(view)
                 boton.setOnClickListener {
                     tirada(movimientos,construido)
                 }
-
             }
-
-
         }
-
-
-
-
     }
     fun resultadoMiniJuego(ganado :Boolean){
         if (!ganado){
