@@ -107,7 +107,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     if (casilla.dificultad==1){
                         minijuego = Adivina(pregunta!!, JugadorActual!!)
                     }else{
-
+                        juego.resultadoMiniJuego(true)
                     }
                     if(minijuego!=null) {
                         if (contexto is AppCompatActivity) {

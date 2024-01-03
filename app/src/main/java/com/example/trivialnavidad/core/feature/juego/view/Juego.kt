@@ -35,29 +35,41 @@ class Juego : Fragment() {
     private var jugador:Int = 0
     private var jugadorActual : JugadorEnPartida? = null
     private var jugadoresEnPartida = listOf<JugadorEnPartida>()
+    private var vista : View? = null
+    private var cargar =false
     private lateinit var metodosTablero: Tablero
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.juego, container, false)
+        var view : View? = null
         contexto = container?.context
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
-        val tablero = view.findViewById<GridLayout>(R.id.gr_tablero)
-        val bt_clasificacion = view.findViewById<Button>(R.id.bt_clasificacion)
-        val bt_dado = view.findViewById<Button>(R.id.bt_dado)
-
-
         val conexion = Conexion(contexto!!)
+        if (vista == null){
+            vista = inflater.inflate(R.layout.juego, container, false)
+            view = vista
+            jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
+            val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
+            metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)
+            metodosTablero.crearTablero()
+            metodosTablero.asignarJugadores()
+
+        }
+        view = vista
+
+
+        val toolbar = view?.findViewById<Toolbar>(R.id.toolbar2)
+        val bt_clasificacion = view?.findViewById<Button>(R.id.bt_clasificacion)
+        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
+
+
+
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        setHasOptionsMenu(true)
 
 
-        jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
-         metodosTablero=Tablero(tablero,contexto!!,jugadoresEnPartida)
-        metodosTablero.crearTablero()
-        metodosTablero.asignarJugadores()
 
 
-        bt_dado.setOnClickListener {
+        bt_dado?.setOnClickListener {
             bt_dado.isEnabled = false
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
@@ -66,7 +78,7 @@ class Juego : Fragment() {
 
 
         }
-        bt_clasificacion.setOnClickListener {
+        bt_clasificacion?.setOnClickListener {
             comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)
         }
         return view
@@ -85,6 +97,10 @@ class Juego : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         jugadorActual = jugadoresEnPartida[jugador]
         actualizarJugador(jugadorActual)
+        if (cargar){
+            val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
+            bt_dado?.isEnabled = true
+        }
 
     }
 
@@ -174,14 +190,15 @@ class Juego : Fragment() {
         }
     }
     fun resultadoMiniJuego(ganado :Boolean){
-        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
-        bt_dado?.isEnabled = true
+
         if (!ganado){
             jugador++
             val jugadorActual = jugadoresEnPartida[jugador]
             actualizarJugador(jugadorActual)
 
         }
+        cargar = true
+
 
     }
 
