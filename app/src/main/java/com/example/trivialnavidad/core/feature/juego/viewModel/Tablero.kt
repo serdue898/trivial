@@ -14,6 +14,7 @@ import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.view.Juego
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -110,8 +111,8 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
 
     }
     fun moverJugador(jugador:JugadorEnPartida , movimientos : Int){
-        var x  = jugador.casillaActual.split("_")[0].toInt()
-        var y = jugador.casillaActual.split("_")[1].toInt()
+        val x  = jugador.casillaActual.split("_")[0].toInt()
+        val y = jugador.casillaActual.split("_")[1].toInt()
         JugadorActual = jugador
         val movimientos = 6
         PosiblesMovimientos(x, y, movimientos,"",jugador)
@@ -125,7 +126,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
 
                     val casilla = obtenerCasilla(fila, columna)
                     posiblesMovimientos.add(casilla!!)
-                    val colorFondo = (casilla?.background as? ColorDrawable)?.color
+                    val colorFondo = (casilla.background as? ColorDrawable)?.color
                     val borderDrawable = GradientDrawable()
                     borderDrawable.setColor(colorFondo!!)
                     borderDrawable.setStroke(5, Color.BLACK)
@@ -179,6 +180,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         reiniciarMovimientos()
 
     }
+    @OptIn(DelicateCoroutinesApi::class)
     fun reiniciarMovimientos(){
         GlobalScope.launch(Dispatchers.Default) {
             withContext(Dispatchers.Main) {
