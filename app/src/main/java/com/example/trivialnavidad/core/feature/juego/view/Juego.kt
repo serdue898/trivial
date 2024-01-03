@@ -58,6 +58,7 @@ class Juego : Fragment() {
 
 
         bt_dado.setOnClickListener {
+            bt_dado.isEnabled = false
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
                     tirarDado()
@@ -173,6 +174,8 @@ class Juego : Fragment() {
         }
     }
     fun resultadoMiniJuego(ganado :Boolean){
+        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
+        bt_dado?.isEnabled = true
         if (!ganado){
             jugador++
             val jugadorActual = jugadoresEnPartida[jugador]

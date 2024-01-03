@@ -33,6 +33,9 @@ class Dado(private val imageViewDado: ImageView ) {
                 lastRandomNumber = randomImageName.last().toString().toInt()
                 delay(300)
             }
+            val resourceId = obtenerResourceId("dado${lastRandomNumber}")
+            imageViewDado.setImageResource(resourceId)
+
             view.findViewById<Button>(R.id.bt_salir).visibility = View.VISIBLE
             deferred.complete(lastRandomNumber)
 
