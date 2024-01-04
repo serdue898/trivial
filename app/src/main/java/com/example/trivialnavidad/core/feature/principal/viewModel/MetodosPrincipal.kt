@@ -1,5 +1,6 @@
 package com.example.trivialnavidad.core.feature.principal.viewModel
 
+import Partidas
 import android.content.Context
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.feature.juego.view.Juego
