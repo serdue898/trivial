@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 
-class MinijuegoTest_fragment: Fragment() {
+class Test: Fragment() {
     private var comunicador: ComunicadorTest? =null;
 
     override fun onAttach(context: Context) {

@@ -7,7 +7,7 @@ import com.example.trivialnavidad.R
 class metodosMinijuego {
      fun abrirJuego( Contexto: Context){
         if (Contexto is AppCompatActivity) {
-            val MinijuegoTest_fragment = MinijuegoTest_fragment()
+            val MinijuegoTest_fragment = Test()
             Contexto.supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedor, MinijuegoTest_fragment)
                 .commit()
