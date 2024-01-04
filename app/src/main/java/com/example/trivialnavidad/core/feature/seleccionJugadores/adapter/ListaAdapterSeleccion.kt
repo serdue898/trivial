@@ -22,6 +22,7 @@ class ListaAdapterSeleccion(
         var nombre: TextView = itemView.findViewById(R.id.tx_nombreJugador)
         var avatar: ImageView = itemView.findViewById(R.id.iV_avatar)
         var eliminar : ImageView = itemView.findViewById(R.id.iv_papelera)
+        var editar : ImageView = itemView.findViewById(R.id.iv_editar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -33,6 +34,7 @@ class ListaAdapterSeleccion(
 
     @SuppressLint("Recycle")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+
         val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
         val jugador = jugadores[position]
         holder.nombre.text = jugador.nombre
@@ -41,5 +43,9 @@ class ListaAdapterSeleccion(
             jugadores.removeAt(position)
             seleccionJugador.actualizarLista()
         }
+        holder.editar.setOnClickListener {
+            seleccionJugador.editarJugadorLista(jugador)
+        }
+
     }
 }

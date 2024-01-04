@@ -1,6 +1,8 @@
 package com.example.trivialnavidad.core.feature.seleccionJugadores.view
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +28,7 @@ class SeleccionJugador : Fragment() {
     private var comunicador: MetodosSeleccion = MetodosSeleccion()
     private var contexto: Context? = null
     private var jugadoresEnPartida = mutableListOf<Jugador>()
-
+    private var avatarImages :TypedArray? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,8 +54,8 @@ class SeleccionJugador : Fragment() {
         val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
-        val avatarImages = resources.obtainTypedArray(R.array.avatar_images)
-        val avatares = List(avatarImages.length()) { i -> avatarImages.getDrawable(i) }
+        avatarImages = resources.obtainTypedArray(R.array.avatar_images)
+        val avatares = List(avatarImages!!.length()) { i -> avatarImages!!.getDrawable(i) }
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
 
 
@@ -64,8 +66,6 @@ class SeleccionJugador : Fragment() {
 
         // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
-        val b_eliminarJugador = view.findViewById<Button>(R.id.b_eliminarJugador)
-        b_eliminarJugador?.isEnabled = false
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         b_guardarJugador?.text = "Nuevo jugador"
@@ -95,6 +95,33 @@ class SeleccionJugador : Fragment() {
 
 
 
+    }
+    fun editarJugadorLista(jugador: Jugador) {
+        val popup = AlertDialog.Builder(contexto)
+        val view = layoutInflater.inflate(R.layout.editar_jugador, null)
+        popup.setView(view)
+        val nombreJugador = view.findViewById<EditText>(R.id.et_nombre)
+        val avatarJugador = view.findViewById<Spinner>(R.id.sp_avatar)
+        nombreJugador.setText(jugador.nombre)
+        val avatares = List(avatarImages!!.length()) { i -> avatarImages!!.getDrawable(i) }
+        val adapterspinner = SpinnerAdapter(contexto!!, avatares)
+        avatarJugador.adapter = adapterspinner
+        avatarJugador.setSelection(jugador.avatar.toInt())
+
+        popup.setPositiveButton("Guardar") { dialog, which ->
+            if (nombreJugador.text.toString().isEmpty()) {
+                Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+
+            }else{
+                val nuevoJugador = Jugador(jugador.id, nombreJugador.text.toString(), avatarJugador.selectedItemPosition.toString())
+                jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
+                actualizarLista()
+            }
+        }
+        popup.setNegativeButton("Cancelar") { dialog, which ->
+            dialog.dismiss()
+        }
+        popup.show()
     }
     fun actualizarLista(){
         val listajugadores = view?.findViewById<RecyclerView>(R.id.ryV_listaJugadores)
@@ -138,8 +165,6 @@ class SeleccionJugador : Fragment() {
             conexion.agregarJugadorEnPartida(jugadorEnPartida)
         }
         comunicador?.empezarPartida(contexto!!,idPartida)
-
-
     }
 
 

@@ -54,6 +54,7 @@ class Juego(var partida :Int?) : Fragment() {
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
             jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
+            jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual == true })
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
             metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)
             metodosTablero.crearTablero()
@@ -183,16 +184,21 @@ class Juego(var partida :Int?) : Fragment() {
     }
     fun resultadoMiniJuego(ganado :Boolean){
         val conexion = Conexion(contexto!!)
-        conexion.actualizarCasillaActual(jugadoresEnPartida[jugador])
+        val jugadorActual = jugadoresEnPartida[jugador]
+        jugadorActual.jugadorActual = false
+        conexion.actualizarCasillaActual(jugadorActual)
         val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
         bt_dado?.isEnabled = true
         if (!ganado){
+
             jugador++
             if (jugador>=jugadoresEnPartida.size){
                 jugador=0
             }
-            val jugadorActual = jugadoresEnPartida[jugador]
-            actualizarJugador(jugadorActual)
+            val jugadorNuevo = jugadoresEnPartida[jugador]
+            actualizarJugador(jugadorNuevo)
+            jugadorNuevo.jugadorActual = true
+            conexion.actualizarCasillaActual(jugadorNuevo)
 
         }
         cargar = true

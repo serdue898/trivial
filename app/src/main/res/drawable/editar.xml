@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo circular gris -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#808080" /> <!-- Puedes ajustar el color gris aquí -->
+        </shape>
+    </item>
+    <item android:drawable="@drawable/edit" android:gravity="center" />
+</layer-list>

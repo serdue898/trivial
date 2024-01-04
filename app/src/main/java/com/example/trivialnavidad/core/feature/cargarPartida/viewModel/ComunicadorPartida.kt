@@ -7,4 +7,5 @@ import android.content.Context
  */
 interface ComunicadorPartida {
     fun cargarPartida(id: Int)
+    fun volver( )
 }

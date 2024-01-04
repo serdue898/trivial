@@ -29,14 +29,8 @@ class Partidas : Fragment() {
         comunicador = MetodosPartida(contexto!!)
         val bt_volver = view.findViewById<Button>(R.id.bt_volver)
         bt_volver.setOnClickListener {
+            comunicador?.volver()
         }
-
-
-
-
-
-
-
         return view
     }
 
