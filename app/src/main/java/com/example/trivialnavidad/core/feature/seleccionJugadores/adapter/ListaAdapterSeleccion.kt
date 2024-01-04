@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugador.adapter
+package com.example.trivialnavidad.core.feature.seleccionJugadores.adapter
 
 import android.view.LayoutInflater
 import android.view.View

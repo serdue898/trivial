@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugador.viewModel
+package com.example.trivialnavidad.core.feature.seleccionJugadores.viewModel
 
 import android.content.Context
 

@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugador.view
+package com.example.trivialnavidad.core.feature.seleccionJugadores.view
 
 import android.content.Context
 import android.os.Bundle
@@ -9,14 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.t8_ej03_persistenciaapi.ui.adapter.ListaAdapter
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
-import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.seleccionJugador.adapter.ListaAdapterSeleccion
-import com.example.trivialnavidad.core.feature.seleccionJugador.viewModel.MetodosSeleccion
+import com.example.trivialnavidad.core.feature.seleccionJugadores.viewModel.MetodosSeleccion
 
 class SelccionJugador : Fragment() {
 
@@ -77,6 +73,7 @@ class SelccionJugador : Fragment() {
             }
 
         }
+
     }
 
     fun agregarJugadorLista(jugadoresEnPartida: List<Jugador>, nombre: String?) {
