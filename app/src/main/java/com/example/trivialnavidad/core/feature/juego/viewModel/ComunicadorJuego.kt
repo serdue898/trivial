@@ -8,4 +8,5 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
  */
 interface ComunicadorJuego {
     fun abrirClasificacion(jugadores: List<JugadorEnPartida>, context : Context)
+    fun salir(context: Context)
 }

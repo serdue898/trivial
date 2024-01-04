@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -24,7 +25,6 @@ import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -108,13 +108,14 @@ class Juego(var partida :Int?) : Fragment() {
 
         return when (item.itemId) {
 
-            R.id.mItm_juegoNuevo -> {
-                //juegoNuevo()
+            R.id.mItm_GuardarSalir -> {
+                guardarDatos()
+                comunicador?.salir(contexto!!)
                 true
             }
 
             R.id.mItm_guardar -> {
-                //guardarDatos()
+                guardarDatos()
                 true
             }
 
@@ -130,6 +131,14 @@ class Juego(var partida :Int?) : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun guardarDatos() {
+        val conexion = Conexion(contexto!!)
+        for (jugador in jugadoresEnPartida){
+            conexion.actualizarCasillaActual(jugador)
+        }
+        Toast.makeText(contexto, "Datos guardados", Toast.LENGTH_SHORT).show()
     }
 
     private fun verInstrucciones() {

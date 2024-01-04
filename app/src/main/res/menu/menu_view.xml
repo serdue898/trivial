@@ -3,14 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mItm_juegoNuevo"
-        android:title="@string/mItm_juegoNuevo" />
+        android:id="@+id/mItm_GuardarSalir"
+        android:title="@string/mItm_GuardarSalir" />
     <item
         android:id="@+id/mItm_guardar"
         android:title="@string/mItm_guardar" />
-    <item
-        android:id="@+id/mItm_numJugadores"
-        android:title="@string/mItm_numJugadores" />
     <item
         android:id="@+id/mItm_instrucciones"
         android:title="@string/mItm_instrucciones" />

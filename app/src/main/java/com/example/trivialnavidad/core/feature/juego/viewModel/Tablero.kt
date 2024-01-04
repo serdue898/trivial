@@ -114,6 +114,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                         for  (i in 0 until 5){
                             listaPtreguntas.add(preguntasMinijuego?.random()!!)
                         }
+                        juego.resultadoMiniJuego(true)
                     }else{
                         juego.resultadoMiniJuego(true)
                     }
