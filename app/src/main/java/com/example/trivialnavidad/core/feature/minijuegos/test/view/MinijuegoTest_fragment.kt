@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.minijuegos.test.view
+package com.example.trivialnavidad.core.feature.juego
 
 import android.content.Context
 import android.os.Bundle

@@ -54,6 +54,7 @@ class Juego : Fragment() {
 
 
 
+        val boton = view.findViewById<Button>(R.id.bt_clasificacion)
 
 
 
@@ -72,8 +73,7 @@ class Juego : Fragment() {
             var listaOrdenada = jugadoresEnPartida.sortedByDescending { it.puntosJugador() }
             comunicador?.abrirClasificacion(listaOrdenada, contexto!!)
 
-
-        }
+        // Se devuelve la vista inflada.
         return view
     }
 
