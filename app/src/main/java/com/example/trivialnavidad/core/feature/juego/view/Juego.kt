@@ -67,18 +67,10 @@ class Juego : Fragment() {
         bt_dado.setOnClickListener {
             handler.tiradaDado()
         }
-        bt_clasificacion.setOnClickListener {
-
-            var jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
-            var listaOrdenada = jugadoresEnPartida.sortedByDescending { it.puntosJugador() }
-            comunicador?.abrirClasificacion(listaOrdenada, contexto!!)
 
         // Se devuelve la vista inflada.
         return view
     }
-
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
             inflater.inflate(R.menu.menu_view, menu)// OJO- se pasa la vista que se quiere inflar
