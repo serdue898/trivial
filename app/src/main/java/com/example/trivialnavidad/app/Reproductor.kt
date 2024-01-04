@@ -11,6 +11,7 @@ class Reproductor(private val context: Context, private val resourceId: Int) {
     init {
         // Inicializar el MediaPlayer con el archivo de audio en res/raw
         mediaPlayer = MediaPlayer.create(context, resourceId)
+        mediaPlayer?.isLooping = true
 
         // Verificar la configuración antes de iniciar la reproducción
         if (configuracion.obtenerOpcionMusica()) {
