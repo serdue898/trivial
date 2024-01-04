@@ -22,5 +22,9 @@ class Reproductor(private val context: Context, private val resourceId: Int) {
         mediaPlayer?.start()
     }
 
+    fun detenerReproduccion() {
+        mediaPlayer?.stop()
+    }
+
     // ... (resto de los métodos)
 }

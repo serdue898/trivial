@@ -17,9 +17,15 @@ class MainActivity : AppCompatActivity() {
         @SuppressLint("StaticFieldLeak")
         var juego=null as Juego?
         var configuracion = null as Configuracion?
+        @SuppressLint("StaticFieldLeak")
+        var reproductor = null as Reproductor?
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         configuracion = Configuracion(this)
+        reproductor = Reproductor(this, R.raw.lobby_music)
+        if (configuracion!!.obtenerOpcionMusica()) {
+            reproductor!!.iniciarReproduccion()
+        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

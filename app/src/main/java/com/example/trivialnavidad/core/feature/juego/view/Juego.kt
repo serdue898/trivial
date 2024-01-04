@@ -149,6 +149,13 @@ class Juego(var partida :Int?) : Fragment() {
         musica.isChecked = configuracion?.obtenerOpcionMusica()!!
         sonido.isChecked = configuracion.obtenerOpcionSonido()
         vibracion.isChecked = configuracion.obtenerOpcionVibracion()
+        musica.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                MainActivity.reproductor?.iniciarReproduccion()
+            } else {
+                MainActivity.reproductor?.detenerReproduccion()
+            }
+        }
         popup.setView(vista)
         popup.setTitle("Configuración")
         popup.setCancelable(false)
