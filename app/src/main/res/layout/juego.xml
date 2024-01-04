@@ -34,7 +34,7 @@
         android:layout_width="72dp"
         android:layout_height="55dp"
         android:layout_marginTop="84dp"
-        android:drawableEnd="@drawable/baseline_casino_24"
+        android:drawableEnd="@drawable/dado"
         android:text="1 "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.297"
@@ -45,7 +45,7 @@
         android:id="@+id/bt_clasificacion"
         android:layout_width="63dp"
         android:layout_height="53dp"
-        android:drawableEnd="@drawable/baseline_format_list_numbered_24"
+        android:drawableEnd="@drawable/clasificacion"
 
         android:text="1 "
         app:layout_constraintBottom_toBottomOf="@+id/bt_dado"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:srcCompat="@drawable/baseline_casino_24"
+        app:srcCompat="@drawable/dado"
         android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

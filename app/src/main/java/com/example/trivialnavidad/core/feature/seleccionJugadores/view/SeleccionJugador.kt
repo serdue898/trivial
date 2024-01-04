@@ -1,0 +1,132 @@
+package com.example.trivialnavidad.core.feature.seleccionJugadores.view
+
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.conexion.onffline.Conexion
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
+import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.ListaAdapterSeleccion
+import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.SpinnerAdapter
+import com.example.trivialnavidad.core.feature.seleccionJugadores.viewModel.MetodosSeleccion
+
+class SeleccionJugador : Fragment() {
+
+    private var comunicador: MetodosSeleccion = MetodosSeleccion()
+    private var contexto: Context? = null
+    private var jugadoresEnPartida = mutableListOf<Jugador>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.seleccion_jugadores, container, false)
+        contexto = container?.context
+
+        /*
+        // codigo de clasificacion y no se si es necesario o no
+
+      val b_guardar = view.findViewById<Button>(R.id.bt_volver)
+        bt_volver.setOnClickListener {
+            comunicador?.volver(contexto!!)
+          }
+    */
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
+
+        val avatarImages = resources.obtainTypedArray(R.array.avatar_images)
+        val avatares = List(avatarImages.length()) { i -> avatarImages.getDrawable(i) }
+        val adapterspinner = SpinnerAdapter(contexto!!, avatares)
+
+
+// Configurar el adaptador en el Spinner
+        spinerAvatares.adapter = adapterspinner
+
+
+
+        // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
+        //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
+        val b_eliminarJugador = view.findViewById<Button>(R.id.b_eliminarJugador)
+        b_eliminarJugador?.isEnabled = false
+        val textoNombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
+
+
+
+
+
+
+
+        b_guardarJugador?.text = "Nuevo jugador"
+        b_guardarJugador?.setOnClickListener {
+            agregarJugadorLista( null)
+            actualizarLista()
+
+            }
+        /*
+            agregarJugadorLista(jugadoresEnPartida, null)
+            b_eliminarJugador?.isEnabled = true
+            b_eliminarJugador?.setOnClickListener {
+
+         */
+
+
+
+
+    }
+    fun actualizarLista(){
+        val listajugadores = view?.findViewById<RecyclerView>(R.id.ryV_listaJugadores)
+
+        val layoutManager = LinearLayoutManager(contexto)
+        listajugadores?.layoutManager = layoutManager
+        val adapter = ListaAdapterSeleccion(jugadoresEnPartida, contexto!!,this)
+        listajugadores?.adapter = adapter
+
+    }
+
+    fun agregarJugadorLista(nombre: String?) {
+        val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
+        val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
+
+        // Obtener el índice del avatar seleccionado
+        val indiceAvatarSeleccionado = avatarJugador?.selectedItemPosition ?: 0
+
+        // Crear un nuevo jugador
+        val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), indiceAvatarSeleccionado.toString())
+
+        // Agregar el nuevo jugador a la lista
+          jugadoresEnPartida.add(jugadorNuevo)
+
+        // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
+        nombreJugador?.setText("")
+        avatarJugador?.setSelection(0)
+    }
+    private fun empezarPartida() {
+        val conexion = Conexion(contexto!!)
+        val juegos = MutableList(4){i -> false}
+        for (jugador in jugadoresEnPartida) {
+            conexion.agregarJugador(jugador)
+
+        }
+
+
+    }
+
+
+
+}
