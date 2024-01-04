@@ -31,6 +31,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         private const val KEY_juego2 = "juego2"
         private const val KEY_juego3 = "juego3"
         private const val KEY_juego4 = "juego4"
+        private const val KEY_AVATAR_JP = "avatar"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -46,6 +47,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                 + KEY_ID_J + " INTEGER, " + KEY_ID_P + " INTEGER, "
                 + KEY_CASILLA_ACTUAL + " TEXT, "
                 + KEY_JUGADOR_ACTUAL + " INTEGER, "
+                + KEY_AVATAR_JP + " TEXT, "
                 + KEY_juego1 + " INTEGER, "
                 + KEY_juego2 + " INTEGER, "
                 + KEY_juego3 + " INTEGER, "

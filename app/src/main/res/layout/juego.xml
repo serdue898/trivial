@@ -54,31 +54,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bt_dado" />
 
-    <GridLayout
-        android:id="@+id/gr_tablero"
-        android:layout_width="0dp"
-        android:layout_height="401dp"
-        app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:layout_constraintVertical_bias="0.0">
-
-    </GridLayout>
-
-    <ImageView
-        android:id="@+id/dado"
-        android:layout_width="131dp"
-        android:layout_height="170dp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:srcCompat="@drawable/baseline_casino_24"
-        android:visibility="invisible"/>
-
     <ImageView
         android:id="@+id/i_avatar"
         android:layout_width="92dp"
@@ -89,5 +64,33 @@
         app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
         app:layout_constraintVertical_bias="0.26"
         app:srcCompat="@drawable/baseline_casino_24" />
+
+    <FrameLayout
+        android:layout_width="388dp"
+        android:layout_height="388dp"
+        android:layout_margin="20dp"
+
+        android:layout_weight="20"
+        android:background="@drawable/background_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+
+        <GridLayout
+            android:id="@+id/gr_tablero"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.46"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.287">
+
+        </GridLayout>
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

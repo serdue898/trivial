@@ -130,7 +130,7 @@ class Conexion(Context: Context) {
                 val juego4 = cursor.getInt(juego4Index)==1
                 val juegos = mutableListOf<Boolean>( juego1, juego2, juego3, juego4)
                 val jugador = obtenerJugador(idJugador)
-                val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, casillaActual, jugadorActual, juegos)
+                val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, casillaActual, jugadorActual,juegos,"")
                 listaJugadoresEnPartida.add(jugadorEnPartida)
             }
         }

@@ -5,7 +5,8 @@ data class JugadorEnPartida(
     var partida: Int,
     var casillaActual: String,
     var jugadorActual: Boolean,
-    var juegos: MutableList<Boolean>
+    var juegos: MutableList<Boolean>,
+    val avatar: String
 ) {
     fun puntosJugador(): Int {
         var puntos = 0
