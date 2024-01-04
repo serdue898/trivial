@@ -58,7 +58,7 @@ class Tablero (var gridTablero: GridLayout) {
                     }else if (tableroVersionUno[i][j].equals("5")){
                         botonTablero.setBackgroundColor(ContextCompat.getColor(contexto, R.color.magenta))
                     } else {
-                        botonTablero.setBackgroundColor(ContextCompat.getColor(contexto,R.color.negro))
+                        botonTablero.setBackgroundColor(ContextCompat.getColor(contexto,R.color.blanquillo))
                     }
                     //gravity= Gravity.FILL
                 }

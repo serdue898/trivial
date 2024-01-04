@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.minijuegos.test.view
 
 import android.content.Context
 import android.os.Bundle
@@ -8,14 +8,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 
 class MinijuegoTest_fragment: Fragment() {
-    private var comunicador: Comunicador? =null;
+    private var comunicador: ComunicadorTest? =null;
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        comunicador = context as? Comunicador
+        comunicador = context as? ComunicadorTest
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,7 +57,7 @@ class MinijuegoTest_fragment: Fragment() {
                     }
                 }
             }
-            comunicador?.enviarDatos("la respuesta ha sido " + correcto)
+           // comunicador?.enviarDatos("la respuesta ha sido " + correcto)
         }
 
         b_opcionA.setOnClickListener(listener)

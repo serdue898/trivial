@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <!-- colores botones-->
+    <color name="blanquillo">#E1AC9C</color>
     <color name="negro">#DD000000</color>
     <color name="magenta">#8B008B</color>
     <color name="azul">#1E90FF</color>
