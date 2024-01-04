@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.ListaAdapterSeleccion
 import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.SpinnerAdapter
 import com.example.trivialnavidad.core.feature.seleccionJugadores.viewModel.MetodosSeleccion
@@ -64,20 +66,25 @@ class SeleccionJugador : Fragment() {
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val b_eliminarJugador = view.findViewById<Button>(R.id.b_eliminarJugador)
         b_eliminarJugador?.isEnabled = false
-        val textoNombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
-
-
-
-
-
-
+        val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         b_guardarJugador?.text = "Nuevo jugador"
         b_guardarJugador?.setOnClickListener {
-            agregarJugadorLista( null)
-            actualizarLista()
-
+            if (jugadoresEnPartida.size >= 6) {
+                Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
+            }else{
+                agregarJugadorLista( )
+                actualizarLista()
+                if (jugadoresEnPartida.size >=2) {
+                    b_eliminarJugador?.visibility = View.VISIBLE
+                }
             }
+
+        }
+        bt_empezarPartida?.setOnClickListener {
+            empezarPartida()
+        }
+
         /*
             agregarJugadorLista(jugadoresEnPartida, null)
             b_eliminarJugador?.isEnabled = true
@@ -99,9 +106,13 @@ class SeleccionJugador : Fragment() {
 
     }
 
-    fun agregarJugadorLista(nombre: String?) {
+    fun agregarJugadorLista() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
+        if (nombreJugador?.text.toString().isEmpty()) {
+            Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Obtener el índice del avatar seleccionado
         val indiceAvatarSeleccionado = avatarJugador?.selectedItemPosition ?: 0
@@ -118,11 +129,15 @@ class SeleccionJugador : Fragment() {
     }
     private fun empezarPartida() {
         val conexion = Conexion(contexto!!)
+        val idPartida = conexion.agregarPartida(Partida(0,"partida"))
         val juegos = MutableList(4){i -> false}
         for (jugador in jugadoresEnPartida) {
             conexion.agregarJugador(jugador)
-
+            val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, "4_4",
+                jugadoresEnPartida[0]==jugador, juegos, jugador.avatar)
+            conexion.agregarJugadorEnPartida(jugadorEnPartida)
         }
+        comunicador?.empezarPartida(contexto!!,idPartida)
 
 
     }

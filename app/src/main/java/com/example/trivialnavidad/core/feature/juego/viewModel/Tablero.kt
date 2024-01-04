@@ -31,6 +31,8 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
     private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
     val preguntas = preguntas()
+    val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
+
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
         arrayOf("3","0","0","0","3","0","0","0","1"),
@@ -221,8 +223,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         casilla.removeAllViews()
         for (jugador in casilla.jugadores){
             val nuevoJugador = ImageView(contexto)
-            val resourceId = contexto.resources.getIdentifier(jugador.avatar, "drawable", contexto.packageName)
-            nuevoJugador.setImageResource(resourceId)
+            nuevoJugador.setImageDrawable(avatarImages.getDrawable(jugador.avatar.toInt()))
             nuevoJugador.layoutParams= GridLayout.LayoutParams().apply {
                 width = 0
                 height = 0

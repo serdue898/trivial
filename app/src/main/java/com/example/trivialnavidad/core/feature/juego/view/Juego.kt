@@ -1,6 +1,7 @@
 package com.example.trivialnavidad.core.feature.juego.view
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -39,11 +40,14 @@ class Juego(var partida :Int?) : Fragment() {
     private var cargar =false
     private var partidaActual = 1
     private lateinit var metodosTablero: Tablero
+    var avatarImages : TypedArray? = null
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view : View?
         contexto = container?.context
+        avatarImages  = contexto?.resources!!.obtainTypedArray(R.array.avatar_images)
         val conexion = Conexion(contexto!!)
         if (partida!=null)partidaActual= partida!!
         if (vista == null){
@@ -142,17 +146,8 @@ class Juego(var partida :Int?) : Fragment() {
     fun actualizarJugador( jugador: JugadorEnPartida? ){
         val nombre = view?.findViewById<TextView>(R.id.t_tunroJugador)
         val avatar = view?.findViewById<ImageView>(R.id.i_avatar)
-
-            nombre?.text = "turno del jugador:"+jugador?.jugador?.nombre
-
-        val jugadorAvatar = ImageView(contexto)
-        val resourceId = contexto!!.resources.getIdentifier(
-            jugador!!.avatar,
-            "drawable",
-            contexto!!.packageName
-        )
-        jugadorAvatar.setImageResource(resourceId)
-        avatar?.setImageDrawable(jugadorAvatar.drawable)
+        nombre?.text = "turno del jugador:"+jugador?.jugador?.nombre
+        avatar?.setImageDrawable(avatarImages?.getDrawable(jugador?.avatar!!.toInt()))
         // Llama a la función y obtén el último número aleatorio
 
     }

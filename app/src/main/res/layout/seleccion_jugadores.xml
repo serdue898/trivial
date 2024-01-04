@@ -68,10 +68,9 @@
         android:layout_height="49dp"
         android:layout_marginTop="48dp"
         android:text="Empezar a jugar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ryV_listaJugadores"
-        app:layout_constraintVertical_bias="0.006" />
+        app:layout_constraintTop_toBottomOf="@+id/ryV_listaJugadores" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

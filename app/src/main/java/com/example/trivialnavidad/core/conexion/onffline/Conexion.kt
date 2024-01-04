@@ -57,13 +57,15 @@ class Conexion(Context: Context) {
         return existe
     }
 
-    fun agregarPartida(partida: Partida) {
+    fun agregarPartida(partida: Partida):Int {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(KEY_NOMBRE_P, partida.nombre)
         }
         val partidaId = db.insert(TABLE_PARTIDA, null, values)
         partida.idPartida = partidaId.toInt()
+        partida.nombre = "Partida ${partidaId.toInt()}"
+        return partidaId.toInt()
     }
 
     fun agregarJugadorEnPartida(jugadorEnPartida: JugadorEnPartida) {
