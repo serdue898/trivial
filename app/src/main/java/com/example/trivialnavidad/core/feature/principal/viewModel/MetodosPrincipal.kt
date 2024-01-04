@@ -12,15 +12,19 @@ class MetodosPrincipal: ComunicadorPrincipal {
 
     override fun abrir_juego(datos: String, context: Context) {
         if (context is AppCompatActivity) {
-            if (datos == "offline") {
-
+            if (datos == "cargar") {
+                val partidas = Partidas()
+                val fragmentManager = context.supportFragmentManager
+                fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor, partidas)
+                    .commit()
+            } else if (datos == "nueva") {
+                // Código para el caso "online", si es necesario
                 val seleccion = SeleccionJugador()
                 val fragmentManager = context.supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(R.id.contenedor, seleccion)
                     .commit()
-            } else if (datos == "online") {
-                // Código para el caso "online", si es necesario
             }
         }
     }

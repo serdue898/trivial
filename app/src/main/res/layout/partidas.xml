@@ -29,12 +29,12 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clasificacion:"
+                android:text="@string/partidas"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="659dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_jugadores"
+                android:id="@+id/rv_partidas"
                 android:layout_width="match_parent"
                 android:layout_height="502dp"
                 android:layout_marginTop="4dp"
@@ -56,8 +56,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

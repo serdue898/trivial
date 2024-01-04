@@ -21,10 +21,21 @@ class Principal : Fragment() {
 
         val botonOff = view.findViewById<Button>(R.id.bt_offline)
         val botonOn = view.findViewById<Button>(R.id.bt_online)
+        val botonNuevaPartida = view.findViewById<Button>(R.id.bt_nueva)
+        val botonCargarPartida = view.findViewById<Button>(R.id.bt_cargar)
 
-
+        botonNuevaPartida.setOnClickListener {
+            comunicador?.abrir_juego("nueva",contexto!!)
+        }
+        botonCargarPartida.setOnClickListener {
+            comunicador?.abrir_juego("cargar",contexto!!)
+        }
         botonOff.setOnClickListener {
-            comunicador?.abrir_juego("offline",contexto!!)
+
+            botonCargarPartida.visibility = View.VISIBLE
+            botonNuevaPartida.visibility = View.VISIBLE
+            botonOff.visibility = View.INVISIBLE
+            botonOn.visibility = View.INVISIBLE
 
         }
         botonOn.setOnClickListener {

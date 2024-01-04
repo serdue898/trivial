@@ -36,4 +36,27 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/bt_offline"
         app:layout_constraintTop_toBottomOf="@+id/bt_offline" />
+
+    <Button
+        android:id="@+id/bt_nueva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nueva_partida"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_offline"
+        app:layout_constraintEnd_toStartOf="@+id/bt_offline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bt_offline"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt_cargar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cargar_partida"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_offline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bt_offline"
+        app:layout_constraintTop_toTopOf="@+id/bt_offline" />
 </androidx.constraintlayout.widget.ConstraintLayout>

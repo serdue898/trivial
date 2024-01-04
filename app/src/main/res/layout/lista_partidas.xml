@@ -4,23 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingVertical="10dp">
+    android:padding="10dp">
 
     <TextView
-        android:id="@+id/tx_nombre"
+        android:id="@+id/tx_id"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="ID" />
 
     <TextView
-        android:id="@+id/tx_puntuacion"
+        android:id="@+id/tx_nombrePartida"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="Partida" />
+
+    <TextView
+        android:id="@+id/tx_numJugadores"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Número" />
+
 </LinearLayout>

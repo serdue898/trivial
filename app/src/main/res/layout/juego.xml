@@ -54,38 +54,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bt_dado" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="91dp"
-        android:layout_height="100dp"
-        android:text="AVATAR"
+    <ImageView
+        android:id="@+id/i_avatar"
+        android:layout_width="92dp"
+        android:layout_height="81dp"
+        android:layout_marginEnd="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador" />
+        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.26"
+        app:srcCompat="@drawable/dado" />
 
-    <GridLayout
-        android:id="@+id/gr_tablero"
-        android:layout_width="347dp"
-        android:layout_height="321dp"
-        app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
+    <FrameLayout
+        android:layout_width="388dp"
+        android:layout_height="388dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/background_border"
+        android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
 
-    </GridLayout>
+        <GridLayout
+            android:id="@+id/gr_tablero"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.46"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.287">
 
-    <ImageView
-        android:id="@+id/dado"
-        android:layout_width="131dp"
-        android:layout_height="170dp"
+        </GridLayout>
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:srcCompat="@drawable/dado"
-        android:visibility="invisible"/>
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

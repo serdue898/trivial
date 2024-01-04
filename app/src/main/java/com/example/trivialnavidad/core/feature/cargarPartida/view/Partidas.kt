@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.clasificacion.view
+
 
 import android.content.Context
 import android.os.Bundle
@@ -10,24 +10,30 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.t8_ej03_persistenciaapi.ui.adapter.ListaAdapter
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.conexion.onffline.Conexion
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.clasificacion.viewModel.ComunicadorClasificacion
-import com.example.trivialnavidad.core.feature.clasificacion.viewModel.MetodosClasifiacion
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
+import com.example.trivialnavidad.core.feature.cargarPartida.adapter.PartidaAdapter
+import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.ComunicadorPartida
+import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.MetodosPartida
 
-class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment() {
-    private var comunicador: ComunicadorClasificacion? = MetodosClasifiacion()
+class Partidas : Fragment() {
+
     private var contexto: Context? = null
-
+    private var comunicador: ComunicadorPartida? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.clasificacion, container, false)
+        val view = inflater.inflate(R.layout.partidas, container, false)
         contexto = container?.context
-
+        comunicador = MetodosPartida(contexto!!)
         val bt_volver = view.findViewById<Button>(R.id.bt_volver)
         bt_volver.setOnClickListener {
-            comunicador?.volver(contexto!!)
         }
+
+
+
+
 
 
 
@@ -37,17 +43,21 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Puedes llamar a actualizarLista aquí para garantizar que la vista ya se haya creado
+        val conexion = Conexion(contexto!!)
+        val partidas = conexion.obtenerPartidas()
+        actualizarLista(partidas)
 
-            actualizarLista(jugadoresEnPartida.sortedByDescending { it.puntosJugador() })
 
     }
 
-    fun actualizarLista(jugadoresEnPartida: List<JugadorEnPartida>) {
-        val lista = view?.findViewById<RecyclerView>(R.id.rv_jugadores)
+    fun actualizarLista(jugadoresEnPartida: List<Partida>) {
+        val lista = view?.findViewById<RecyclerView>(R.id.rv_partidas)
         lista?.layoutManager = LinearLayoutManager(contexto)
         val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)
         lista?.addItemDecoration(dividerItemDecoration)
-        val adapter = ListaAdapter(jugadoresEnPartida)
+        val adapter = PartidaAdapter(jugadoresEnPartida,comunicador!!)
         lista?.adapter = adapter
+
+
     }
 }
