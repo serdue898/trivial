@@ -23,9 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         configuracion = Configuracion(this)
         reproductor = Reproductor(this, R.raw.lobby_music)
-        if (configuracion!!.obtenerOpcionMusica()) {
-            reproductor!!.iniciarReproduccion()
-        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +33,11 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Liberar recursos cuando la actividad se destruye
+        reproductor?.liberarRecursos()
     }
 
 

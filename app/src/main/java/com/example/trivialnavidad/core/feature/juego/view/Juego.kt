@@ -121,7 +121,7 @@ class Juego(var partida :Int?) : Fragment() {
                 true
             }
             R.id.mItm_configuracion -> {
-                abrirConfiguracion()
+                MainActivity.configuracion?.mostrarConfiguracion(contexto!!)
                 true
             }
 
@@ -139,34 +139,7 @@ class Juego(var partida :Int?) : Fragment() {
         }
     }
 
-    private fun abrirConfiguracion() {
-        val configuracion = MainActivity.configuracion
-        val popup = AlertDialog.Builder(contexto as AppCompatActivity)
-        val vista = LayoutInflater.from(contexto).inflate(R.layout.popup_configuracion, null)
-        val musica = vista.findViewById<CheckBox>(R.id.ch_musica)
-        val sonido = vista.findViewById<CheckBox>(R.id.ch_sonido)
-        val vibracion = vista.findViewById<CheckBox>(R.id.ch_vibracion)
-        musica.isChecked = configuracion?.obtenerOpcionMusica()!!
-        sonido.isChecked = configuracion.obtenerOpcionSonido()
-        vibracion.isChecked = configuracion.obtenerOpcionVibracion()
-        musica.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                MainActivity.reproductor?.iniciarReproduccion()
-            } else {
-                MainActivity.reproductor?.detenerReproduccion()
-            }
-        }
-        popup.setView(vista)
-        popup.setTitle("Configuración")
-        popup.setCancelable(false)
-        popup.setPositiveButton("Aceptar") { _, _ ->
-            configuracion.guardarOpcionMusica(musica.isChecked)
-            configuracion.guardarOpcionSonido(sonido.isChecked)
-            configuracion.guardarOpcionVibracion(vibracion.isChecked)
-        }
-        popup.show()
 
-    }
 
     private fun guardarDatos() {
         val conexion = Conexion(contexto!!)
