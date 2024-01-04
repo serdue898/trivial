@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
+import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.cargarPartida.adapter.PartidaAdapter
 import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.ComunicadorPartida
@@ -31,6 +33,10 @@ class Partidas : Fragment() {
 
 
 
+
+
+
+
         return view
     }
 
@@ -40,6 +46,7 @@ class Partidas : Fragment() {
         val conexion = Conexion(contexto!!)
         val partidas = conexion.obtenerPartidas()
         actualizarLista(partidas)
+
 
     }
 

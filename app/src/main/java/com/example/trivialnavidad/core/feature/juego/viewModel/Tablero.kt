@@ -221,7 +221,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         casilla.removeAllViews()
         for (jugador in casilla.jugadores){
             val nuevoJugador = ImageView(contexto)
-            val resourceId = contexto.resources.getIdentifier(jugador.jugador.avatar, "drawable", contexto.packageName)
+            val resourceId = contexto.resources.getIdentifier(jugador.avatar, "drawable", contexto.packageName)
             nuevoJugador.setImageResource(resourceId)
             nuevoJugador.layoutParams= GridLayout.LayoutParams().apply {
                 width = 0

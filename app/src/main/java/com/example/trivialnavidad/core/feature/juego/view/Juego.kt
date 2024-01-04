@@ -147,7 +147,7 @@ class Juego(var partida :Int?) : Fragment() {
 
         val jugadorAvatar = ImageView(contexto)
         val resourceId = contexto!!.resources.getIdentifier(
-            jugador!!.jugador.avatar,
+            jugador!!.avatar,
             "drawable",
             contexto!!.packageName
         )
@@ -193,6 +193,9 @@ class Juego(var partida :Int?) : Fragment() {
         bt_dado?.isEnabled = true
         if (!ganado){
             jugador++
+            if (jugador>=jugadoresEnPartida.size){
+                jugador=0
+            }
             val jugadorActual = jugadoresEnPartida[jugador]
             actualizarJugador(jugadorActual)
 
