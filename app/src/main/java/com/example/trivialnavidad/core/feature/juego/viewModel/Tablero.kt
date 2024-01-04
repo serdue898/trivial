@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
@@ -108,6 +109,11 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     var minijuego : Fragment? = null
                     if (casilla.dificultad==1){
                         minijuego = Adivina(pregunta!!, JugadorActual!!)
+                    }else if (casilla.dificultad==2){
+                        val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
+                        for  (i in 0 until 5){
+                            listaPtreguntas.add(preguntasMinijuego?.random()!!)
+                        }
                     }else{
                         juego.resultadoMiniJuego(true)
                     }

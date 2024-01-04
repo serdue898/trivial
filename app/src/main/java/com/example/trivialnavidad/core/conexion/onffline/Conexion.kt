@@ -40,6 +40,9 @@ class Conexion(Context: Context) {
 
             val jugadorId = db.insert(TABLE_JUGADORES, null, values)
             jugador.id = jugadorId.toInt()
+        }else{
+            jugador.id=obtenerJugadorPorNombre(jugador.nombre)
+
         }
 
     }
@@ -65,6 +68,7 @@ class Conexion(Context: Context) {
         val partidaId = db.insert(TABLE_PARTIDA, null, values)
         partida.idPartida = partidaId.toInt()
         partida.nombre = "Partida ${partidaId.toInt()}"
+        actualizarPartida(partida)
         return partidaId.toInt()
     }
 
@@ -78,6 +82,18 @@ class Conexion(Context: Context) {
             put(KEY_AVATAR_JP, jugadorEnPartida.avatar)
         }
        var funciona= db.insert(TABLE_JUGADOR_EN_PARTIDA, null, values)
+    }
+    fun actualizarPartida(partida: Partida){
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(KEY_NOMBRE_P, partida.nombre)
+        }
+        db.update(
+            TABLE_PARTIDA,
+            values,
+            "$KEY_ID_P = ?",
+            arrayOf(partida.idPartida.toString())
+        )
     }
     fun obtenerPartidas(): List<Partida> {
         val db = dbHelper.readableDatabase
@@ -166,6 +182,22 @@ class Conexion(Context: Context) {
         cursor.close()
 
         return jugador
+
+    }
+    private fun obtenerJugadorPorNombre(nombreJugador: String): Int {
+        val db = dbHelper.readableDatabase
+        val query = "SELECT * FROM $TABLE_JUGADORES WHERE $KEY_NOMBRE_J = ?"
+        val cursor: Cursor = db.rawQuery(query, arrayOf(nombreJugador))
+        var jugador = Jugador(0, "", "")
+        var id=0
+        while (cursor.moveToNext()) {
+            val idIndex = cursor.getColumnIndex(KEY_ID_J)
+            if (idIndex != -1 ) {
+                 id = cursor.getInt(idIndex)
+            }
+        }
+        cursor.close()
+        return id
 
     }
 

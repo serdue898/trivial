@@ -76,7 +76,7 @@ class SeleccionJugador : Fragment() {
                 agregarJugadorLista( )
                 actualizarLista()
                 if (jugadoresEnPartida.size >=2) {
-                    b_eliminarJugador?.visibility = View.VISIBLE
+                    bt_empezarPartida?.visibility = View.VISIBLE
                 }
             }
 
