@@ -29,7 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Juego : Fragment() {
+class Juego(var partida :Int?) : Fragment() {
     private var comunicador: ComunicadorJuego? = MetodosJuego()
     private var contexto: Context? = null
     private var jugador:Int = 0
@@ -37,17 +37,19 @@ class Juego : Fragment() {
     private var jugadoresEnPartida = listOf<JugadorEnPartida>()
     private var vista : View? = null
     private var cargar =false
+    private var partidaActual = 1
     private lateinit var metodosTablero: Tablero
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view : View? = null
+        var view : View?
         contexto = container?.context
         val conexion = Conexion(contexto!!)
+        if (partida!=null)partidaActual= partida!!
         if (vista == null){
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
-            jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(1)
+            jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
             metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)
             metodosTablero.crearTablero()
@@ -190,7 +192,10 @@ class Juego : Fragment() {
         }
     }
     fun resultadoMiniJuego(ganado :Boolean){
-
+        val conexion = Conexion(contexto!!)
+        conexion.actualizarCasillaActual(jugadoresEnPartida[jugador])
+        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
+        bt_dado?.isEnabled = true
         if (!ganado){
             jugador++
             val jugadorActual = jugadoresEnPartida[jugador]
@@ -198,6 +203,7 @@ class Juego : Fragment() {
 
         }
         cargar = true
+
 
 
     }

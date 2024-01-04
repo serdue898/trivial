@@ -20,4 +20,7 @@
     <string name="bt_online">online</string>
     <string name="acierto">has acertado la pregunta</string>
     <string name="fallo">fallaste la pregunta</string>
+    <string name="partidas">Partidas:</string>
+    <string name="nueva_partida">Nueva Partida</string>
+    <string name="cargar_partida">Cargar Partida</string>
 </resources>

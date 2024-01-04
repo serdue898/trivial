@@ -62,7 +62,7 @@ class Conexion(Context: Context) {
             put(KEY_NOMBRE_P, partida.nombre)
         }
         val partidaId = db.insert(TABLE_PARTIDA, null, values)
-        partida.id = partidaId.toInt()
+        partida.idPartida = partidaId.toInt()
     }
 
     fun agregarJugadorEnPartida(jugadorEnPartida: JugadorEnPartida) {
