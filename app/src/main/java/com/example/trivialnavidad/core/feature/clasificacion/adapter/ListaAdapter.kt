@@ -25,11 +25,17 @@ class ListaAdapter(private val jugadores: List<JugadorEnPartida>) : RecyclerView
 
     // Reemplazo del contenido de una vista (invocado por el layout manager).
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val jugador = jugadores[position]
-        holder.nombre.text = jugador.jugador.nombre
-        holder.puntuacion.text = jugador.puntosJugador().toString()
+        if (position == 0) {
+            // Configurar encabezados
+            holder.nombre.text = "Nombre"
+            holder.puntuacion.text = "Puntuacion"
+        } else {
+            val jugador = jugadores[position-1]
+            holder.nombre.text = jugador.jugador.nombre
+            holder.puntuacion.text = jugador.puntosJugador().toString()
+        }
     }
 
     // Devuelve el tamaño de tu conjunto de datos (invocado por el layout manager).
-    override fun getItemCount() = jugadores.size
+    override fun getItemCount() = jugadores.size+1
 }

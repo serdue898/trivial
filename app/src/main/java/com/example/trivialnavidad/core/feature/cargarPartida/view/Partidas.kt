@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
@@ -44,8 +45,10 @@ class Partidas : Fragment() {
 
     fun actualizarLista(jugadoresEnPartida: List<Partida>) {
         val lista = view?.findViewById<RecyclerView>(R.id.rv_partidas)
-        val adapter = PartidaAdapter(jugadoresEnPartida,comunicador!!)
         lista?.layoutManager = LinearLayoutManager(contexto)
+        val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)
+        lista?.addItemDecoration(dividerItemDecoration)
+        val adapter = PartidaAdapter(jugadoresEnPartida,comunicador!!)
         lista?.adapter = adapter
 
 

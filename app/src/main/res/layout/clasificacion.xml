@@ -18,10 +18,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="528dp"
-            android:orientation="vertical"
             android:layout_margin="20dp"
+            android:orientation="vertical"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="671dp">
 
@@ -29,13 +29,13 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Puntuacion:"
+                android:text="Clasificacion:"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="659dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_jugadores"
-                android:layout_width="351dp"
+                android:layout_width="match_parent"
                 android:layout_height="502dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -16,10 +16,7 @@ class Dado(private val imageViewDado: ImageView ) {
 
     private var lastRandomNumber = 0
 
-    fun tiradaDado() {
-        lastRandomNumber = 0
 
-    }
 
     suspend fun cambiarImagenCadaSegundo(view: View): Int {
         val deferred = CompletableDeferred<Int>()

@@ -69,8 +69,6 @@ class Juego(var partida :Int?) : Fragment() {
         setHasOptionsMenu(true)
 
 
-
-
         bt_dado?.setOnClickListener {
             bt_dado.isEnabled = false
             GlobalScope.launch {
@@ -85,16 +83,6 @@ class Juego(var partida :Int?) : Fragment() {
         }
         return view
     }
-    fun tirada(movimientos: Int, alertDialog: AlertDialog){
-        alertDialog.dismiss()
-        GlobalScope.launch {
-            withContext(Dispatchers.Main) {
-                jugadorActual = jugadoresEnPartida[jugador]
-                metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())
-            }
-
-        }
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         jugadorActual = jugadoresEnPartida[jugador]
@@ -105,7 +93,6 @@ class Juego(var partida :Int?) : Fragment() {
         }
 
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
             inflater.inflate(R.menu.menu_view, menu)// OJO- se pasa la vista que se quiere inflar
@@ -139,21 +126,20 @@ class Juego(var partida :Int?) : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun verInstrucciones() {
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
-        val acercaDe = R.string.intrucciones
         msnEmergente.setMessage(getString(R.string.intrucciones))
 
         msnEmergente.show()
     }
-
     private fun acercaDe() {
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
-        val acercaDe = R.string.acercaDe
         msnEmergente.setMessage(getString(R.string.acercaDe))
         msnEmergente.show()
     }
-     fun actualizarJugador( jugador: JugadorEnPartida? ){
+
+    fun actualizarJugador( jugador: JugadorEnPartida? ){
         val nombre = view?.findViewById<TextView>(R.id.t_tunroJugador)
         val avatar = view?.findViewById<ImageView>(R.id.i_avatar)
 
@@ -188,6 +174,15 @@ class Juego(var partida :Int?) : Fragment() {
                 boton.setOnClickListener {
                     tirada(movimientos,construido)
                 }
+            }
+        }
+    }
+    fun tirada(movimientos: Int, alertDialog: AlertDialog){
+        alertDialog.dismiss()
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                jugadorActual = jugadoresEnPartida[jugador]
+                metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())
             }
         }
     }

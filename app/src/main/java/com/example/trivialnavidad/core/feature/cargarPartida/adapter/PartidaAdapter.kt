@@ -17,6 +17,7 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
         var nombre: TextView = itemView.findViewById(R.id.tx_nombrePartida)
         var id: TextView = itemView.findViewById(R.id.tx_id)
         var numjugadores: TextView = itemView.findViewById(R.id.tx_numJugadores)
+
     }
 
     // Creación de nuevas vistas (invocadas por el layout manager).
@@ -27,14 +28,23 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
 
     // Reemplazo del contenido de una vista (invocado por el layout manager).
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val partida = partidas[position]
-        holder.id.text = partida.idPartida.toString()
-        holder.nombre.text = partida.nombre
-        holder.itemView.setOnClickListener {
-            comunicador.cargarPartida(partida.idPartida)
+        if (position == 0) {
+            // Configurar encabezados
+            holder.id.text = "ID"
+            holder.nombre.text = "Partida"
+            holder.numjugadores.text = "Número"
+        } else {
+            val partida = partidas[position - 1]  // Resta 1 para compensar el encabezado
+            holder.id.text = partida.idPartida.toString()
+            holder.nombre.text = partida.nombre
+
+            // Agregar un clic listener para cargar la partida
+            holder.itemView.setOnClickListener {
+                comunicador.cargarPartida(partida.idPartida)
+            }
         }
     }
 
     // Devuelve el tamaño de tu conjunto de datos (invocado por el layout manager).
-    override fun getItemCount() = partidas.size
+    override fun getItemCount() = partidas.size+1
 }
