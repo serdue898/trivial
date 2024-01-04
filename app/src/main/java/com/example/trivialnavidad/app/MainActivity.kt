@@ -16,24 +16,11 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         var juego=null as Juego?
+        var configuracion = null as Configuracion?
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseDatos(this)
-        var conexion = Conexion(this)
-        /*
-        val juegos = MutableList(4){i -> false}
-        var jug1 = Jugador(1,"prueba","dado1")
-        var jug2 = Jugador(2,"prueba2","dado1")
+        configuracion = Configuracion(this)
 
-        conexion.agregarJugador(jug1)
-        conexion.agregarJugador(jug2)
-        var partida = Partida(1,"partida1")
-        conexion.agregarPartida(partida)
-        var jugador1 = JugadorEnPartida(jug1,1,"1_1",false,juegos,"dado1")
-        conexion.agregarJugadorEnPartida(jugador1)
-        var jugador2 = JugadorEnPartida(jug2,1,"1_1",false,juegos,"dado2")
-        conexion.agregarJugadorEnPartida(jugador2)
-        */
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {

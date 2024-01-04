@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
@@ -118,6 +120,10 @@ class Juego(var partida :Int?) : Fragment() {
                 guardarDatos()
                 true
             }
+            R.id.mItm_configuracion -> {
+                abrirConfiguracion()
+                true
+            }
 
             R.id.mItm_instrucciones -> {
                 verInstrucciones()
@@ -131,6 +137,28 @@ class Juego(var partida :Int?) : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun abrirConfiguracion() {
+        val configuracion = MainActivity.configuracion
+        val popup = AlertDialog.Builder(contexto as AppCompatActivity)
+        val vista = LayoutInflater.from(contexto).inflate(R.layout.popup_configuracion, null)
+        val musica = vista.findViewById<CheckBox>(R.id.ch_musica)
+        val sonido = vista.findViewById<CheckBox>(R.id.ch_sonido)
+        val vibracion = vista.findViewById<CheckBox>(R.id.ch_vibracion)
+        musica.isChecked = configuracion?.obtenerOpcionMusica()!!
+        sonido.isChecked = configuracion.obtenerOpcionSonido()
+        vibracion.isChecked = configuracion.obtenerOpcionVibracion()
+        popup.setView(vista)
+        popup.setTitle("Configuración")
+        popup.setCancelable(false)
+        popup.setPositiveButton("Aceptar") { _, _ ->
+            configuracion.guardarOpcionMusica(musica.isChecked)
+            configuracion.guardarOpcionSonido(sonido.isChecked)
+            configuracion.guardarOpcionVibracion(vibracion.isChecked)
+        }
+        popup.show()
+
     }
 
     private fun guardarDatos() {

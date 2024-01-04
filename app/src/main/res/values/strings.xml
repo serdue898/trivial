@@ -23,4 +23,5 @@
     <string name="partidas">Partidas:</string>
     <string name="nueva_partida">Nueva Partida</string>
     <string name="cargar_partida">Cargar Partida</string>
+    <string name="mItm_configuracion">Configuracion</string>
 </resources>

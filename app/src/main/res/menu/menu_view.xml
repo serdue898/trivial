@@ -9,6 +9,9 @@
         android:id="@+id/mItm_guardar"
         android:title="@string/mItm_guardar" />
     <item
+        android:id="@+id/mItm_configuracion"
+        android:title="@string/mItm_configuracion" />
+    <item
         android:id="@+id/mItm_instrucciones"
         android:title="@string/mItm_instrucciones" />
     <item
