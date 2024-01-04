@@ -1,5 +1,6 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
+import android.content.Context
 import android.content.DialogInterface
 import android.view.View
 import android.widget.Button
@@ -11,8 +12,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AlertDialog.Builder
+import com.example.trivialnavidad.app.MainActivity
+import com.example.trivialnavidad.app.Reproductor
+import com.example.trivialnavidad.app.Vibracion
 
-class Dado(private val imageViewDado: ImageView ) {
+class Dado(private val imageViewDado: ImageView, private val vibracion: Vibracion?,private val reproductor: Reproductor? ) {
 
     private var lastRandomNumber = 0
 
@@ -20,6 +24,11 @@ class Dado(private val imageViewDado: ImageView ) {
 
     suspend fun cambiarImagenCadaSegundo(view: View): Int {
         val deferred = CompletableDeferred<Int>()
+        if (reproductor != null){
+            reproductor.iniciarReproduccion()
+            if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.pausarReproduccion()
+
+        }
 
         GlobalScope.launch(Dispatchers.Main) {
             repeat(10) {
@@ -28,6 +37,7 @@ class Dado(private val imageViewDado: ImageView ) {
                 imageViewDado.setImageResource(resourceId)
 
                 lastRandomNumber = randomImageName.last().toString().toInt()
+                if (vibracion != null) vibracion.vibrar(100)
                 delay(300)
             }
             val resourceId = obtenerResourceId("dado${lastRandomNumber}")
@@ -37,6 +47,8 @@ class Dado(private val imageViewDado: ImageView ) {
             deferred.complete(lastRandomNumber)
 
         }
+        reproductor?.detenerReproduccion()
+        if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.iniciarReproduccion()
 
 
         // Espera a que la corrutina termine y obtén el último número aleatorio

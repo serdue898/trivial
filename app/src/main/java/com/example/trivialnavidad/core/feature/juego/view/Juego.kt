@@ -20,6 +20,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
+import com.example.trivialnavidad.app.Reproductor
+import com.example.trivialnavidad.app.Vibracion
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
@@ -182,7 +184,11 @@ class Juego(var partida :Int?) : Fragment() {
 
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
-                val movimientos = Dado(dado).cambiarImagenCadaSegundo(view)
+                var vibracion = null as Vibracion?
+                var sonido = null as Reproductor?
+                if (MainActivity.configuracion?.obtenerOpcionVibracion()!!) vibracion = Vibracion(contexto!!)
+                //if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.lobby_music)
+                val movimientos = Dado(dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
                 boton.setOnClickListener {
                     tirada(movimientos,construido)
                 }
