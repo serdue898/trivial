@@ -10,17 +10,16 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 
 class ListaAdapter(private val jugadores: List<JugadorEnPartida>) : RecyclerView.Adapter<ListaAdapter.PostViewHolder>() {
+    // Creación de nuevas vistas (invocadas por el layout manager).
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.lista_clasificacion, parent, false)
+        return PostViewHolder(view)
+    }
 
     // Definición del ViewHolder que proporciona una referencia a las vistas para cada elemento de datos.
     class PostViewHolder(itemView: View) : ViewHolder(itemView) {
         var nombre: TextView = itemView.findViewById(R.id.tx_nombre)
         var puntuacion: TextView = itemView.findViewById(R.id.tx_puntuacion)
-    }
-
-    // Creación de nuevas vistas (invocadas por el layout manager).
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.lista_clasificacion, parent, false)
-        return PostViewHolder(view)
     }
 
     // Reemplazo del contenido de una vista (invocado por el layout manager).
