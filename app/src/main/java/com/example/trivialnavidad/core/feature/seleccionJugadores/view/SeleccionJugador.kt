@@ -5,16 +5,21 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
@@ -36,6 +41,9 @@ class SeleccionJugador : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.seleccion_jugadores, container, false)
         contexto = container?.context
+        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar3)
+        (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        setHasOptionsMenu(true)
 
         /*
         // codigo de clasificacion y no se si es necesario o no
@@ -46,6 +54,33 @@ class SeleccionJugador : Fragment() {
           }
     */
         return view
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
+        inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.mItm_configuracion -> {
+                MainActivity.configuracion?.mostrarConfiguracion(contexto!!)
+                true
+            }
+            R.id.mItm_inicio -> {
+                comunicador?.volver(contexto!!)
+                true
+            }
+            R.id.mItm_acerca -> {
+                val msnEmergente = androidx.appcompat.app.AlertDialog.Builder(contexto as AppCompatActivity)
+                msnEmergente.setMessage(getString(R.string.acercaDe))
+                msnEmergente.show()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

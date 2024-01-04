@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -102,7 +101,7 @@ class Juego(var partida :Int?) : Fragment() {
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
-            inflater.inflate(R.menu.menu_view, menu)// OJO- se pasa la vista que se quiere inflar
+            inflater.inflate(R.menu.menu_juego_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
 
