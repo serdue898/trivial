@@ -2,38 +2,86 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="283dp"
-        android:layout_height="104dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/nombre_juego"
-        android:textSize="80sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/bt_offline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="44dp"
         android:text="@string/bt_offline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/bt_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="60dp"
         android:text="@string/bt_online"
-        app:layout_constraintEnd_toEndOf="@+id/bt_offline"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_offline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/bt_offline"
+        app:layout_constraintTop_toTopOf="@+id/bt_offline"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt_nueva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nueva_partida"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/bt_offline"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="@+id/bt_offline"
         app:layout_constraintTop_toBottomOf="@+id/bt_offline" />
+
+    <Button
+        android:id="@+id/bt_cargar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cargar_partida"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/bt_online"
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toStartOf="@+id/bt_online"
+        app:layout_constraintTop_toBottomOf="@+id/bt_online" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="376dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/trivial" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="157dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/bt_online"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="@+id/bt_offline"
+        app:layout_constraintTop_toBottomOf="@+id/bt_cargar"
+        app:srcCompat="@drawable/trivial_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

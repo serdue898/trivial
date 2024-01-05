@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".app.MainActivity">
@@ -21,71 +22,79 @@
         android:id="@+id/t_tunroJugador"
         android:layout_width="157dp"
         android:layout_height="35dp"
+        android:layout_marginTop="52dp"
         android:text="@string/t_tunroJugador"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <Button
         android:id="@+id/bt_dado"
         android:layout_width="72dp"
         android:layout_height="55dp"
-        android:layout_marginTop="84dp"
-        android:drawableEnd="@drawable/baseline_casino_24"
+        android:layout_marginBottom="80dp"
+        android:drawableEnd="@drawable/dado"
         android:text="1 "
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.297"
+        app:layout_constraintHorizontal_bias="0.309"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/t_tunroJugador" />
+        app:layout_constraintTop_toBottomOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.79" />
 
     <Button
         android:id="@+id/bt_clasificacion"
         android:layout_width="63dp"
         android:layout_height="53dp"
-        android:drawableEnd="@drawable/baseline_format_list_numbered_24"
+        android:drawableEnd="@drawable/clasificacion"
 
         android:text="1 "
         app:layout_constraintBottom_toBottomOf="@+id/bt_dado"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintHorizontal_bias="0.683"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bt_dado" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="91dp"
-        android:layout_height="100dp"
-        android:text="AVATAR"
-        app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador" />
-
-    <GridLayout
-        android:id="@+id/gr_tablero"
-        android:layout_width="347dp"
-        android:layout_height="321dp"
-        app:layout_constraintBottom_toTopOf="@+id/t_tunroJugador"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </GridLayout>
+        app:layout_constraintTop_toTopOf="@+id/bt_dado"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/dado"
-        android:layout_width="131dp"
-        android:layout_height="170dp"
+        android:id="@+id/i_avatar"
+        android:layout_width="92dp"
+        android:layout_height="81dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/t_tunroJugador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.26"
+        app:srcCompat="@drawable/dado" />
 
-        app:layout_constraintBottom_toBottomOf="parent"
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+
+        android:layout_height="388dp"
+        android:layout_weight="1"
+        android:background="@drawable/background_border"
+        android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
-        app:srcCompat="@drawable/baseline_casino_24"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+
+        <GridLayout
+            android:id="@+id/gr_tablero"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.46"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.287">
+
+        </GridLayout>
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

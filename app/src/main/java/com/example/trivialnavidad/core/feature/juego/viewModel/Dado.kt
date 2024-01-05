@@ -1,43 +1,58 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
+import android.content.Context
+import android.content.DialogInterface
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import com.example.trivialnavidad.R
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.appcompat.app.AlertDialog.Builder
+import com.example.trivialnavidad.app.MainActivity
+import com.example.trivialnavidad.app.Reproductor
+import com.example.trivialnavidad.app.Vibracion
 
-class Dado(private val imageViewDado: ImageView) {
+class Dado(private val imageViewDado: ImageView, private val vibracion: Vibracion?,private val reproductor: Reproductor? ) {
 
     private var lastRandomNumber = 0
 
-    fun tiradaDado() {
-        lastRandomNumber = 0
-        cambiarImagenCadaSegundo()
-    }
 
-    private fun cambiarImagenCadaSegundo() {
-        val job = GlobalScope.launch(Dispatchers.Main) {
+
+    suspend fun cambiarImagenCadaSegundo(view: View): Int {
+        val deferred = CompletableDeferred<Int>()
+        if (reproductor != null){
+            reproductor.iniciarReproduccion()
+            if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.pausarReproduccion()
+
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
             repeat(10) {
                 val randomImageName = "dado${(1..6).random()}"
-                // Asigna la imagen al ImageView
                 val resourceId = obtenerResourceId(randomImageName)
                 imageViewDado.setImageResource(resourceId)
 
                 lastRandomNumber = randomImageName.last().toString().toInt()
+                if (vibracion != null) vibracion.vibrar(100)
                 delay(300)
-                imageViewDado.visibility = ImageView.VISIBLE
             }
+            val resourceId = obtenerResourceId("dado${lastRandomNumber}")
+            imageViewDado.setImageResource(resourceId)
 
-            // Cuando termina el tiempo, devuelve el último número aleatorio
-            // Puedes hacer lo que necesites con este número
-            // En este ejemplo, simplemente lo imprimo
-            println("Último número aleatorio: $lastRandomNumber")
-            imageViewDado.visibility = ImageView.INVISIBLE
+            view.findViewById<Button>(R.id.bt_salir).visibility = View.VISIBLE
+            deferred.complete(lastRandomNumber)
+
         }
+        reproductor?.detenerReproduccion()
+        if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.iniciarReproduccion()
 
-        // Puedes cancelar el trabajo si es necesario (por ejemplo, si el usuario sale de la pantalla)
-        // job.cancel()
+
+        // Espera a que la corrutina termine y obtén el último número aleatorio
+        return deferred.await()
     }
 
     private fun obtenerResourceId(imageName: String): Int {

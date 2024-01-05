@@ -14,11 +14,10 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     // Son como los valores estáticos en Java
     companion object {
         private const val DATABASE_NAME = "trivial"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 3
         private const val TABLE_JUGADORES = "jugador"
         private const val KEY_ID_J = "id_jugador"
         private const val KEY_NOMBRE_J = "nombre"
-        private const val KEY_AVATAR_J = "avatar"
 
         private const val TABLE_PARTIDA = "partida"
         private const val KEY_ID_P = "id_partida"
@@ -31,28 +30,30 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         private const val KEY_juego2 = "juego2"
         private const val KEY_juego3 = "juego3"
         private const val KEY_juego4 = "juego4"
+        private const val KEY_AVATAR_JP = "avatar_partida"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         val createJugadorTable = ("CREATE TABLE " + TABLE_JUGADORES + " ( "
-                + KEY_ID_J + " INTEGER PRIMARY KEY," + KEY_NOMBRE_J + " TEXT,"
-                + KEY_AVATAR_J + " TEXT " + ")")
+                + "$KEY_ID_J INTEGER PRIMARY KEY, $KEY_NOMBRE_J TEXT "
+                + ")")
 
         val createPartidaTable = ("CREATE TABLE " + TABLE_PARTIDA + " ( "
-                + KEY_ID_P + " INTEGER PRIMARY KEY, " + KEY_NOMBRE_P + " TEXT "
+                + "$KEY_ID_P INTEGER PRIMARY KEY, $KEY_NOMBRE_P TEXT "
                 + " ) ")
 
         val createJugadorEnPartidaTable = ("CREATE TABLE " + TABLE_JUGADOR_EN_PARTIDA + " ( "
-                + KEY_ID_J + " INTEGER, " + KEY_ID_P + " INTEGER, "
-                + KEY_CASILLA_ACTUAL + " INTEGER, "
-                + KEY_JUGADOR_ACTUAL + " INTEGER, "
-                + KEY_juego1 + " INTEGER, "
-                + KEY_juego2 + " INTEGER, "
-                + KEY_juego3 + " INTEGER, "
-                + KEY_juego4 + " INTEGER, "
-                + " PRIMARY KEY (" + KEY_ID_J + ", " + KEY_ID_P + " ), "
-                + " FOREIGN KEY (" + KEY_ID_J + " ) REFERENCES " + TABLE_JUGADORES + " ( " + KEY_ID_J + " ),"
-                + " FOREIGN KEY (" + KEY_ID_P + " ) REFERENCES " + TABLE_PARTIDA + " ( " + KEY_ID_P + " ) "
+                + "$KEY_ID_J INTEGER, $KEY_ID_P INTEGER, "
+                + "$KEY_CASILLA_ACTUAL TEXT, "
+                + "$KEY_JUGADOR_ACTUAL INTEGER, "
+                + "$KEY_AVATAR_JP TEXT, "
+                + "$KEY_juego1 INTEGER, "
+                + "$KEY_juego2 INTEGER, "
+                + "$KEY_juego3 INTEGER, "
+                + "$KEY_juego4 INTEGER, "
+                + " PRIMARY KEY ($KEY_ID_J, $KEY_ID_P), "
+                + " FOREIGN KEY ($KEY_ID_J) REFERENCES $TABLE_JUGADORES ($KEY_ID_J),"
+                + " FOREIGN KEY ($KEY_ID_P) REFERENCES $TABLE_PARTIDA ($KEY_ID_P) "
                 + ")")
 
         db.execSQL(createJugadorTable)

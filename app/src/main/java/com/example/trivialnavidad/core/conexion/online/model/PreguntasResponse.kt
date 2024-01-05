@@ -7,8 +7,8 @@ data class PreguntasResponse(
 )
 
 data class Pregunta(
-    val asignatura: String,
+    val dificultad: Int,
     val pregunta: String,
     val respuestas: List<String>,
-    val correcta: String
+    val correcta: List<String>
 )
