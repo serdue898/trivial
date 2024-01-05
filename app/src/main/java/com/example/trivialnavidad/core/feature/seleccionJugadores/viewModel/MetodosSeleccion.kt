@@ -10,7 +10,9 @@ import com.example.trivialnavidad.core.feature.principal.view.Principal
 class MetodosSeleccion {
     fun empezarPartida(contexto: Context,id_partida: Int) {
         if (contexto is AppCompatActivity) {
-            val juego = Juego(id_partida)
+            val juego = Juego()
+            juego.partida = id_partida
+
             MainActivity.juego = juego
             val fragmentManager = contexto.supportFragmentManager
             fragmentManager.beginTransaction()

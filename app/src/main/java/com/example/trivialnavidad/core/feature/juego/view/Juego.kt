@@ -26,6 +26,7 @@ import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
+import com.example.trivialnavidad.core.feature.juego.viewModel.JuegoViewModel
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
 import kotlinx.coroutines.Dispatchers
@@ -33,15 +34,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Juego(var partida :Int?) : Fragment() {
+class Juego() : Fragment() {
+
     private var comunicador: ComunicadorJuego? = MetodosJuego()
     private var contexto: Context? = null
-    private var jugador:Int = 0
-    private var jugadorActual : JugadorEnPartida? = null
-    private var jugadoresEnPartida = listOf<JugadorEnPartida>()
     private var vista : View? = null
-    private var cargar =false
-    private var partidaActual = 1
+    var partida: Int? = null
+    var jugador: Int = 0
+    var cargar: Boolean = false
+    var jugadorActual: JugadorEnPartida? = null
+    var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
+    var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
     var avatarImages : TypedArray? = null
 
@@ -52,10 +55,10 @@ class Juego(var partida :Int?) : Fragment() {
         contexto = container?.context
         avatarImages  = contexto?.resources!!.obtainTypedArray(R.array.avatar_images)
         val conexion = Conexion(contexto!!)
-        if (partida!=null)partidaActual= partida!!
         if (vista == null){
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
+            if (partida != null) partidaActual = partida!!
             jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
             jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual == true })
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
@@ -228,8 +231,4 @@ class Juego(var partida :Int?) : Fragment() {
 
 
     }
-
-
-
-
 }

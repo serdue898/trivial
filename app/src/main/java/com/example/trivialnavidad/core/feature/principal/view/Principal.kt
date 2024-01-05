@@ -20,6 +20,7 @@ import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrinci
 class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
     private var contexto: Context? = null
+    private var empezado = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.principal, container, false)
@@ -67,11 +68,12 @@ class Principal : Fragment() {
 
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
             R.id.mItm_configuracion -> {
-                MainActivity.configuracion?.mostrarConfiguracion(contexto!!)
+                MainActivity.configuracion?.mostrarConfiguracion(contexto!!,true)
                 true
             }
             R.id.mItm_acerca -> {
@@ -83,6 +85,17 @@ class Principal : Fragment() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (empezado) {
+            val configuracion = MainActivity.configuracion
+            configuracion?.toggleDarkMode(contexto!!,configuracion.obtenerOpcionTemas())
+        }
+    }
+    fun empezar(){
+        empezado = true
     }
 
 

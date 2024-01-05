@@ -10,7 +10,8 @@ import com.example.trivialnavidad.core.feature.principal.view.Principal
 class MetodosPartida(val context: Context): ComunicadorPartida {
     override fun cargarPartida(id: Int ) {
         if (context is AppCompatActivity) {
-            MainActivity.juego = Juego(id)
+            MainActivity.juego = Juego()
+            MainActivity.juego?.partida = id
             val juego = MainActivity.juego as Juego
             val fragmentManager = context.supportFragmentManager
             fragmentManager.beginTransaction()
