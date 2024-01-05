@@ -84,8 +84,12 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 casilla.setOnClickListener {
                     moverVista( casilla)
                     conexion.actualizarCasillaActual(JugadorActual!!)
+                    casilla.dificultad = 4
+
                     val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
                     val pregunta = preguntasMinijuego?.random()
+
+
                     var minijuego : Fragment? = null
                     when (casilla.dificultad) {
                         1 -> {

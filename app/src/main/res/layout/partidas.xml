@@ -14,6 +14,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toTopOf="@+id/bt_volver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar4">
@@ -29,15 +30,18 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
+                android:layout_weight="0"
                 android:layout_height="wrap_content"
                 android:text="@string/partidas"
                 tools:layout_editor_absoluteX="30dp"
-                tools:layout_editor_absoluteY="659dp" />
+                tools:layout_editor_absoluteY="659dp"
+                tools:ignore="Suspicious0dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_partidas"
                 android:layout_width="match_parent"
-                android:layout_height="499dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.466"
@@ -52,15 +56,16 @@
         android:id="@+id/bt_volver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="volver"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar4"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"

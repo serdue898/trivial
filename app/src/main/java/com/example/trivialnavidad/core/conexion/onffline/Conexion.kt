@@ -88,12 +88,7 @@ class Conexion(Context: Context) {
         val values = ContentValues().apply {
             put(KEY_NOMBRE_P, partida.nombre)
         }
-        db.update(
-            TABLE_PARTIDA,
-            values,
-            "$KEY_ID_P = ?",
-            arrayOf(partida.idPartida.toString())
-        )
+        db.update(TABLE_PARTIDA,values,"$KEY_ID_P = ?",arrayOf(partida.idPartida.toString()))
     }
     fun obtenerPartidas(): List<Partida> {
         val db = dbHelper.readableDatabase
@@ -126,9 +121,9 @@ class Conexion(Context: Context) {
         val listaJugadoresEnPartida = mutableListOf<JugadorEnPartida>()
 
         val query = "SELECT * FROM $TABLE_JUGADOR_EN_PARTIDA " +
-                "WHERE $KEY_ID_P = $partidaId "
+                "WHERE $KEY_ID_P = ? "
 
-        val cursor: Cursor = db.rawQuery(query, null)
+        val cursor: Cursor = db.rawQuery(query, arrayOf(partidaId.toString()))
 
         while (cursor.moveToNext()) {
             val idJugadorIndex = cursor.getColumnIndex(KEY_ID_J)
@@ -167,7 +162,7 @@ class Conexion(Context: Context) {
         val db = dbHelper.readableDatabase
         val query = "SELECT * FROM $TABLE_JUGADORES WHERE $KEY_ID_J = ?"
         val cursor: Cursor = db.rawQuery(query, arrayOf(idJugador.toString()))
-        var jugador = Jugador(0, "", "")
+        var jugador :Jugador?=null
         while (cursor.moveToNext()) {
             val idIndex = cursor.getColumnIndex(KEY_ID_J)
             val nombreIndex = cursor.getColumnIndex(KEY_NOMBRE_J)
@@ -181,14 +176,14 @@ class Conexion(Context: Context) {
 
         cursor.close()
 
-        return jugador
+        return jugador!!
 
     }
     private fun obtenerJugadorPorNombre(nombreJugador: String): Int {
         val db = dbHelper.readableDatabase
         val query = "SELECT * FROM $TABLE_JUGADORES WHERE $KEY_NOMBRE_J = ?"
         val cursor: Cursor = db.rawQuery(query, arrayOf(nombreJugador))
-        var jugador = Jugador(0, "", "")
+
         var id=0
         while (cursor.moveToNext()) {
             val idIndex = cursor.getColumnIndex(KEY_ID_J)
@@ -221,12 +216,7 @@ class Conexion(Context: Context) {
             put(KEY_juego3, juego3)
             put(KEY_juego4, juego4)
         }
-        db.update(
-            TABLE_JUGADOR_EN_PARTIDA,
-            values,
-            "$KEY_ID_J = ? AND $KEY_ID_P = ?",
-            arrayOf(jugadorId.toString(), partidaId.toString())
-        )
+        db.update(TABLE_JUGADOR_EN_PARTIDA,values,"$KEY_ID_J = ? AND $KEY_ID_P = ?", arrayOf(jugadorId.toString(), partidaId.toString()))
 
     }
 }
