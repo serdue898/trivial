@@ -8,6 +8,7 @@ import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.widget.GridLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -113,6 +114,25 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         4 -> {
                             minijuego = Parejas(pregunta!!, JugadorActual!!)
+                        }
+                        5 -> {
+                            var entrar = true
+                            JugadorActual?.juegos?.forEach {
+                                if (!it) {
+                                    entrar = false
+                                }
+                            }
+                            if (entrar){
+                                juego.resultadoMiniJuego(true)
+                            }else {
+                                val alert = AlertDialog.Builder(contexto)
+                                alert.setTitle("Juego final")
+                                alert.setMessage("No tienes suficientes quesitos , tira de nuevo")
+                                alert.setPositiveButton("Aceptar") { dialog, which ->
+                                    dialog.dismiss()
+                                }
+                                juego.resultadoMiniJuego(true)
+                            }
                         }
                         else -> {
                             juego.resultadoMiniJuego(true)
