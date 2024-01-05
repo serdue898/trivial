@@ -22,25 +22,26 @@
         android:id="@+id/t_tunroJugador"
         android:layout_width="157dp"
         android:layout_height="35dp"
+        android:layout_marginTop="52dp"
         android:text="@string/t_tunroJugador"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintHorizontal_bias="0.106"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
     <Button
         android:id="@+id/bt_dado"
         android:layout_width="72dp"
         android:layout_height="55dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginBottom="80dp"
         android:drawableEnd="@drawable/dado"
         android:text="1 "
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.297"
+        app:layout_constraintHorizontal_bias="0.309"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/t_tunroJugador" />
+        app:layout_constraintTop_toBottomOf="@+id/t_tunroJugador"
+        app:layout_constraintVertical_bias="0.79" />
 
     <Button
         android:id="@+id/bt_clasificacion"
@@ -51,9 +52,10 @@
         android:text="1 "
         app:layout_constraintBottom_toBottomOf="@+id/bt_dado"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintHorizontal_bias="0.683"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bt_dado" />
+        app:layout_constraintTop_toTopOf="@+id/bt_dado"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/i_avatar"
@@ -67,10 +69,10 @@
         app:srcCompat="@drawable/dado" />
 
     <FrameLayout
-        android:layout_width="388dp"
-        android:layout_height="388dp"
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
 
-        android:layout_marginTop="8dp"
+        android:layout_height="388dp"
         android:layout_weight="1"
         android:background="@drawable/background_border"
         android:foregroundGravity="center_horizontal"
