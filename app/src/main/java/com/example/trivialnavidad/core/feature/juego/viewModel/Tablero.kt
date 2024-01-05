@@ -31,7 +31,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     val juego = MainActivity.juego as Juego
     private val preguntas = preguntas()
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
-
+    private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
         arrayOf("3","0","0","0","3","0","0","0","1"),
@@ -43,7 +43,6 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
         arrayOf("1","0","0","0","3","0","0","0","3"),
         arrayOf("4","3","2","1","4","3","2","1","4"),
     )
-    private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     fun asignarJugadores(){
         for (jugador in jugadores){
             val fila  = jugador.casillaActual.split("_")[0].toInt()
@@ -78,7 +77,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                    casilla.dificultad = dificultad
+                casilla.dificultad = dificultad
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
@@ -93,8 +92,17 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         2 -> {
                             val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
-                            for  (k in 0 until 5){
-                                listaPtreguntas.add(preguntasMinijuego?.random()!!)
+                            for  (k in 0 until 1){
+                                var repetida=true
+                                var preguntaNueva : Pregunta? = null
+                                while (repetida){
+                                    preguntaNueva = preguntasMinijuego?.random()
+                                    if (!listaPtreguntas.contains(preguntaNueva)){
+                                        repetida = false
+                                    }
+                                }
+
+                                listaPtreguntas.add(preguntaNueva!!)
                             }
                             juego.resultadoMiniJuego(true)
                         }
