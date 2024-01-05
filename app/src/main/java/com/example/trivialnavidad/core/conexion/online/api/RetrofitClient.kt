@@ -27,11 +27,11 @@ object RetrofitClient {
         retrofit.create(ApiService::class.java)
     }
 
-    fun obtenerTodasLasPreguntas(callback: (PreguntasResponse:PreguntasResponse?, error: String?) -> Unit) {
+    fun obtenerTodasLasPreguntas(callback: (preguntas:List<Pregunta>?, error: String?) -> Unit) {
         val apiService = RetrofitClient.instance
         val call = apiService.getPreguntas()
-        call.enqueue(object : Callback<PreguntasResponse> {
-            override fun onResponse(call: Call<PreguntasResponse>, response: Response<PreguntasResponse>) {
+        call.enqueue(object : Callback<List<Pregunta>> {
+            override fun onResponse(call: Call<List<Pregunta>>, response: Response<List<Pregunta>>) {
                 if (response.isSuccessful) {
                     val preguntas = response.body()
                     callback(preguntas, null)
@@ -42,7 +42,7 @@ object RetrofitClient {
                 }
             }
 
-            override fun onFailure(call: Call<PreguntasResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<Pregunta>>, t: Throwable) {
                 // Manejar el fallo y llamar al callback con información del error
                 Log.d("Preguntas", "pata"+t.message)
                 callback(null, "Error de red: ${t.message}")

@@ -8,7 +8,7 @@ import com.example.t8_ej03_persistenciaapi.model.PreguntasResponse
 import kotlinx.coroutines.runBlocking
 
 class preguntas {
-    private var preguntas:PreguntasResponse? = null
+    private var preguntas:List<Pregunta>? = null
     fun cogerpreguntas(){
         obtenerTodasLasPreguntas { pregntasOptenidas , respuesta ->
             preguntas = pregntasOptenidas
@@ -18,7 +18,7 @@ class preguntas {
     fun preguntasDificultad(dificultad:Int):List<Pregunta>?{
         var preguntasDificultad:List<Pregunta>? = null
         if(preguntas != null){
-            preguntasDificultad = preguntas!!.preguntas.filter { it.dificultad == dificultad }
+            preguntasDificultad = preguntas!!.filter { it.dificultad == dificultad }
         }
         return preguntasDificultad
     }

@@ -20,4 +20,10 @@
         <item>@color/rojo</item>
         <item>@color/magenta</item>
     </array>
+    <array name="imagenesParejas">
+        <item>@drawable/avatar1</item>
+        <item>@drawable/avatar2</item>
+        <item>@drawable/avatar3</item>
+        <item>@drawable/avatar4</item>
+    </array>
 </resources>

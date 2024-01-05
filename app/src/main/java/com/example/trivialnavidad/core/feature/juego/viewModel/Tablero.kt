@@ -18,6 +18,7 @@ import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
+import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -105,6 +106,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                                 listaPtreguntas.add(preguntaNueva!!)
                             }
                             juego.resultadoMiniJuego(true)
+                        }
+                        4 -> {
+                            minijuego = Parejas(pregunta!!, JugadorActual!!)
                         }
                         else -> {
                             juego.resultadoMiniJuego(true)

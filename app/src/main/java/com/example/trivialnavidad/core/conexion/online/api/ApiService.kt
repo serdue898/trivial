@@ -9,5 +9,5 @@ interface ApiService {
     // Definición del método para obtener publicaciones. Utiliza la anotación @GET para indicar
     // que es una solicitud GET HTTP. La función devuelve un objeto Call que encapsula una lista de Posts.
     @GET("preguntas.json")
-    fun getPreguntas(): Call<PreguntasResponse>
+    fun getPreguntas(): Call<List<Pregunta>>
 }
