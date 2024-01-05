@@ -12,4 +12,12 @@
         <item>@drawable/avatar9</item>
         <item>@drawable/avatar10</item>
     </array>
+    <array name="colores">
+        <item>@color/negro</item>
+        <item>@color/verde</item>
+        <item>@color/azul</item>
+        <item>@color/amarillo</item>
+        <item>@color/rojo</item>
+        <item>@color/magenta</item>
+    </array>
 </resources>

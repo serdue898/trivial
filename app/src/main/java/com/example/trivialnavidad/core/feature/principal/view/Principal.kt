@@ -33,6 +33,7 @@ class Principal : Fragment() {
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        (contexto as AppCompatActivity).supportActionBar?.title = null
 
 
         botonNuevaPartida.setOnClickListener {

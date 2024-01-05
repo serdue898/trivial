@@ -36,6 +36,7 @@ class Partidas : Fragment() {
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar4)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        (contexto as AppCompatActivity).supportActionBar?.title = null
         bt_volver.setOnClickListener {
             comunicador?.volver()
         }

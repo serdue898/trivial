@@ -44,6 +44,7 @@ class SeleccionJugador : Fragment() {
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar3)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        (contexto as AppCompatActivity).supportActionBar?.title = null
 
         /*
         // codigo de clasificacion y no se si es necesario o no

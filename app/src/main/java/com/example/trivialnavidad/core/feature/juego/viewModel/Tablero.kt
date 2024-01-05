@@ -16,23 +16,21 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
-import com.example.trivialnavidad.core.feature.juego.view.Adivina
+import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
 
-class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores: List<JugadorEnPartida>) {
+class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>) {
     private var JugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
-    val preguntas = preguntas()
-    val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
+    private val preguntas = preguntas()
+    private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
 
     private val tableroVersionUno = arrayOf(
         arrayOf("4","1","2","3","4","1","2","3","4"),
@@ -45,13 +43,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         arrayOf("1","0","0","0","3","0","0","0","3"),
         arrayOf("4","3","2","1","4","3","2","1","4"),
     )
-    private val colores = arrayOf(
-       "verde",
-        "azul",
-        "amarillo",
-        "rojo",
-        "magenta"
-    )
+    private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     fun asignarJugadores(){
         for (jugador in jugadores){
             val fila  = jugador.casillaActual.split("_")[0].toInt()
@@ -86,20 +78,8 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                    casilla.dificultad = dificultad.toInt()
-                    if (tableroVersionUno[i][j] == "1"){
-                        casilla.color = ContextCompat.getColor(contexto, R.color.verde)
-                    }else if (tableroVersionUno[i][j] == "2"){
-                        casilla.color = ContextCompat.getColor(contexto, R.color.azul)
-                    }else if (tableroVersionUno[i][j] == "3"){
-                        casilla.color = ContextCompat.getColor(contexto, R.color.amarillo)
-                    }else if (tableroVersionUno[i][j] == "4"){
-                        casilla.color = ContextCompat.getColor(contexto, R.color.rojo)
-                    }else if (tableroVersionUno[i][j] == "5"){
-                        casilla.color = ContextCompat.getColor(contexto, R.color.magenta)
-                    } else {
-                        casilla.color = ContextCompat.getColor(contexto, R.color.negro)
-                    }
+                    casilla.dificultad = dificultad
+                casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
                     moverVista( casilla)
@@ -107,23 +87,27 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
                     val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
                     val pregunta = preguntasMinijuego?.random()
                     var minijuego : Fragment? = null
-                    if (casilla.dificultad==1){
-                        minijuego = Adivina(pregunta!!, JugadorActual!!)
-                    }else if (casilla.dificultad==2){
-                        val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
-                        for  (i in 0 until 5){
-                            listaPtreguntas.add(preguntasMinijuego?.random()!!)
+                    when (casilla.dificultad) {
+                        1 -> {
+                            minijuego = Adivina(pregunta!!, JugadorActual!!)
                         }
-                        juego.resultadoMiniJuego(true)
-                    }else{
-                        juego.resultadoMiniJuego(true)
+                        2 -> {
+                            val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
+                            for  (k in 0 until 5){
+                                listaPtreguntas.add(preguntasMinijuego?.random()!!)
+                            }
+                            juego.resultadoMiniJuego(true)
+                        }
+                        else -> {
+                            juego.resultadoMiniJuego(true)
+                        }
                     }
                     if(minijuego!=null) {
                         if (contexto is AppCompatActivity) {
                             val fragmentManager =
                                 (contexto as AppCompatActivity).supportFragmentManager
                             fragmentManager.beginTransaction()
-                                .replace(R.id.contenedor, minijuego!!)
+                                .replace(R.id.contenedor, minijuego)
                                 .commit()
 
                         }
@@ -147,11 +131,11 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         val x  = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
         JugadorActual = jugador
-        PosiblesMovimientos(x, y, movimientos,"",jugador)
+        posiblesMovimientos(x, y, movimientos,"",jugador)
     }
 
 
-    fun PosiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
+    private fun posiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (movimientos == 0) {
             GlobalScope.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
@@ -183,7 +167,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
     private fun moverEnDireccion(fila: Int, columna: Int, movimientos: Int,direction:String,jugador: JugadorEnPartida) {
         if (fila in 0 until gridTablero.columnCount && columna in 0 until gridTablero.rowCount) {
             if (!comprobarCasilla(fila,columna)) {
-                PosiblesMovimientos( fila, columna, movimientos,direction,jugador)
+                posiblesMovimientos( fila, columna, movimientos,direction,jugador)
             }
         }
     }
@@ -192,13 +176,13 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
         return gridTablero.getChildAt(fila  * gridTablero.columnCount + columna) as? Casilla
     }
 
-    fun comprobarCasilla(fila :Int, columna:Int):Boolean{
+    private fun comprobarCasilla(fila :Int, columna:Int):Boolean{
         val casilla = gridTablero.getChildAt(fila * gridTablero.columnCount + columna) as Casilla
         val colorDeFondo = (casilla.background as? ColorDrawable)?.color
         return colorDeFondo == ContextCompat.getColor(contexto, R.color.negro)
     }
 
-    fun moverVista(casillaNueva: Casilla){
+    private fun moverVista(casillaNueva: Casilla){
         val fila  = JugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
         val columna = JugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
         val casilla = obtenerCasilla(fila!!,columna!!)
@@ -226,7 +210,7 @@ class Tablero (var gridTablero: GridLayout, var contexto: Context ,var jugadores
 
     }
 
-    fun rellenarCasilla(casilla: Casilla){
+    private fun rellenarCasilla(casilla: Casilla){
         casilla.removeAllViews()
         for (jugador in casilla.jugadores){
             val nuevoJugador = ImageView(contexto)

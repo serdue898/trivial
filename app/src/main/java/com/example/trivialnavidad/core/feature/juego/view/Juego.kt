@@ -26,7 +26,6 @@ import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.viewModel.ComunicadorJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
-import com.example.trivialnavidad.core.feature.juego.viewModel.JuegoViewModel
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
 import kotlinx.coroutines.Dispatchers
@@ -34,19 +33,19 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Juego() : Fragment() {
+class Juego : Fragment() {
 
     private var comunicador: ComunicadorJuego? = MetodosJuego()
     private var contexto: Context? = null
     private var vista : View? = null
     var partida: Int? = null
-    var jugador: Int = 0
-    var cargar: Boolean = false
-    var jugadorActual: JugadorEnPartida? = null
-    var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
-    var partidaActual: Int = 1
+    private var jugador: Int = 0
+    private var cargar: Boolean = false
+    private var jugadorActual: JugadorEnPartida? = null
+    private var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
+    private var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
-    var avatarImages : TypedArray? = null
+    private var avatarImages : TypedArray? = null
 
 
 
@@ -60,7 +59,7 @@ class Juego() : Fragment() {
             view = vista
             if (partida != null) partidaActual = partida!!
             jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
-            jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual == true })
+            jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual })
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
             metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)
             metodosTablero.crearTablero()
@@ -71,17 +70,18 @@ class Juego() : Fragment() {
 
 
         val toolbar = view?.findViewById<Toolbar>(R.id.toolbar2)
-        val bt_clasificacion = view?.findViewById<Button>(R.id.bt_clasificacion)
-        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
+        val clasificacion = view?.findViewById<Button>(R.id.bt_clasificacion)
+        val dado = view?.findViewById<Button>(R.id.bt_dado)
 
 
 
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
+        (contexto as AppCompatActivity).supportActionBar?.title = null
 
 
-        bt_dado?.setOnClickListener {
-            bt_dado.isEnabled = false
+        dado?.setOnClickListener {
+            dado.isEnabled = false
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
                     tirarDado()
@@ -89,7 +89,7 @@ class Juego() : Fragment() {
 
 
         }
-        bt_clasificacion?.setOnClickListener {
+        clasificacion?.setOnClickListener {
             comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)
         }
         return view
@@ -99,8 +99,8 @@ class Juego() : Fragment() {
         jugadorActual = jugadoresEnPartida[jugador]
         actualizarJugador(jugadorActual)
         if (cargar){
-            val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
-            bt_dado?.isEnabled = true
+            val dado = view.findViewById<Button>(R.id.bt_dado)
+            dado?.isEnabled = true
         }
 
     }
@@ -165,15 +165,15 @@ class Juego() : Fragment() {
         msnEmergente.show()
     }
 
-    fun actualizarJugador( jugador: JugadorEnPartida? ){
+    private fun actualizarJugador( jugador: JugadorEnPartida? ){
         val nombre = view?.findViewById<TextView>(R.id.t_tunroJugador)
         val avatar = view?.findViewById<ImageView>(R.id.i_avatar)
-        nombre?.text = "turno del jugador:"+jugador?.jugador?.nombre
+        nombre?.text = "turno del jugador:${jugador?.jugador?.nombre}"
         avatar?.setImageDrawable(avatarImages?.getDrawable(jugador?.avatar!!.toInt()))
         // Llama a la función y obtén el último número aleatorio
 
     }
-    suspend fun tirarDado(){
+    private suspend fun tirarDado(){
         val view = LayoutInflater.from(contexto).inflate(R.layout.dado_lyout, null)
         val dado = view.findViewById<ImageView>(R.id.dado)
         val boton = view.findViewById<Button>(R.id.bt_salir)
@@ -198,7 +198,7 @@ class Juego() : Fragment() {
             }
         }
     }
-    fun tirada(movimientos: Int, alertDialog: AlertDialog){
+    private fun tirada(movimientos: Int, alertDialog: AlertDialog){
         alertDialog.dismiss()
         GlobalScope.launch {
             withContext(Dispatchers.Main) {
@@ -209,13 +209,12 @@ class Juego() : Fragment() {
     }
     fun resultadoMiniJuego(ganado :Boolean){
         val conexion = Conexion(contexto!!)
-        val jugadorActual = jugadoresEnPartida[jugador]
-        jugadorActual.jugadorActual = false
-        conexion.actualizarCasillaActual(jugadorActual)
-        val bt_dado = view?.findViewById<Button>(R.id.bt_dado)
-        bt_dado?.isEnabled = true
-        if (!ganado){
 
+        val jugadorActual = jugadoresEnPartida[jugador]
+        val dado = view?.findViewById<Button>(R.id.bt_dado)
+        dado?.isEnabled = true
+        if (!ganado){
+            jugadorActual.jugadorActual = false
             jugador++
             if (jugador>=jugadoresEnPartida.size){
                 jugador=0
@@ -227,6 +226,7 @@ class Juego() : Fragment() {
 
         }
         cargar = true
+        conexion.actualizarCasillaActual(jugadorActual)
 
 
 

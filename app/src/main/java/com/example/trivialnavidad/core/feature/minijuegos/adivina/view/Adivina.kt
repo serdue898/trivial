@@ -1,11 +1,8 @@
-package com.example.trivialnavidad.core.feature.juego.view
+package com.example.trivialnavidad.core.feature.minijuegos.adivina.view
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -37,8 +34,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         tx_pregunta.text = pregunta.pregunta
         bt_clasificacion.setOnClickListener {
             val respuesta = texto.text.toString()
-            var acercaDe: Int
-            if (respuesta == pregunta.correcta) {
+            val acercaDe: Int
+            if (respuesta == pregunta.correcta[0]) {
                  acercaDe = R.string.acierto
                 jugador.juegos[0] = true
                 ganado = true
