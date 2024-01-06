@@ -1,5 +1,6 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,6 +18,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.juego.MinijuegoTest_fragment
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
@@ -84,71 +86,96 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
                     moverVista( casilla)
-                    conexion.actualizarCasillaActual(JugadorActual!!)
-                    casilla.dificultad = 4
 
                     val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
-                    val pregunta = preguntasMinijuego?.random()
 
+                    if (preguntasMinijuego == null) {
 
-                    var minijuego : Fragment? = null
-                    when (casilla.dificultad) {
-                        1 -> {
-                            minijuego = Adivina(pregunta!!, JugadorActual!!)
+                        val alert = AlertDialog.Builder(contexto)
+                        alert.setTitle("Juego")
+                        alert.setCancelable(false)
+                        alert.setMessage("Necesitas internet para jugar,se cerrara el juego")
+                        alert.setPositiveButton("Aceptar") { dialog, which ->
+                            (contexto as? Activity)?.finish()
+                            dialog.dismiss()
+
                         }
-                        2 -> {
-                            val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
-                            for  (k in 0 until 1){
-                                var repetida=true
-                                var preguntaNueva : Pregunta? = null
-                                while (repetida){
-                                    preguntaNueva = preguntasMinijuego?.random()
-                                    if (!listaPtreguntas.contains(preguntaNueva)){
-                                        repetida = false
+                        alert.show()
+                        juego.resultadoMiniJuego(true)
+                    }else {
+                        val pregunta = preguntasMinijuego?.random()
+                        var minijuego: Fragment? = null
+                        when (casilla.dificultad) {
+                            1 -> {
+                                minijuego = Adivina(pregunta!!, JugadorActual!!)
+                            }
+
+                            2 -> {
+                                //falta terminar
+                                val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
+                                for (k in 0 until 1) {
+                                    var repetida = true
+                                    var preguntaNueva: Pregunta? = null
+                                    while (repetida) {
+                                        preguntaNueva = preguntasMinijuego?.random()
+                                        if (!listaPtreguntas.contains(preguntaNueva)) {
+                                            repetida = false
+                                        }
+                                    }
+
+                                    listaPtreguntas.add(preguntaNueva!!)
+                                }
+                                juego.resultadoMiniJuego(true)
+                            }
+
+                            3 -> {
+                                minijuego =
+                                    MinijuegoTest_fragment(pregunta!!, JugadorActual!!, false)
+                            }
+
+                            4 -> {
+                                minijuego = Parejas(pregunta!!, JugadorActual!!)
+                            }
+
+                            5 -> {
+                                var entrar = true
+                                JugadorActual?.juegos?.forEach {
+                                    if (!it) {
+                                        entrar = false
                                     }
                                 }
+                                if (entrar) {
+                                    minijuego =
+                                        MinijuegoTest_fragment(pregunta!!, JugadorActual!!, true)
+                                } else {
+                                    val alert = AlertDialog.Builder(contexto)
+                                    alert.setTitle("Juego final")
+                                    alert.setMessage("No tienes suficientes quesitos , tira de nuevo")
+                                    alert.setPositiveButton("Aceptar") { dialog, which ->
+                                        dialog.dismiss()
+                                    }
+                                    alert.show()
+                                    juego.resultadoMiniJuego(true)
+                                }
+                            }
 
-                                listaPtreguntas.add(preguntaNueva!!)
-                            }
-                            juego.resultadoMiniJuego(true)
-                        }
-                        4 -> {
-                            minijuego = Parejas(pregunta!!, JugadorActual!!)
-                        }
-                        5 -> {
-                            var entrar = true
-                            JugadorActual?.juegos?.forEach {
-                                if (!it) {
-                                    entrar = false
-                                }
-                            }
-                            if (entrar){
-                                juego.resultadoMiniJuego(true)
-                            }else {
-                                val alert = AlertDialog.Builder(contexto)
-                                alert.setTitle("Juego final")
-                                alert.setMessage("No tienes suficientes quesitos , tira de nuevo")
-                                alert.setPositiveButton("Aceptar") { dialog, which ->
-                                    dialog.dismiss()
-                                }
+                            else -> {
                                 juego.resultadoMiniJuego(true)
                             }
                         }
-                        else -> {
-                            juego.resultadoMiniJuego(true)
-                        }
-                    }
-                    if(minijuego!=null) {
-                        if (contexto is AppCompatActivity) {
-                            val fragmentManager =
-                                (contexto as AppCompatActivity).supportFragmentManager
-                            fragmentManager.beginTransaction()
-                                .replace(R.id.contenedor, minijuego)
-                                .commit()
+                        if (minijuego != null) {
+                            if (contexto is AppCompatActivity) {
+                                val fragmentManager =
+                                    (contexto as AppCompatActivity).supportFragmentManager
+                                fragmentManager.beginTransaction()
+                                    .replace(R.id.contenedor, minijuego)
+                                    .commit()
+
+                            }
 
                         }
+                        conexion.actualizarCasillaActual(JugadorActual!!)
                     }
-
                 }
                 casilla.isEnabled = false
 

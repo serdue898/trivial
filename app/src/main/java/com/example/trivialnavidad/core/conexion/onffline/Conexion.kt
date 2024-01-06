@@ -11,7 +11,7 @@ class Conexion(Context: Context) {
     private val dbHelper: BaseDatos = BaseDatos(Context)
     companion object {
         private const val DATABASE_NAME = "trivial"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 4
         private const val TABLE_JUGADORES = "jugador"
         private const val KEY_ID_J = "id_jugador"
         private const val KEY_NOMBRE_J = "nombre"
@@ -19,6 +19,7 @@ class Conexion(Context: Context) {
         private const val TABLE_PARTIDA = "partida"
         private const val KEY_ID_P = "id_partida"
         private const val KEY_NOMBRE_P = "nombre"
+        private const val KEY_finalizada_P = "finalizada"
 
         private const val TABLE_JUGADOR_EN_PARTIDA = "jugador_en_partida"
         private const val KEY_CASILLA_ACTUAL = "casilla_actual"
@@ -64,12 +65,36 @@ class Conexion(Context: Context) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(KEY_NOMBRE_P, partida.nombre)
+            put(KEY_finalizada_P, if(partida.finalizada) 1 else 0 )
         }
         val partidaId = db.insert(TABLE_PARTIDA, null, values)
         partida.idPartida = partidaId.toInt()
         partida.nombre = "Partida ${partidaId.toInt()}"
         actualizarPartida(partida)
         return partidaId.toInt()
+    }
+    fun obtenerPartida(idPartida: Int): Partida {
+        val db = dbHelper.readableDatabase
+        val query = "SELECT * FROM $TABLE_PARTIDA WHERE $KEY_ID_P = ?"
+        val cursor: Cursor = db.rawQuery(query, arrayOf(idPartida.toString()))
+        var partida :Partida?=null
+        while (cursor.moveToNext()) {
+            val idIndex = cursor.getColumnIndex(KEY_ID_P)
+            val nombreIndex = cursor.getColumnIndex(KEY_NOMBRE_P)
+            val finalizadaIndex = cursor.getColumnIndex(KEY_finalizada_P)
+
+            if (idIndex != -1 && nombreIndex != -1 ) {
+                val id = cursor.getInt(idIndex)
+                val nombre = cursor.getString(nombreIndex)
+                val finalizada = cursor.getInt(finalizadaIndex)==1
+                partida = Partida(id, nombre,finalizada)
+            }
+        }
+
+        cursor.close()
+
+        return partida!!
+
     }
 
     fun agregarJugadorEnPartida(jugadorEnPartida: JugadorEnPartida) {
@@ -87,6 +112,7 @@ class Conexion(Context: Context) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put(KEY_NOMBRE_P, partida.nombre)
+            put(KEY_finalizada_P, if(partida.finalizada) 1 else 0 )
         }
         db.update(TABLE_PARTIDA,values,"$KEY_ID_P = ?",arrayOf(partida.idPartida.toString()))
     }
@@ -101,11 +127,13 @@ class Conexion(Context: Context) {
         while (cursor.moveToNext()) {
             val idIndex = cursor.getColumnIndex(KEY_ID_P)
             val nombreIndex = cursor.getColumnIndex(KEY_NOMBRE_P)
+            val finalizadaIndex = cursor.getColumnIndex(KEY_finalizada_P)
 
             if (idIndex != -1 && nombreIndex != -1) {
                 val id = cursor.getInt(idIndex)
                 val nombre = cursor.getString(nombreIndex)
-                val partida = Partida(id, nombre)
+                val finalizada = cursor.getInt(finalizadaIndex)==1
+                val partida = Partida(id, nombre,finalizada)
                 listaPartidas.add(partida)
             }
         }

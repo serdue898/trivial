@@ -16,7 +16,7 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var nombre: TextView = itemView.findViewById(R.id.tx_nombrePartida)
         var id: TextView = itemView.findViewById(R.id.tx_id)
-        var numjugadores: TextView = itemView.findViewById(R.id.tx_numJugadores)
+        var finalizada: TextView = itemView.findViewById(R.id.tx_numJugadores)
 
     }
 
@@ -32,15 +32,16 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
             // Configurar encabezados
             holder.id.text = "ID"
             holder.nombre.text = "Partida"
-            holder.numjugadores.text = "Número"
+            holder.finalizada.text = "Finalizada"
         } else {
             val partida = partidas[position - 1]  // Resta 1 para compensar el encabezado
             holder.id.text = partida.idPartida.toString()
             holder.nombre.text = partida.nombre
+            holder.finalizada.text = if (partida.finalizada)"Sí" else "No"
 
             // Agregar un clic listener para cargar la partida
             holder.itemView.setOnClickListener {
-                comunicador.cargarPartida(partida.idPartida)
+                comunicador.cargarPartida(partida)
             }
         }
     }

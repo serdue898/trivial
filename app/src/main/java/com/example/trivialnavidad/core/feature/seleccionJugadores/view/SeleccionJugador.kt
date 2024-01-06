@@ -192,7 +192,7 @@ class SeleccionJugador : Fragment() {
     }
     private fun empezarPartida() {
         val conexion = Conexion(contexto!!)
-        val idPartida = conexion.agregarPartida(Partida(0,"partida"))
+        val idPartida = conexion.agregarPartida(Partida(0,"partida",false))
         val juegos = MutableList(4){i -> false}
         for (jugador in jugadoresEnPartida) {
             conexion.agregarJugador(jugador)

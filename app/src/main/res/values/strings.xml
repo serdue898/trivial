@@ -25,4 +25,5 @@
     <string name="cargar_partida">Cargar Partida</string>
     <string name="mItm_configuracion">Configuracion</string>
     <string name="mItm_inicio">Inicio</string>
+    <string name="ganado">Has ganado el juego</string>
 </resources>

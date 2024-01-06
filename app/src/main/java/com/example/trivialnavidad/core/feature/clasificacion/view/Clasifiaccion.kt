@@ -16,7 +16,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.ComunicadorClasificacion
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.MetodosClasifiacion
 
-class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment() {
+class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>,var finalizada:Boolean): Fragment() {
     private var comunicador: ComunicadorClasificacion? = MetodosClasifiacion()
     private var contexto: Context? = null
 
@@ -26,7 +26,12 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>): Fragment()
 
         val bt_volver = view.findViewById<Button>(R.id.bt_volver)
         bt_volver.setOnClickListener {
-            comunicador?.volver(contexto!!)
+            if (finalizada) {
+                comunicador?.inicio(contexto!!)
+            }
+            else {
+                comunicador?.volver(contexto!!)
+            }
         }
 
 

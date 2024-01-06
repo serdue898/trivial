@@ -42,8 +42,8 @@ class Juego : Fragment() {
     private var jugador: Int = 0
     private var cargar: Boolean = false
     private var jugadorActual: JugadorEnPartida? = null
-    private var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
-    private var partidaActual: Int = 1
+    var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
+    var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
     private var avatarImages : TypedArray? = null
 
