@@ -4,6 +4,8 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/botones</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:text">@color/white</item>
         <!-- Agrega el color del texto para el tema oscuro -->
     </style>
 </resources>

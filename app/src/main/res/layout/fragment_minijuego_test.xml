@@ -32,6 +32,7 @@
         <Button
             android:id="@+id/bt_opcionA"
             android:background="@color/azul"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -41,6 +42,7 @@
         <Button
             android:id="@+id/bt_opcionD"
             android:background="@color/amarillo"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -50,6 +52,7 @@
         <Button
             android:id="@+id/bt_opcionC"
             android:background="@color/negro"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
@@ -60,6 +63,7 @@
             android:id="@+id/bt_opcionB"
             android:background="@color/negro"
             android:backgroundTint="@color/negro"
+            android:textColor="@color/white"
 
             android:layout_width="0dp"
             android:layout_height="0dp"
