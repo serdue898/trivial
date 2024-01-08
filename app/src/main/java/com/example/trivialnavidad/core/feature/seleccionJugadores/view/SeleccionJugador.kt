@@ -140,8 +140,7 @@ class SeleccionJugador : Fragment() {
                 avatares.add(i)
             }
         }
-        val adapterspinner = SpinnerAdapter(contexto!!, avatares)
-        return adapterspinner
+        return SpinnerAdapter(contexto!!, avatares)
     }
     fun editarJugadorLista(jugador: Jugador) {
         val popup = AlertDialog.Builder(contexto)
@@ -159,12 +158,13 @@ class SeleccionJugador : Fragment() {
 
             }else{
 
-                var view = avatarJugador?.getChildAt(avatarJugador.selectedItemPosition)
+                var view = avatarJugador?.selectedView
                 val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id, nombreJugador.text.toString(), posicion.toString())
                 jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
                 actualizarLista()
+                actualizarSpinner()
             }
         }
         popup.setNegativeButton("Cancelar") { dialog, which ->

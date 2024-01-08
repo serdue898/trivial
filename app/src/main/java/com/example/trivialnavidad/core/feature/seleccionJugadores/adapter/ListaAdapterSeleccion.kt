@@ -42,6 +42,7 @@ class ListaAdapterSeleccion(
         holder.eliminar.setOnClickListener {
             jugadores.removeAt(position)
             seleccionJugador.actualizarLista()
+            seleccionJugador.actualizarSpinner()
         }
         holder.editar.setOnClickListener {
             seleccionJugador.editarJugadorLista(jugador)
