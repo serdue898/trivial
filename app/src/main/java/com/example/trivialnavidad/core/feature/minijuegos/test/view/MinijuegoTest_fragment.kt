@@ -35,6 +35,7 @@ class MinijuegoTest_fragment(val pregunta: Pregunta ,val  jugador: JugadorEnPart
         val b_opcionC= view.findViewById<Button>(R.id.bt_opcionC)
         val b_opcionD= view.findViewById<Button>(R.id.bt_opcionD)
         val texto = view.findViewById<TextView>(R.id.tx_enunciado)
+        b_opcionA.background = contexto!!.getDrawable(R.color.negro)
         texto.text = pregunta.pregunta
         b_opcionA.text = pregunta.respuestas[0]
         b_opcionB.text = pregunta.respuestas[1]
@@ -86,9 +87,10 @@ class MinijuegoTest_fragment(val pregunta: Pregunta ,val  jugador: JugadorEnPart
         if (resultado) {
             if (final) {
                 acercaDe = R.string.ganado
-                jugador.juegos[2] = true
+
             } else {
                 acercaDe = R.string.acierto
+                jugador.juegos[2] = true
             }
             ganado = true
         } else {

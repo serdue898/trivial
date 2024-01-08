@@ -117,12 +117,11 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                                     var repetida = true
                                     var preguntaNueva: Pregunta? = null
                                     while (repetida) {
-                                        preguntaNueva = preguntasMinijuego?.random()
+                                        preguntaNueva = preguntasMinijuego.random()
                                         if (!listaPtreguntas.contains(preguntaNueva)) {
                                             repetida = false
                                         }
                                     }
-
                                     listaPtreguntas.add(preguntaNueva!!)
                                 }
                                 juego.resultadoMiniJuego(true)
