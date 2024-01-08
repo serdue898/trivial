@@ -26,4 +26,12 @@
     <string name="mItm_configuracion">Configuracion</string>
     <string name="mItm_inicio">Inicio</string>
     <string name="ganado">Has ganado el juego</string>
+    <string name="turno_del_jugador">"Turno del jugador: "</string>
+    <string name="tira_el_dado">Tira el dado</string>
+    <string name="datos_guardados">Datos guardados</string>
+    <string name="juego">Juego</string>
+    <string name="internet_mensaje">Necesitas internet para jugar,se cerrara el juego</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="mensaje_no_minijuego">No tienes suficientes quesitos , tira de nuevo</string>
+    <string name="juego_final">Juego final</string>
 </resources>

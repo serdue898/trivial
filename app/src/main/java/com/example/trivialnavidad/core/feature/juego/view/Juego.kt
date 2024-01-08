@@ -150,7 +150,7 @@ class Juego : Fragment() {
         for (jugador in jugadoresEnPartida){
             conexion.actualizarCasillaActual(jugador)
         }
-        Toast.makeText(contexto, "Datos guardados", Toast.LENGTH_SHORT).show()
+        Toast.makeText(contexto, getString(R.string.datos_guardados), Toast.LENGTH_SHORT).show()
     }
 
     private fun verInstrucciones() {
@@ -168,7 +168,8 @@ class Juego : Fragment() {
     private fun actualizarJugador( jugador: JugadorEnPartida? ){
         val nombre = view?.findViewById<TextView>(R.id.t_tunroJugador)
         val avatar = view?.findViewById<ImageView>(R.id.i_avatar)
-        nombre?.text = "turno del jugador:${jugador?.jugador?.nombre}"
+        val texto =getString(R.string.turno_del_jugador) +jugador?.jugador?.nombre
+        nombre?.text = texto
         avatar?.setImageDrawable(avatarImages?.getDrawable(jugador?.avatar!!.toInt()))
         // Llama a la función y obtén el último número aleatorio
 
@@ -181,7 +182,7 @@ class Juego : Fragment() {
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setView(view)
-        msnEmergente.setTitle("Tira el dado")
+        msnEmergente.setTitle(getString(R.string.tira_el_dado))
         val construido = msnEmergente.create()
         construido.show()
 

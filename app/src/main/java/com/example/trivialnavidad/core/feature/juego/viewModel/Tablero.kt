@@ -92,10 +92,10 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     if (preguntasMinijuego == null) {
 
                         val alert = AlertDialog.Builder(contexto)
-                        alert.setTitle("Juego")
+                        alert.setTitle(contexto.getString(R.string.juego))
                         alert.setCancelable(false)
-                        alert.setMessage("Necesitas internet para jugar,se cerrara el juego")
-                        alert.setPositiveButton("Aceptar") { dialog, which ->
+                        alert.setMessage(contexto.getString(R.string.internet_mensaje))
+                        alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, which ->
                             (contexto as? Activity)?.finish()
                             dialog.dismiss()
 
@@ -149,9 +149,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                                         MinijuegoTest_fragment(pregunta!!, JugadorActual!!, true)
                                 } else {
                                     val alert = AlertDialog.Builder(contexto)
-                                    alert.setTitle("Juego final")
-                                    alert.setMessage("No tienes suficientes quesitos , tira de nuevo")
-                                    alert.setPositiveButton("Aceptar") { dialog, which ->
+                                    alert.setTitle(contexto.getString(R.string.juego_final))
+                                    alert.setMessage(contexto.getString(R.string.mensaje_no_minijuego))
+                                    alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, which ->
                                         dialog.dismiss()
                                     }
                                     alert.show()
