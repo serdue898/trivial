@@ -9,7 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import com.example.trivialnavidad.R
 
-class SpinnerAdapter(context: Context, private val avatars: List<Drawable?>) : ArrayAdapter<Drawable>(context, 0, avatars) {
+class SpinnerAdapter(context: Context, private val avatars: List<Int?>) : ArrayAdapter<Int>(context, 0, avatars) {
+    val avatarImages = context.resources.obtainTypedArray(R.array.avatar_images)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createView(position, convertView, parent)
     }
@@ -19,12 +20,15 @@ class SpinnerAdapter(context: Context, private val avatars: List<Drawable?>) : A
     }
 
     private fun createView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val avatar = getItem(position)
+        val avatar = avatarImages.getDrawable(avatars[position]!!)
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.seleccion_spinner, parent, false)
 
         // Configurar la imagen del avatar en la vista
         val avatarImageView: ImageView = view.findViewById(R.id.iv_avatar)
         avatarImageView.setImageDrawable(avatar)
+        avatarImageView.tag = avatars[position]
+
+
         return view
     }
 }

@@ -24,7 +24,6 @@ import com.example.trivialnavidad.core.feature.cargarPartida.adapter.PartidaAdap
 import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.ComunicadorPartida
 import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.MetodosPartida
 import io.socket.client.Ack
-import io.socket.client.Socket
 import org.json.JSONArray
 import org.json.JSONException
 
