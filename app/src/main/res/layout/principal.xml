@@ -40,9 +40,9 @@
         android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/bt_offline"
-        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintHorizontal_bias="0.58"
         app:layout_constraintStart_toStartOf="@+id/bt_offline"
-        app:layout_constraintTop_toBottomOf="@+id/bt_offline" />
+        app:layout_constraintTop_toTopOf="@+id/bt_offline" />
 
     <Button
         android:id="@+id/bt_cargar"
@@ -52,9 +52,8 @@
         android:textColor="@color/white"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/bt_online"
-        app:layout_constraintHorizontal_bias="0.566"
         app:layout_constraintStart_toStartOf="@+id/bt_online"
-        app:layout_constraintTop_toBottomOf="@+id/bt_online" />
+        app:layout_constraintTop_toTopOf="@+id/bt_online" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -82,7 +81,7 @@
         android:id="@+id/imageView2"
         android:layout_width="157dp"
         android:layout_height="122dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="@+id/bt_online"
         app:layout_constraintHorizontal_bias="0.594"
         app:layout_constraintStart_toStartOf="@+id/bt_offline"

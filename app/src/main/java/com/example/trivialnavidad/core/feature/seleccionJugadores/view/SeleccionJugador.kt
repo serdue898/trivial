@@ -97,7 +97,7 @@ class SeleccionJugador : Fragment() {
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
 
 
-// Configurar el adaptador en el Spinner
+        // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
 
 
