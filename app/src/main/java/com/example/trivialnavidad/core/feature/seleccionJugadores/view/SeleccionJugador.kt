@@ -104,7 +104,6 @@ class SeleccionJugador : Fragment() {
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
-        b_guardarJugador?.text = "Nuevo jugador"
         b_guardarJugador?.setOnClickListener {
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
