@@ -10,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -106,6 +107,8 @@ class SeleccionJugador : Fragment() {
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         b_guardarJugador?.setOnClickListener {
+            val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
             }else{
@@ -188,7 +191,7 @@ class SeleccionJugador : Fragment() {
             Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
             return
         }
-        val view = avatarJugador?.getChildAt(0)
+        val view = avatarJugador?.selectedView
          val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
         var posicion =avatar?.tag.toString().toInt()
 
