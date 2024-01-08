@@ -16,7 +16,7 @@ class MetodosPrincipal: ComunicadorPrincipal {
     override fun abrir_juego(datos: String, context: Context) {
         if (context is AppCompatActivity) {
             if (datos == "cargar") {
-                val partidas = Partidas()
+                val partidas = Partidas("offline")
                 val fragmentManager = context.supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(R.id.contenedor, partidas)
@@ -31,6 +31,14 @@ class MetodosPrincipal: ComunicadorPrincipal {
             }else if (datos =="online-crear"){
 
             }else if (datos =="online-cargar"){
+
+
+                val partidas = Partidas("online")
+                partidas.cogerPartidas()
+                val fragmentManager = context.supportFragmentManager
+                fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor, partidas)
+                    .commit()
 
             }
         }

@@ -16,6 +16,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
 import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrincipal
+import io.socket.client.IO
 
 class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
@@ -53,6 +54,14 @@ class Principal : Fragment() {
 
         }
         botonOn.setOnClickListener {
+            if (MainActivity.socket == null) {
+                try {
+                    MainActivity.socket = IO.socket("http://192.168.0.202:5000")
+                    MainActivity.socket?.connect()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
             botonCargarPartida.visibility = View.VISIBLE
             botonNuevaPartida.visibility = View.VISIBLE
             botonCargarPartida.tag = "online-cargar"
