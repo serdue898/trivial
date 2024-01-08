@@ -131,6 +131,15 @@ class SeleccionJugador : Fragment() {
 
 
     }
+    fun actualizarSpinner(){
+        val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
+        val avatares = List(avatarImages!!.length()) { i -> avatarImages!!.getDrawable(i) }
+        val adapterspinner = SpinnerAdapter(contexto!!, avatares)
+        spinerAvatares?.adapter = adapterspinner
+
+
+
+    }
     fun editarJugadorLista(jugador: Jugador) {
         val popup = AlertDialog.Builder(contexto)
         val view = layoutInflater.inflate(R.layout.editar_jugador, null)
