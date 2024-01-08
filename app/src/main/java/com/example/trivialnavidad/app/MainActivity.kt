@@ -12,6 +12,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.principal.view.Principal
+import io.socket.client.Socket
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         var configuracion = null as Configuracion?
         @SuppressLint("StaticFieldLeak")
         var reproductor = null as Reproductor?
+        var socket: Socket? = null
 
     }
     private var isRecreated = false

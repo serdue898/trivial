@@ -37,21 +37,29 @@ class Principal : Fragment() {
 
 
         botonNuevaPartida.setOnClickListener {
-            comunicador?.abrir_juego("nueva",contexto!!)
+            comunicador?.abrir_juego(botonNuevaPartida.tag.toString(),contexto!!)
         }
         botonCargarPartida.setOnClickListener {
-            comunicador?.abrir_juego("cargar",contexto!!)
+            comunicador?.abrir_juego(botonCargarPartida.tag.toString(),contexto!!)
         }
         botonOff.setOnClickListener {
 
             botonCargarPartida.visibility = View.VISIBLE
             botonNuevaPartida.visibility = View.VISIBLE
+            botonCargarPartida.tag = "cargar"
+            botonNuevaPartida.tag = "nueva"
             botonOff.visibility = View.INVISIBLE
             botonOn.visibility = View.INVISIBLE
 
         }
         botonOn.setOnClickListener {
-            comunicador?.abrir_juego("online",contexto!!)
+            botonCargarPartida.visibility = View.VISIBLE
+            botonNuevaPartida.visibility = View.VISIBLE
+            botonCargarPartida.tag = "online-cargar"
+            botonNuevaPartida.tag = "online-crear"
+            botonOff.visibility = View.INVISIBLE
+            botonOn.visibility = View.INVISIBLE
+
         }
 
         // Se devuelve la vista inflada.
