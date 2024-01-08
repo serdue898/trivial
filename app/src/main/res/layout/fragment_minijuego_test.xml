@@ -17,47 +17,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/bt_opcionA"
-        android:layout_width="140dp"
-        android:layout_height="99dp"
-        android:layout_marginTop="24dp"
-        android:text="Button"
+    <GridLayout
+        android:rowCount="2"
+        android:columnCount="2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_enunciado" />
+        app:layout_constraintTop_toBottomOf="@+id/tx_enunciado">
 
-    <Button
-        android:id="@+id/bt_opcionD"
-        android:layout_width="152dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="148dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.833"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_enunciado" />
+        <Button
+            android:id="@+id/bt_opcionA"
+            android:background="@color/azul"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Button" />
 
-    <Button
-        android:id="@+id/bt_opcionC"
-        android:layout_width="123dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="148dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_enunciado" />
+        <Button
+            android:id="@+id/bt_opcionD"
+            android:background="@color/amarillo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Button" />
 
-    <Button
-        android:id="@+id/bt_opcionB"
-        android:layout_width="151dp"
-        android:layout_height="89dp"
-        android:layout_marginTop="24dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.83"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tx_enunciado" />
+        <Button
+            android:id="@+id/bt_opcionC"
+            android:background="@color/negro"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/bt_opcionB"
+            android:background="@color/negro"
+            android:backgroundTint="@color/negro"
+
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Button" />
+    </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
