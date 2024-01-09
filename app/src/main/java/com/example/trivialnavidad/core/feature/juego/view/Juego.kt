@@ -46,6 +46,7 @@ class Juego : Fragment() {
     var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
     private var avatarImages : TypedArray? = null
+    var tipo : String = "offline"
 
 
 
@@ -58,7 +59,8 @@ class Juego : Fragment() {
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
             if (partida != null) partidaActual = partida!!
-            jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
+            if (tipo == "offline")jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
+
             jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual })
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
             metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)

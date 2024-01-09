@@ -7,10 +7,11 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class Jugador (
-    var id: Int,
+    var id_jugador: Int,
     val nombre: String,
     val avatar: String
 ) {
+    var partida: Int = 0
     fun toJson(): String {
         return Json.encodeToString(this)
     }

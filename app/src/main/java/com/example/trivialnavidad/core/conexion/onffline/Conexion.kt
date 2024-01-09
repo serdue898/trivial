@@ -40,9 +40,9 @@ class Conexion(Context: Context) {
             }
 
             val jugadorId = db.insert(TABLE_JUGADORES, null, values)
-            jugador.id = jugadorId.toInt()
+            jugador.id_jugador = jugadorId.toInt()
         }else{
-            jugador.id=obtenerJugadorPorNombre(jugador.nombre)
+            jugador.id_jugador=obtenerJugadorPorNombre(jugador.nombre)
 
         }
 
@@ -100,7 +100,7 @@ class Conexion(Context: Context) {
     fun agregarJugadorEnPartida(jugadorEnPartida: JugadorEnPartida) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(KEY_ID_J, jugadorEnPartida.jugador.id)
+            put(KEY_ID_J, jugadorEnPartida.jugador?.id_jugador)
             put(KEY_ID_P, jugadorEnPartida.partida)
             put(KEY_CASILLA_ACTUAL, jugadorEnPartida.casillaActual)
             put(KEY_JUGADOR_ACTUAL, if (jugadorEnPartida.jugadorActual) 1 else 0)
@@ -176,7 +176,8 @@ class Conexion(Context: Context) {
                 val juego4 = cursor.getInt(juego4Index)==1
                 val juegos = mutableListOf( juego1, juego2, juego3, juego4)
                 val jugador = obtenerJugador(idJugador)
-                val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, casillaActual, jugadorActual,juegos,avatar)
+                val jugadorEnPartida = JugadorEnPartida(idJugador, idPartida, casillaActual, jugadorActual,juegos,avatar)
+                jugadorEnPartida.jugador = jugador
                 listaJugadoresEnPartida.add(jugadorEnPartida)
             }
         }
@@ -226,7 +227,7 @@ class Conexion(Context: Context) {
 
     fun actualizarCasillaActual(jugadorEnPartida: JugadorEnPartida) {
         val db = dbHelper.writableDatabase
-        val jugadorId = jugadorEnPartida.jugador.id
+        val jugadorId = jugadorEnPartida.jugador?.id_jugador
         val partidaId = jugadorEnPartida.partida
         val nuevaCasilla = jugadorEnPartida.casillaActual
         val jugadorActual = if (jugadorEnPartida.jugadorActual) 1 else 0

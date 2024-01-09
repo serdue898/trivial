@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.principal.view.Principal
 import io.socket.client.Socket
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         @SuppressLint("StaticFieldLeak")
         var reproductor = null as Reproductor?
         var socket: Socket? = null
+        var jugadorActual = null as Jugador?
 
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // Liberar recursos cuando la actividad se destruye
         reproductor?.liberarRecursos()
+        if (jugadorActual != null) {
+            socket?.emit("desconectar", jugadorActual?.toJson())
+        }
     }
 
 

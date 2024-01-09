@@ -29,7 +29,6 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.unirseOnline.adapter.ListaAdapterSeleccion
 import com.example.trivialnavidad.core.feature.unirseOnline.adapter.SpinnerAdapter
 import com.example.trivialnavidad.core.feature.unirseOnline.viewModel.MetodosUnirse
-import kotlinx.serialization.json.Json
 import org.json.JSONArray
 
 class UnirseOnline(var id_partida :Int) : Fragment() {
@@ -109,6 +108,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
         val socket = MainActivity.socket
+        socket?.emit("actualizarJugadores")
         socket?.on("listaJugadores") { args ->
             val listaJugadores = args[0] as JSONArray
             // Manejar la lista de jugadores en tu aplicación Android
@@ -117,10 +117,27 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             jugadoresEnPartida.clear()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = Jugador.fromJson(listaJugadores[i].toString())
-                jugadoresEnPartida.add(jugador)
+                if (jugador.partida == id_partida)jugadoresEnPartida.add(jugador)
             }
-            actualizarLista()
 
+            activity?.runOnUiThread {
+                actualizarLista()
+            }
+
+        }
+        socket?.on("empezarPartida") { args ->
+            val listaJugadores = args[0] as JSONArray
+            // Manejar la lista de jugadores en tu aplicación Android
+            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
+            var jugadores:MutableList<JugadorEnPartida> = mutableListOf()
+            jugadoresEnPartida.clear()
+            for (i in 0 until listaJugadores.length()) {
+                val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
+                jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
+                jugadores.add(jugador)
+
+            }
+            empezarPartida(jugadores)
         }
         b_guardarJugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -137,9 +154,11 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
         }
         bt_empezarPartida?.setOnClickListener {
-            empezarPartida()
+            val socket = MainActivity.socket
+            socket?.emit("empezarPartida", id_partida)
         }
     }
+
 
 
     fun addJugadorOnline(jugador: Jugador){
@@ -184,7 +203,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 var view = avatarJugador?.selectedView
                 val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
-                val nuevoJugador = Jugador(jugador.id, nombreJugador.text.toString(), posicion.toString())
+                val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
                 jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
                 actualizarLista()
                 actualizarSpinner()
@@ -220,8 +239,9 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
-
+        jugadorNuevo.partida = id_partida
         // Agregar el nuevo jugador a la lista
+        MainActivity.jugadorActual = jugadorNuevo
         jugadoresEnPartida.add(jugadorNuevo)
 
         // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
@@ -229,17 +249,8 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         avatarJugador?.setSelection(0)
         addJugadorOnline(jugadorNuevo)
     }
-    private fun empezarPartida() {
-        val conexion = Conexion(contexto!!)
-        val idPartida = conexion.agregarPartida(Partida(0,"partida",false))
-        val juegos = MutableList(4){i -> false}
-        for (jugador in jugadoresEnPartida) {
-            conexion.agregarJugador(jugador)
-            val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, "4_4",
-                jugadoresEnPartida[0]==jugador, juegos, jugador.avatar)
-            conexion.agregarJugadorEnPartida(jugadorEnPartida)
-        }
-        comunicador?.empezarPartida(contexto!!,idPartida)
+    private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
+        comunicador?.empezarPartida(contexto!!,id_partida,jugadores)
     }
 
 

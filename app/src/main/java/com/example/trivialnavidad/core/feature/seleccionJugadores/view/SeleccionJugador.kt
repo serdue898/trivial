@@ -161,7 +161,7 @@ class SeleccionJugador : Fragment() {
                 var view = avatarJugador?.selectedView
                 val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
-                val nuevoJugador = Jugador(jugador.id, nombreJugador.text.toString(), posicion.toString())
+                val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
                 jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
                 actualizarLista()
                 actualizarSpinner()
@@ -211,8 +211,9 @@ class SeleccionJugador : Fragment() {
         val juegos = MutableList(4){i -> false}
         for (jugador in jugadoresEnPartida) {
             conexion.agregarJugador(jugador)
-            val jugadorEnPartida = JugadorEnPartida(jugador, idPartida, "4_4",
+            val jugadorEnPartida = JugadorEnPartida(jugador.id_jugador, idPartida, "4_4",
                 jugadoresEnPartida[0]==jugador, juegos, jugador.avatar)
+            jugadorEnPartida.jugador = jugador
             conexion.agregarJugadorEnPartida(jugadorEnPartida)
         }
         comunicador?.empezarPartida(contexto!!,idPartida)

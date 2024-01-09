@@ -1,11 +1,12 @@
-package com.example.trivialnavidad.core.conexion.onffline.modelo
+package com.example.trivialnavidad.core.conexion.online.model
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class JugadorEnPartida(
+data class JugadorEnPartidaOnline(
     var id_jugador: Int,
     var partida: Int,
     var casillaActual: String,
@@ -29,7 +30,7 @@ data class JugadorEnPartida(
     }
 
     companion object {
-        fun fromJson(json: String): JugadorEnPartida {
+        fun fromJson(json: String): JugadorEnPartidaOnline {
             return Json.decodeFromString(json)
         }
     }
