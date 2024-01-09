@@ -130,7 +130,6 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             // Manejar la lista de jugadores en tu aplicación Android
             // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
             var jugadores:MutableList<JugadorEnPartida> = mutableListOf()
-            jugadoresEnPartida.clear()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
                 jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
