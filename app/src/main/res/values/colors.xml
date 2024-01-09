@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <!-- colores botones-->
+    <!-- colores tablero-->
     <color name="blanquillo">#E1AC9C</color>
     <color name="negro">#DD000000</color>
     <color name="magenta">#8B008B</color>
@@ -10,4 +8,11 @@
     <color name="amarillo">#FFD700</color>
     <color name="verde">#008000</color>
     <color name="rojo">#DC143C</color>
+    <!-- colores probar-->
+    #025259
+    #007172
+    #F29325
+    #D94F04
+    #F4E2DE
+    <color name="qwer">#F4E2DE</color>
 </resources>
