@@ -14,6 +14,6 @@
     <color name="fondo">#E5F9F9</color>
     <color name="botones">#00c5bd</color>
     -->
-    <color name="fondo">#2E3797</color>
-    <color name="botones">#0065b5</color>
+    <color name="fondo">#0065b5</color>
+    <color name="botones"> #2E3797</color>
 </resources>

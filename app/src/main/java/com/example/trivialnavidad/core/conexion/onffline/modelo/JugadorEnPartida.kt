@@ -1,5 +1,7 @@
 package com.example.trivialnavidad.core.conexion.onffline.modelo
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class JugadorEnPartida(
     var jugador: Jugador,
     var partida: Int,

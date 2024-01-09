@@ -1,5 +1,6 @@
 package com.example.trivialnavidad.core.feature.cargarPartida.viewModel
 
+import android.app.AlertDialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.principal.view.Principal
+import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
 
 class MetodosPartida(val context: Context): ComunicadorPartida {
     override fun cargarPartida(partida: Partida ) {
@@ -43,5 +45,16 @@ class MetodosPartida(val context: Context): ComunicadorPartida {
         }
 
     }
+
+    override fun unirseAPartida(idPartida: Int, contexto: Context) {
+        if (context is AppCompatActivity) {
+            val unirse = UnirseOnline(idPartida)
+            val fragmentManager = context.supportFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.contenedor, unirse)
+                .commit()
+        }
+    }
+
 
 }

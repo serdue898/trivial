@@ -9,4 +9,5 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 interface ComunicadorPartida {
     fun cargarPartida(partida: Partida)
     fun volver( )
+    fun unirseAPartida(idPartida :Int,contexto: Context)
 }

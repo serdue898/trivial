@@ -92,7 +92,7 @@ class Partidas (var tipo:String): Fragment() {
         val partidasOnline : MutableList<Partida> = mutableListOf()
         val socket = MainActivity.socket
             // Cuando se conecta, solicita las partidas iniciales
-            socket!!.emit("obtener_partidas", Ack { args1: Array<Any> ->
+        socket!!.emit("obtener_partidas", Ack { args1: Array<Any> ->
                 val jsonArray = args1[0] as JSONArray
 
                 try {
@@ -118,7 +118,7 @@ class Partidas (var tipo:String): Fragment() {
         lista?.layoutManager = LinearLayoutManager(contexto)
         val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)
         lista?.addItemDecoration(dividerItemDecoration)
-        val adapter = PartidaAdapter(partidas,comunicador!!)
+        val adapter = PartidaAdapter(partidas,comunicador!!,tipo,contexto!!)
         lista?.adapter = adapter
 
 
