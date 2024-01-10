@@ -84,7 +84,6 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
-
         socket?.on("moverJugador") { args ->
             val jugadorjson = args[0] as JSONObject
             // Manejar la lista de jugadores en tu aplicación Android
@@ -92,29 +91,33 @@ class Juego : Fragment() {
             val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
             jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
             val posicionAntigua = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.casillaActual
+
             if (jugador.partida == partidaActual) {
+                jugadoresEnPartida[jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador })] = jugador
+
                 activity?.runOnUiThread {
                     metodosTablero.moverOnline(jugador,posicionAntigua!!)
                 }
                 if (!jugador.jugadorActual){
-
-                    this.jugador++
-                    if (this.jugador >= jugadoresEnPartida.size) {
-                        this.jugador = 0
-                    }
-                    val jugadorNuevo = jugadoresEnPartida[this.jugador]
-                    actualizarJugador(jugadorNuevo)
-                    jugadorNuevo.jugadorActual = true
-                    jugadorActual = jugadorNuevo
-                    if (jugadorActual?.id_jugador == MainActivity.jugadorActual?.id_jugador) {
-                        activity?.runOnUiThread {
-                            dado?.isEnabled = true
+                        this.jugador++
+                        if (this.jugador >= jugadoresEnPartida.size) {
+                            this.jugador = 0
                         }
-                    }
+                        val jugadorNuevo = jugadoresEnPartida[this.jugador]
+                        jugadorNuevo.jugadorActual = true
+                        jugadorActual = jugadorNuevo
+
+                }else{
+                    jugadorActual = jugador
+                }
+
+                activity?.runOnUiThread {
+                    dado?.isEnabled = jugadorActual?.id_jugador == MainActivity.jugadorActual?.id_jugador
                 }
                 actualizarJugador(jugadorActual)
             }
         }
+
 
         dado?.setOnClickListener {
             dado.isEnabled = false
@@ -132,6 +135,7 @@ class Juego : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dado = view?.findViewById<Button>(R.id.bt_dado)
         jugadorActual = jugadoresEnPartida[jugador]
         actualizarJugador(jugadorActual)
         if (cargar){
@@ -139,6 +143,7 @@ class Juego : Fragment() {
             dado?.isEnabled = true
             cargar = false
         }
+
 
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -86,11 +86,8 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
-                    if (tipo == "offline"){
+
                         moverVista( casilla)
-                    }else{
-                        jugadorActual?.casillaActual = casilla.fila.toString() +"_"+ casilla.columna.toString()
-                    }
 
 
                     val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
@@ -179,13 +176,6 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                             }
 
                         }
-                        if (tipo == "online"){
-                            val socket = MainActivity.socket
-                            socket?.emit("moverJugador",jugadorActual?.toJson())
-                        }else{
-                            conexion.actualizarCasillaActual(jugadorActual!!)
-
-                        }
                     }
                 }
                 casilla.isEnabled = false
@@ -206,16 +196,16 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
         val columna = jugador.casillaActual.split("_")[1].toInt()
         val casilla = obtenerCasilla(fila,columna)
         val casillaAntigua = obtenerCasilla(jugadorAntiguo.split("_")[0].toInt(),jugadorAntiguo.split("_")[1].toInt())
-        if (jugador.casillaActual==jugadorAntiguo){
+        if (jugador.casillaActual==jugadorAntiguo || jugador.id_jugador == MainActivity.jugadorActual?.id_jugador){
             return
         }
+
 
         casillaAntigua?.removeJugador(jugador.id_jugador)
         rellenarCasilla(casillaAntigua!!)
         casilla?.addJugador(jugador)
         rellenarCasilla(casilla!!)
-
-        jugador.casillaActual= casillaAntigua.fila.toString() +"_"+ casillaAntigua.columna.toString()
+        jugadorActual = jugador
         reiniciarMovimientos()
     }
     fun moverJugador(jugador:JugadorEnPartida , movimientos : Int){
