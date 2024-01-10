@@ -2,6 +2,7 @@ package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.widget.GridLayout
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 
@@ -15,8 +16,16 @@ class Casilla(contexto: Context, val fila: Int, val columna: Int ) : GridLayout(
     fun removeJugador(jugador: JugadorEnPartida){
          jugadores.remove(jugador)
     }
-    fun removeJugador(id: Int){
-        jugadores.removeAt(jugadores.indexOfFirst { it.id_jugador == id })
+    fun removeJugador(id: Int): Boolean{
+        val posicion = jugadores.indexOfFirst { it.id_jugador == id }
+        if (posicion != -1) {
+            jugadores.removeAt(posicion)
+            return true
+        }
+        return false
+
+
+
 
     }
 
