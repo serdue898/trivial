@@ -28,8 +28,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>) {
-    private var JugadorActual : JugadorEnPartida? = null
+class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>,private val tipo :String
+) {
+    private var jugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
@@ -85,7 +86,12 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
-                    moverVista( casilla)
+                    if (tipo == "offline"){
+                        moverVista( casilla)
+                    }else{
+                        jugadorActual?.casillaActual = casilla.fila.toString() +"_"+ casilla.columna.toString()
+                    }
+
 
                     val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
 
@@ -107,7 +113,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         var minijuego: Fragment? = null
                         when (casilla.dificultad) {
                             1 -> {
-                                minijuego = Adivina(pregunta!!, JugadorActual!!)
+                                minijuego = Adivina(pregunta!!, jugadorActual!!)
                             }
 
                             2 -> {
@@ -129,23 +135,23 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
                             3 -> {
                                 minijuego =
-                                    MinijuegoTest_fragment(pregunta!!, JugadorActual!!, false)
+                                    MinijuegoTest_fragment(pregunta!!, jugadorActual!!, false)
                             }
 
                             4 -> {
-                                minijuego = Parejas(pregunta!!, JugadorActual!!)
+                                minijuego = Parejas(pregunta!!, jugadorActual!!)
                             }
 
                             5 -> {
                                 var entrar = true
-                                JugadorActual?.juegos?.forEach {
+                                jugadorActual?.juegos?.forEach {
                                     if (!it) {
                                         entrar = false
                                     }
                                 }
                                 if (entrar) {
                                     minijuego =
-                                        MinijuegoTest_fragment(pregunta!!, JugadorActual!!, true)
+                                        MinijuegoTest_fragment(pregunta!!, jugadorActual!!, true)
                                 } else {
                                     val alert = AlertDialog.Builder(contexto)
                                     alert.setTitle(contexto.getString(R.string.juego_final))
@@ -173,7 +179,13 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                             }
 
                         }
-                        conexion.actualizarCasillaActual(JugadorActual!!)
+                        if (tipo == "online"){
+                            val socket = MainActivity.socket
+                            socket?.emit("moverJugador",jugadorActual?.toJson())
+                        }else{
+                            conexion.actualizarCasillaActual(jugadorActual!!)
+
+                        }
                     }
                 }
                 casilla.isEnabled = false
@@ -189,11 +201,29 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
 
     }
+    fun moverOnline(jugador: JugadorEnPartida,jugadorAntiguo: String){
+        val fila  = jugador.casillaActual.split("_")[0].toInt()
+        val columna = jugador.casillaActual.split("_")[1].toInt()
+        val casilla = obtenerCasilla(fila,columna)
+        val casillaAntigua = obtenerCasilla(jugadorAntiguo.split("_")[0].toInt(),jugadorAntiguo.split("_")[1].toInt())
+        if (jugador.casillaActual==jugadorAntiguo){
+            return
+        }
+
+        casillaAntigua?.removeJugador(jugador.id_jugador)
+        rellenarCasilla(casillaAntigua!!)
+        casilla?.addJugador(jugador)
+        rellenarCasilla(casilla!!)
+
+        jugador.casillaActual= casillaAntigua.fila.toString() +"_"+ casillaAntigua.columna.toString()
+        reiniciarMovimientos()
+    }
     fun moverJugador(jugador:JugadorEnPartida , movimientos : Int){
         val x  = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
-        JugadorActual = jugador
+        jugadorActual = jugador
         posiblesMovimientos(x, y, movimientos,"",jugador)
+
     }
 
 
@@ -245,16 +275,16 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     }
 
     private fun moverVista(casillaNueva: Casilla){
-        val fila  = JugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
-        val columna = JugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
+        val fila  = jugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
+        val columna = jugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
         val casilla = obtenerCasilla(fila!!,columna!!)
 
-        casillaNueva.addJugador(JugadorActual!!)
+        casillaNueva.addJugador(jugadorActual!!)
         rellenarCasilla(casillaNueva)
-        casilla?.removeJugador(JugadorActual!!)
+        casilla?.removeJugador(jugadorActual!!)
         rellenarCasilla(casilla!!)
 
-        JugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
+        jugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
         reiniciarMovimientos()
 
     }

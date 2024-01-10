@@ -32,6 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 
 class Juego : Fragment() {
 
@@ -42,11 +44,12 @@ class Juego : Fragment() {
     private var jugador: Int = 0
     private var cargar: Boolean = false
     private var jugadorActual: JugadorEnPartida? = null
-    var jugadoresEnPartida: List<JugadorEnPartida> = emptyList()
+    var jugadoresEnPartida: MutableList<JugadorEnPartida> = mutableListOf<JugadorEnPartida>()
     var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
     private var avatarImages : TypedArray? = null
     var tipo : String = "offline"
+    val socket = MainActivity.socket
 
 
 
@@ -59,11 +62,12 @@ class Juego : Fragment() {
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
             if (partida != null) partidaActual = partida!!
-            if (tipo == "offline")jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual)
+            if (tipo == "offline")jugadoresEnPartida = conexion.obtenerJugadoresEnPartida(partidaActual).toMutableList()
 
             jugador = jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.jugadorActual })
+            jugadorActual = jugadoresEnPartida[jugador]
             val tablero = view?.findViewById<GridLayout>(R.id.gr_tablero)
-            metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida)
+            metodosTablero=Tablero(tablero!!,contexto!!,jugadoresEnPartida,tipo)
             metodosTablero.crearTablero()
             metodosTablero.asignarJugadores()
 
@@ -74,13 +78,43 @@ class Juego : Fragment() {
         val toolbar = view?.findViewById<Toolbar>(R.id.toolbar2)
         val clasificacion = view?.findViewById<Button>(R.id.bt_clasificacion)
         val dado = view?.findViewById<Button>(R.id.bt_dado)
-
+        if (tipo == "online" && jugadorActual?.id_jugador != MainActivity.jugadorActual?.id_jugador) dado?.isEnabled = false
 
 
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
+        socket?.on("moverJugador") { args ->
+            val jugadorjson = args[0] as JSONObject
+            // Manejar la lista de jugadores en tu aplicación Android
+            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
+            val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
+            jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
+            val posicionAntigua = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.casillaActual
+            if (jugador.partida == partidaActual) {
+                activity?.runOnUiThread {
+                    metodosTablero.moverOnline(jugador,posicionAntigua!!)
+                }
+                if (!jugador.jugadorActual){
+
+                    this.jugador++
+                    if (this.jugador >= jugadoresEnPartida.size) {
+                        this.jugador = 0
+                    }
+                    val jugadorNuevo = jugadoresEnPartida[this.jugador]
+                    actualizarJugador(jugadorNuevo)
+                    jugadorNuevo.jugadorActual = true
+                    jugadorActual = jugadorNuevo
+                    if (jugadorActual?.id_jugador == MainActivity.jugadorActual?.id_jugador) {
+                        activity?.runOnUiThread {
+                            dado?.isEnabled = true
+                        }
+                    }
+                }
+                actualizarJugador(jugadorActual)
+            }
+        }
 
         dado?.setOnClickListener {
             dado.isEnabled = false
@@ -213,24 +247,27 @@ class Juego : Fragment() {
     }
     fun resultadoMiniJuego(ganado :Boolean){
         val conexion = Conexion(contexto!!)
-
         val jugadorActual = jugadoresEnPartida[jugador]
         val dado = view?.findViewById<Button>(R.id.bt_dado)
-        dado?.isEnabled = true
+        if(tipo=="offline") dado?.isEnabled = true
         if (!ganado){
             jugadorActual.jugadorActual = false
-            jugador++
-            if (jugador>=jugadoresEnPartida.size){
-                jugador=0
+            if (tipo=="offline") {
+                jugador++
+                if (jugador >= jugadoresEnPartida.size) {
+                    jugador = 0
+                }
+                val jugadorNuevo = jugadoresEnPartida[jugador]
+                actualizarJugador(jugadorNuevo)
+                jugadorNuevo.jugadorActual = true
+                conexion.actualizarCasillaActual(jugadorNuevo)
             }
-            val jugadorNuevo = jugadoresEnPartida[jugador]
-            actualizarJugador(jugadorNuevo)
-            jugadorNuevo.jugadorActual = true
-            conexion.actualizarCasillaActual(jugadorNuevo)
-
         }
         cargar = true
-        conexion.actualizarCasillaActual(jugadorActual)
+        if (tipo == "online"){
+            socket?.emit("moverJugador",jugadorActual.toJson())
+        }
+        if(tipo=="offline")conexion.actualizarCasillaActual(jugadorActual)
 
 
 

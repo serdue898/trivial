@@ -136,6 +136,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 jugadores.add(jugador)
 
             }
+            MainActivity.jugadorActual = jugadores.find { it.jugador?.nombre == MainActivity.jugadorActual?.nombre }!!.jugador
             empezarPartida(jugadores)
         }
         b_guardarJugador?.setOnClickListener {

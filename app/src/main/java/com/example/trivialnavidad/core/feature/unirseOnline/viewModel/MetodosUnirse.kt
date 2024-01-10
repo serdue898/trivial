@@ -14,7 +14,7 @@ class MetodosUnirse {
             val juego = Juego()
             juego.partida = id_partida
             juego.tipo = "online"
-            juego.jugadoresEnPartida = jugadores
+            juego.jugadoresEnPartida = jugadores.toMutableList()
 
             MainActivity.juego = juego
             val fragmentManager = contexto.supportFragmentManager

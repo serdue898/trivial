@@ -6,13 +6,18 @@ import android.widget.GridLayout
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 
 class Casilla(contexto: Context, val fila: Int, val columna: Int ) : GridLayout(contexto) {
-    var jugadores :List<JugadorEnPartida> = listOf()
+    var jugadores :MutableList<JugadorEnPartida> = mutableListOf()
     var dificultad : Int = 0
     var color : Int= 0
     fun addJugador(jugador: JugadorEnPartida){
-        jugadores = jugadores.plus(jugador)
+         jugadores.add(jugador)
     }
     fun removeJugador(jugador: JugadorEnPartida){
-        jugadores = jugadores.minus(jugador)
+         jugadores.remove(jugador)
     }
+    fun removeJugador(id: Int){
+        jugadores.removeAt(jugadores.indexOfFirst { it.id_jugador == id })
+
+    }
+
 }
