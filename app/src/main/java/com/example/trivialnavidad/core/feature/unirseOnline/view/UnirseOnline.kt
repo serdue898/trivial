@@ -196,6 +196,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         popup.setView(view)
         val nombreJugador = view.findViewById<EditText>(R.id.et_nombre)
         val avatarJugador = view.findViewById<Spinner>(R.id.sp_avatar)
+        nombreJugador.isEnabled = false
         nombreJugador.setText(jugador.nombre)
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
@@ -210,9 +211,9 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
-                jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
-                actualizarLista()
-                actualizarSpinner()
+                nuevoJugador.partida = id_partida
+                val socket = MainActivity.socket
+                socket?.emit("actualizarJugador", nuevoJugador.toJson())
             }
         }
         popup.setNegativeButton("Cancelar") { dialog, which ->
