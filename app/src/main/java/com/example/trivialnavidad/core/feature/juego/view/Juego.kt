@@ -88,9 +88,7 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
-
-
-            GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.Main) {
                 socket?.on("moverJugadorOnline") { args ->
                     Log.d("DEBUG", "Evento moverJugadorOnline recibido")
                     val jugadorjson = args[0] as JSONObject

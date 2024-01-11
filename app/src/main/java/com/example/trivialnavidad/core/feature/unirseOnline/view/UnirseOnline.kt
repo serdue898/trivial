@@ -110,7 +110,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
         val socket = MainActivity.socket
-        socket?.emit("actualizarJugadores")
+        if (!host)socket?.emit("actualizarJugadores")
         socket?.on("listaJugadores") { args ->
             val listaJugadores = args[0] as JSONArray
             // Manejar la lista de jugadores en tu aplicación Android
@@ -120,6 +120,10 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             for (i in 0 until listaJugadores.length()) {
                 val jugador = Jugador.fromJson(listaJugadores[i].toString())
                 if (jugador.partida == id_partida)jugadoresEnPartida.add(jugador)
+            }
+            val hostPreparado  = jugadoresEnPartida.find { it.nombre == MainActivity.jugadorActual?.nombre}?.host
+            if (hostPreparado!=null) {
+                host = hostPreparado
             }
 
             activity?.runOnUiThread {
@@ -169,6 +173,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
     fun addJugadorOnline(jugador: Jugador){
         val socket = MainActivity.socket
+        jugador.host = host
         val jugadorJson = jugador.toJson()
         socket?.emit("addJugador", jugadorJson)
     }

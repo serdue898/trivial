@@ -12,6 +12,7 @@ data class Jugador (
     val avatar: String
 ) {
     var partida: Int = 0
+    var host = false
     fun toJson(): String {
         return Json.encodeToString(this)
     }
