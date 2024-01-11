@@ -2,48 +2,39 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/pregunta"
-        android:layout_width="341dp"
-        android:layout_height="224dp"
+        android:id="@+id/t_pregunta"
+        android:layout_width="353dp"
+        android:layout_height="44dp"
         android:layout_marginTop="80dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/respuesta"
-        android:layout_width="323dp"
-        android:layout_height="86dp"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Respuesta"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.465"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pregunta" />
-
-    <Button
-        android:id="@+id/comprobar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Comprobar"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/respuesta"
-        app:layout_constraintStart_toStartOf="@+id/respuesta"
-        app:layout_constraintTop_toBottomOf="@+id/respuesta" />
-
     <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Respuesta:"
-        app:layout_constraintBottom_toTopOf="@+id/respuesta"
-        app:layout_constraintStart_toStartOf="@+id/respuesta" />
+        android:id="@+id/t_palabraAdivina"
+        android:layout_width="352dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="72dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_pregunta" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gr_botonesLetras"
+        android:layout_width="347dp"
+        android:layout_height="275dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_palabraAdivina">
+
+    </androidx.gridlayout.widget.GridLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
