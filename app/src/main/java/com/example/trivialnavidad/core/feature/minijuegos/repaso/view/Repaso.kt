@@ -28,7 +28,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         savedInstanceState: Bundle?
     ): View? {
         // enunciado comodin para generar los huecos
-        var enunciadoComodin = pregunta.pregunta
+        val enunciadoComodin = pregunta.pregunta
 
         // asignar las preguntas a los elementos de la vista
         var respuestasRepaso : List<String> = listOf()
