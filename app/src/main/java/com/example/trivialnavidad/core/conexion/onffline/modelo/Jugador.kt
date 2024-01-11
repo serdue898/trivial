@@ -13,6 +13,7 @@ data class Jugador (
 ) {
     var partida: Int = 0
     var host = false
+    var contraseña = ""
     fun toJson(): String {
         return Json.encodeToString(this)
     }

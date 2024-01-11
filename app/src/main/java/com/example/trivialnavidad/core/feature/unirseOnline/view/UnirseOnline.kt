@@ -94,20 +94,16 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val nombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
+        nombreJugador.isEnabled = false
+        nombreJugador.setText(MainActivity.jugadorActual?.nombre)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
         val avatares = List(avatarImages!!.length()) { i -> i }
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
-
-
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
-
-
-
-        // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
-        //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
         val socket = MainActivity.socket
         if (!host)socket?.emit("actualizarJugadores")

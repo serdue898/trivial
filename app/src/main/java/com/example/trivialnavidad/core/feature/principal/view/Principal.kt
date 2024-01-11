@@ -22,6 +22,7 @@ class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
     private var contexto: Context? = null
     private var empezado = false
+    var tipo = "offline"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.principal, container, false)
