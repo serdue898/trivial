@@ -38,7 +38,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
         val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
         val palabraAdivinar = pregunta.correcta
-        val palabraDividida = view.findViewById<EditText>(R.id.t_palabraAdivina)
+        val palabraDividida = view.findViewById<TextView>(R.id.t_palabraAdivina)
         var ganado = false
         tx_pregunta.text = pregunta.pregunta
         val gr_abecedario = view.findViewById<GridLayout>(R.id.gr_botonesLetras)
@@ -52,21 +52,18 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         for (letra in abecedario){
             var botonLetra: Button = Button(contexto)
             botonLetra.text= letra.toString()
-            /* añadir los margenes a los botones para que esten separados pero me pide hacer un import que le pincho y no lo hace :S
-            botonLetra.marginBottom(5)
-            botonLetra.marginTop(5)
-            botonLetra.marginLeft(5)
-            botonLetra.marginRight(5)
-            */
+
+
             val params = GridLayout.LayoutParams()
             params.width = ViewGroup.LayoutParams.WRAP_CONTENT
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            params.setMargins(5,5,5,5)
 
             // Agrega el botón al GridLayout con los parámetros de diseño
             gr_abecedario.addView(botonLetra, params)
 
             botonLetra.setOnClickListener(){
-
+                botonLetra.isEnabled = false
                 if(comprobarLetra(botonLetra, palabraAdivinar )){
                     botonLetra.setBackgroundColor(R.color.verde)
                     palabraHuecos=rellenarPalabra(palabraHuecos, palabraAdivinar, botonLetra.text.toString())
@@ -77,8 +74,6 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
                     val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
                     mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
                     mensaje.show()
-                }else{
-
                 }
             }
         }
@@ -103,7 +98,6 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
                 correcto= true
             }
         }
-
         return correcto
     }
     fun comprobarPlabra(palabraDividida:String): Boolean{
@@ -125,23 +119,19 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         val letrasDividida = palabraDividida.toCharArray().map { it.toString() }.toTypedArray()
         var posicion = 0
 
+        var i =0
         for(letraAdivinar in letrasAdivinar){
-            var i =0
             if(letraAdivinar == letra){
                 posicion= i
             }
             i++
         }
+        i = 0
         for(letrahueco in letrasDividida){
-            var i = 0
-            if(i == posicion){
-                palabraHuecosActualizados= palabraHuecosActualizados + letra
-            }else{
-                palabraHuecosActualizados= palabraHuecosActualizados + "_ "
-            }
+            palabraHuecosActualizados += if(i == posicion){letra}else{"_ "}
+            i++
 
         }
-
         return  palabraHuecosActualizados
     }
 }
