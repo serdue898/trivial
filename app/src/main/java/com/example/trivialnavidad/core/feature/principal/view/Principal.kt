@@ -32,6 +32,7 @@ class Principal : Fragment() {
         val botonOn = view.findViewById<Button>(R.id.bt_online)
         val botonNuevaPartida = view.findViewById<Button>(R.id.bt_nueva)
         val botonCargarPartida = view.findViewById<Button>(R.id.bt_cargar)
+        val botonVolver = view.findViewById<Button>(R.id.bt_volverInicio)
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
@@ -52,6 +53,7 @@ class Principal : Fragment() {
             botonNuevaPartida.tag = "nueva"
             botonOff.visibility = View.INVISIBLE
             botonOn.visibility = View.INVISIBLE
+            botonVolver.visibility = View.VISIBLE
 
         }
         botonOn.setOnClickListener {
@@ -69,7 +71,15 @@ class Principal : Fragment() {
             botonNuevaPartida.tag = "online-crear"
             botonOff.visibility = View.INVISIBLE
             botonOn.visibility = View.INVISIBLE
+            botonVolver.visibility = View.VISIBLE
 
+        }
+        botonVolver.setOnClickListener {
+            botonCargarPartida.visibility = View.INVISIBLE
+            botonNuevaPartida.visibility = View.INVISIBLE
+            botonOff.visibility = View.VISIBLE
+            botonOn.visibility = View.VISIBLE
+            botonVolver.visibility = View.INVISIBLE
         }
 
         // Se devuelve la vista inflada.

@@ -76,7 +76,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 true
             }
             R.id.mItm_inicio -> {
-                comunicador?.volver(contexto!!)
+                comunicador.volver(contexto!!)
                 true
             }
             R.id.mItm_acerca -> {

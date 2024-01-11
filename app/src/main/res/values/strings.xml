@@ -34,4 +34,5 @@
     <string name="aceptar">Aceptar</string>
     <string name="mensaje_no_minijuego">No tienes suficientes quesitos , tira de nuevo</string>
     <string name="juego_final">Juego final</string>
+    <string name="bt_volver">volver</string>
 </resources>
