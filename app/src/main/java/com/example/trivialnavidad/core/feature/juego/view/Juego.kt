@@ -3,6 +3,7 @@ package com.example.trivialnavidad.core.feature.juego.view
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -88,13 +89,17 @@ class Juego : Fragment() {
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
-        socket?.on("moverJugadorOnline") { args ->
-            val jugadorjson = args[0] as JSONObject
-            // Manejar la lista de jugadores en tu aplicación Android
-            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
-            val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
-            jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
-            actualizarJugadorOnline(jugador)
+
+            GlobalScope.launch(Dispatchers.Main) {
+                socket?.on("moverJugadorOnline") { args ->
+                    Log.d("DEBUG", "Evento moverJugadorOnline recibido")
+                    val jugadorjson = args[0] as JSONObject
+                    // Manejar la lista de jugadores en tu aplicación Android
+                    // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
+                    val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
+                    jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
+                actualizarJugadorOnline(jugador)
+            }
 
         }
 
@@ -126,10 +131,10 @@ class Juego : Fragment() {
             actualizarJugadorOnline(jugadorTemp!!)
             jugadorTemp = null
             cargarOnline = false
+        }else if (jugadorTemp != null ){
+            actualizarJugadorOnline(jugadorTemp!!)
+            jugadorTemp = null
         }
-
-
-
     }
     fun actualizarJugadorOnline(jugador: JugadorEnPartida){
         if (view == null) {

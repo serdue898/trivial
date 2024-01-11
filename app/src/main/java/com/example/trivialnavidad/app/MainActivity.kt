@@ -41,9 +41,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // Liberar recursos cuando la actividad se destruye
         reproductor?.liberarRecursos()
-        if (jugadorActual != null) {
-            socket?.emit("desconectar", jugadorActual?.toJson())
-        }
     }
 
 

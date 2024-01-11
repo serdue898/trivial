@@ -37,6 +37,8 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     private var contexto: Context? = null
     private var jugadoresEnPartida = mutableListOf<Jugador>()
     private var avatarImages : TypedArray? = null
+    private var emepzar = false
+    var host = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -121,12 +123,18 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             }
 
             activity?.runOnUiThread {
+                if (jugadoresEnPartida.size >=2 && host) {
+                    bt_empezarPartida?.visibility = View.VISIBLE
+                }else{
+                    bt_empezarPartida?.visibility = View.INVISIBLE
+                }
                 actualizarLista()
             }
 
         }
         socket?.on("empezarPartida") { args ->
             val listaJugadores = args[0] as JSONArray
+            emepzar = true
             // Manejar la lista de jugadores en tu aplicación Android
             // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
             var jugadores:MutableList<JugadorEnPartida> = mutableListOf()
@@ -146,9 +154,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
             }else{
                 agregarJugadorLista( )
-                if (jugadoresEnPartida.size >=2) {
-                    bt_empezarPartida?.visibility = View.VISIBLE
-                }
+
                 b_guardarJugador.isEnabled = false
             }
 
@@ -251,6 +257,13 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     }
     private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
         comunicador?.empezarPartida(contexto!!,id_partida,jugadores)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Liberar recursos cuando la actividad se destruye¡
+        if (!emepzar) {
+            MainActivity.socket?.emit("desconectar", MainActivity.jugadorActual?.toJson())
+        }
     }
 
 
