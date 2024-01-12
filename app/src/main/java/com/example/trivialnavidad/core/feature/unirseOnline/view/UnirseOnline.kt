@@ -51,6 +51,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
+
         /*
         // codigo de clasificacion y no se si es necesario o no
 
@@ -105,6 +106,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
+
         val socket = MainActivity.socket
         if (!host)socket?.emit("actualizarJugadores")
         socket?.on("listaJugadores") { args ->

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
+import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
 import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrincipal
 import io.socket.client.IO
@@ -65,13 +66,8 @@ class Principal : Fragment() {
                     e.printStackTrace()
                 }
             }
-            botonCargarPartida.visibility = View.VISIBLE
-            botonNuevaPartida.visibility = View.VISIBLE
-            botonCargarPartida.tag = "online-cargar"
-            botonNuevaPartida.tag = "online-crear"
-            botonOff.visibility = View.INVISIBLE
-            botonOn.visibility = View.INVISIBLE
-            botonVolver.visibility = View.VISIBLE
+            login()
+
 
         }
         botonVolver.setOnClickListener {
@@ -84,6 +80,93 @@ class Principal : Fragment() {
 
         // Se devuelve la vista inflada.
         return view
+    }
+    fun mostrarOnline(){
+        val botonOff = view?.findViewById<Button>(R.id.bt_offline)
+        val botonOn = view?.findViewById<Button>(R.id.bt_online)
+        val botonNuevaPartida = view?.findViewById<Button>(R.id.bt_nueva)
+        val botonCargarPartida = view?.findViewById<Button>(R.id.bt_cargar)
+        val botonVolver = view?.findViewById<Button>(R.id.bt_volverInicio)
+        botonCargarPartida?.visibility = View.VISIBLE
+        botonNuevaPartida?.visibility = View.VISIBLE
+        botonCargarPartida?.tag = "online-cargar"
+        botonNuevaPartida?.tag = "online-crear"
+        botonOff?.visibility = View.INVISIBLE
+        botonOn?.visibility = View.INVISIBLE
+        botonVolver?.visibility = View.VISIBLE
+
+    }
+    fun login(){
+        val popupLogin = AlertDialog.Builder(contexto as AppCompatActivity)
+        popupLogin.setTitle("Login")
+        val view = (contexto as AppCompatActivity).layoutInflater.inflate(R.layout.login, null)
+        popupLogin.setView(view)
+        popupLogin.setPositiveButton("Aceptar") { dialog, which ->
+            val nombre = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.ed_nombre).text.toString()
+            val contraseña = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_contrasena).text.toString()
+            val socket = MainActivity.socket
+            val jugador = Jugador(0,nombre,"0")
+            jugador.contraseña = contraseña
+            socket?.emit("login",jugador.toJson())
+            socket?.on("login") { args ->
+                val id = args[0].toString()
+                if (id == "null") {
+                    (contexto as AppCompatActivity).runOnUiThread {
+                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                        errorPopup.setTitle("Error")
+                        errorPopup.setMessage("Usuario o contraseña incorrectos")
+                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        errorPopup.show()
+                    }
+                } else {
+                    MainActivity.jugadorActual= Jugador.fromJson(id)
+                    activity?.runOnUiThread {
+                        mostrarOnline()
+                    }
+
+                }
+            }
+        }
+        popupLogin.setNegativeButton("Cancelar") { dialog, which ->
+            dialog.dismiss()
+        }
+        popupLogin.setNeutralButton ("Registrarse"){dialog, which ->
+            val nombre = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.ed_nombre).text.toString()
+            val contraseña = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_contrasena).text.toString()
+            val socket = MainActivity.socket
+            val jugador = Jugador(0,nombre,"0")
+            jugador.contraseña = contraseña
+            socket?.emit("registrarJugador", jugador.toJson())
+            socket?.on("registrarJugador") { args ->
+                val jugador = args[0]
+
+                if (jugador == "null") {
+                    (contexto as AppCompatActivity).runOnUiThread {
+                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                        errorPopup.setTitle("Error")
+                        errorPopup.setMessage("Ya existe un usuario con ese nombre")
+                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        errorPopup.show()
+                    }
+                } else {
+
+                    MainActivity.jugadorActual= Jugador.fromJson(jugador.toString())
+                    activity?.runOnUiThread {
+                        mostrarOnline()
+                    }
+
+
+                }
+            }
+        }
+        (contexto as AppCompatActivity).runOnUiThread {
+            popupLogin.show()
+        }
+
     }
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)

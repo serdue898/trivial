@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class Jugador (
     var id_jugador: Int,
-    val nombre: String,
+    var nombre: String,
     val avatar: String
 ) {
     var partida: Int = 0
