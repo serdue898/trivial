@@ -24,6 +24,7 @@ class Principal : Fragment() {
     private var contexto: Context? = null
     private var empezado = false
     var tipo = "offline"
+    var volver = "inicio"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.principal, container, false)
@@ -109,8 +110,8 @@ class Principal : Fragment() {
             jugador.contraseña = contraseña
             socket?.emit("login",jugador.toJson())
             socket?.on("login") { args ->
-                val id = args[0].toString()
-                if (id == "null") {
+                val id = args[0]
+                if (id == "null" || id=="error") {
                     (contexto as AppCompatActivity).runOnUiThread {
                         val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
                         errorPopup.setTitle("Error")
@@ -121,7 +122,7 @@ class Principal : Fragment() {
                         errorPopup.show()
                     }
                 } else {
-                    MainActivity.jugadorActual= Jugador.fromJson(id)
+                    MainActivity.jugadorActual= Jugador.fromJson(id.toString())
                     activity?.runOnUiThread {
                         mostrarOnline()
                     }
