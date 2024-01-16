@@ -18,10 +18,11 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.juego.MinijuegoTest_fragment
-import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
+import com.example.trivialnavidad.core.feature.juego.Test
+import com.example.trivialnavidad.core.feature.juego.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
+import com.example.trivialnavidad.core.feature.minijuegos.repaso.view.Repaso
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -132,6 +133,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 }
 
                 2 -> {
+                    minijuego = Repaso(pregunta!!, jugadorActual!!)
                     //falta terminar
                     val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                     for (k in 0 until 1) {
@@ -145,12 +147,12 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         listaPtreguntas.add(preguntaNueva!!)
                     }
-                    juego.resultadoMiniJuego(true)
+
                 }
 
                 3 -> {
-                    minijuego =
-                        MinijuegoTest_fragment(pregunta!!, jugadorActual!!, false)
+                    minijuego =Test(pregunta!!, jugadorActual!!, false)
+
                 }
 
                 4 -> {
@@ -166,7 +168,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     }
                     if (entrar) {
                         minijuego =
-                            MinijuegoTest_fragment(pregunta!!, jugadorActual!!, true)
+                            Test(pregunta!!, jugadorActual!!, true)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))

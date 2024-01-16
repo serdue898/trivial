@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
     <!-- colores botones-->
     <color name="blanquillo">#E1AC9C</color>
     <color name="negro">#DD000000</color>

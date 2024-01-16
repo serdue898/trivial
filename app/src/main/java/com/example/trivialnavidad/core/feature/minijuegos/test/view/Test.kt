@@ -18,7 +18,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.MetodosTest
 
-class MinijuegoTest_fragment(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Boolean): Fragment() {
+class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Boolean): Fragment() {
     private var comunicador: ComunicadorTest? =MetodosTest();
     private var contexto: Context? = null
 

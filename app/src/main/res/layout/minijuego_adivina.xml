@@ -26,15 +26,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/t_pregunta" />
 
-    <androidx.gridlayout.widget.GridLayout
+    <GridLayout
         android:id="@+id/gr_botonesLetras"
-        android:layout_width="347dp"
-        android:layout_height="275dp"
+        android:layout_width="364dp"
+        android:layout_height="396dp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/t_palabraAdivina">
 
-    </androidx.gridlayout.widget.GridLayout>
+    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

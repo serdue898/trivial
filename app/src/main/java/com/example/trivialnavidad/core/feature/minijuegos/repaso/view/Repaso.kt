@@ -22,11 +22,10 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
 
     private var comunicador: ComunicadorRepaso? = MetodosRepaso()
     private var contexto: Context? = null
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle? ): View {
+        val view = inflater.inflate(R.layout.minijuego_repaso, container, false)
+        contexto = container?.context
+
         // enunciado comodin para generar los huecos
         val enunciadoComodin = pregunta.pregunta
 
@@ -37,8 +36,6 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         enunciado?.text= generarHuecosTexto(enunciadoComodin, respuestasRepaso)
 
         // falta coger las respuestas de la base de datos
-        val view = inflater.inflate(R.layout.minijuego_repaso, container, false)
-        contexto = container?.context
 
         // declarar cada uno de spinner que va a contener la información aunque está seá repetida
         val sp_hueco1 = view.findViewById<Spinner>(R.id.sp_hueco1)
@@ -61,10 +58,10 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
 
         bt_corregir.setOnClickListener(){
             val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
-            if((sp_hueco1.isSelected.toString()== pregunta.correcta)&&
-                (sp_hueco2.isSelected.toString()== pregunta.correcta)&&
-                (sp_hueco3.isSelected.toString()== pregunta.correcta)&&
-                (sp_hueco4.isSelected.toString()== pregunta.correcta)){
+            if((sp_hueco1.isSelected.toString()== pregunta.correcta [0])&&
+                (sp_hueco2.isSelected.toString()== pregunta.correcta[1])&&
+                (sp_hueco3.isSelected.toString()== pregunta.correcta[2])&&
+                (sp_hueco4.isSelected.toString()== pregunta.correcta[3])){
                 mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
 
             }else{
@@ -84,5 +81,25 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
             i++
         }
         return  enunciadoHuecos
+    }
+    private fun terminarJuego(resultado: Boolean){
+        var ganado = false
+        val acercaDe: Int
+        if (resultado) {
+
+            acercaDe = R.string.acierto
+            jugador.juegos[1] = true
+
+            ganado = true
+        } else {
+            acercaDe = R.string.fallo
+        }
+        val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
+        msnEmergente.setCancelable(false)
+        msnEmergente.setMessage(getString(acercaDe))
+        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+            comunicador?.volver(contexto!!,ganado)
+        }
+        msnEmergente.show()
     }
 }

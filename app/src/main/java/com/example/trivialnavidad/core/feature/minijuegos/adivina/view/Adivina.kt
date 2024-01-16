@@ -23,6 +23,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.ComunicadorAdivina
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.MetodosAdivina
+import java.util.Locale
 
 class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment() {
     private var comunicador: ComunicadorAdivina? = MetodosAdivina()
@@ -37,7 +38,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
 
         val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
-        val palabraAdivinar = pregunta.correcta
+        var palabraAdivinar = pregunta.correcta[0].lowercase()
+        palabraAdivinar="patata"
         val palabraDividida = view.findViewById<TextView>(R.id.t_palabraAdivina)
         var ganado = false
         tx_pregunta.text = pregunta.pregunta
@@ -48,7 +50,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         var palabraHuecos = desgranarPalabra(palabraAdivinar)
         // no entiendo porque no me esta dejando asignar el string al txtview de la palabra hecha trocitos
         palabraDividida.text= palabraHuecos
-
+        gr_abecedario.rowCount=9
+        gr_abecedario.columnCount=4
         for (letra in abecedario){
             var botonLetra: Button = Button(contexto)
             botonLetra.text= letra.toString()
@@ -66,13 +69,19 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
                 botonLetra.isEnabled = false
                 if(comprobarLetra(botonLetra, palabraAdivinar )){
                     botonLetra.setBackgroundColor(R.color.verde)
-                    palabraHuecos=rellenarPalabra(palabraHuecos, palabraAdivinar, botonLetra.text.toString())
+                    palabraHuecos=rellenarPalabra(palabraHuecos.replace(" ",""), palabraAdivinar, botonLetra.text.toString())
+                    palabraDividida.text= palabraHuecos
                 }else {
                     botonLetra.setBackgroundColor(R.color.rojo)
                 }
-                if(comprobarPlabra(palabraHuecos)){
+                if(comprobarPlabra(palabraHuecos.replace(" ",""))){
                     val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
+                    mensaje.setCancelable(false)
+
                     mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
+                    mensaje.setPositiveButton("Aceptar") { dialog, which ->
+                        terminarJuego(true)
+                    }
                     mensaje.show()
                 }
             }
@@ -85,7 +94,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
        var palabraDividida : String= ""
         val arrayDeLetras = palabra.toCharArray().map { it.toString() }.toTypedArray()
         for(hueco in arrayDeLetras){
-           palabraDividida= palabraDividida +"_ "
+            palabraDividida += "_ "
         }
         return palabraDividida
     }
@@ -95,43 +104,57 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         val arrayDeLetras = palabra.toCharArray().map { it.toString() }.toTypedArray()
         for(hueco in arrayDeLetras){
             if(botonPulsado.text== hueco){
+
                 correcto= true
             }
         }
         return correcto
     }
     fun comprobarPlabra(palabraDividida:String): Boolean{
-        var completa= false
+
         val arrayDeLetras = palabraDividida.toCharArray().map { it.toString() }.toTypedArray()
-        for (hueco in palabraDividida){
-            if (hueco.equals("_")){
-                return completa
-            }else{
-                completa= true
+        for (hueco in arrayDeLetras){
+            if (hueco == "_"){
+                return false
             }
         }
 
-        return completa
+        return true
     }
-    fun rellenarPalabra(palabraDividida: String, palabraAdivinar: String, letra: String) : String{
+    fun rellenarPalabra(palabraHuecos: String, palabraAdivinar: String, letra: String) : String{
         var palabraHuecosActualizados = ""
         val letrasAdivinar = palabraAdivinar.toCharArray().map { it.toString() }.toTypedArray()
-        val letrasDividida = palabraDividida.toCharArray().map { it.toString() }.toTypedArray()
+        val letrasDividida = palabraHuecos.toCharArray().map { it.toString() }.toTypedArray()
         var posicion = 0
 
-        var i =0
-        for(letraAdivinar in letrasAdivinar){
-            if(letraAdivinar == letra){
-                posicion= i
+        for (hueco in letrasDividida){
+            if (letrasAdivinar[posicion]==letra){
+                palabraHuecosActualizados += "$letra "
+            }else{
+                palabraHuecosActualizados += "$hueco "
             }
-            i++
-        }
-        i = 0
-        for(letrahueco in letrasDividida){
-            palabraHuecosActualizados += if(i == posicion){letra}else{"_ "}
-            i++
-
+            posicion++
         }
         return  palabraHuecosActualizados
+    }
+    private fun terminarJuego(resultado: Boolean){
+        var ganado = false
+        val acercaDe: Int
+        if (resultado) {
+
+                acercaDe = R.string.acierto
+                jugador.juegos[0] = true
+
+            ganado = true
+        } else {
+            acercaDe = R.string.fallo
+        }
+        val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
+        msnEmergente.setCancelable(false)
+        msnEmergente.setMessage(getString(acercaDe))
+        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+            comunicador?.volver(contexto!!,ganado)
+        }
+        msnEmergente.show()
     }
 }
