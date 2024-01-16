@@ -83,7 +83,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                casilla.dificultad = dificultad
+                casilla.dificultad = 1
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {

@@ -3,6 +3,7 @@ package com.example.trivialnavidad.core.feature.juego.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
     private var contexto: Context? = null
 
 
+
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.minijuego_adivina, container, false)
@@ -55,11 +57,12 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         for (letra in abecedario){
             var botonLetra: Button = Button(contexto)
             botonLetra.text= letra.toString()
+            botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra)
 
 
             val params = GridLayout.LayoutParams()
-            params.width = ViewGroup.LayoutParams.WRAP_CONTENT
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            params.width = GridLayout.LayoutParams.WRAP_CONTENT
+            params.height = GridLayout.LayoutParams.WRAP_CONTENT
             params.setMargins(5,5,5,5)
 
             // Agrega el botón al GridLayout con los parámetros de diseño
@@ -68,11 +71,11 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
             botonLetra.setOnClickListener(){
                 botonLetra.isEnabled = false
                 if(comprobarLetra(botonLetra, palabraAdivinar )){
-                    botonLetra.setBackgroundColor(R.color.verde)
+                    botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra_acertada)
                     palabraHuecos=rellenarPalabra(palabraHuecos.replace(" ",""), palabraAdivinar, botonLetra.text.toString())
                     palabraDividida.text= palabraHuecos
                 }else {
-                    botonLetra.setBackgroundColor(R.color.rojo)
+                    botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra_fallada)
                 }
                 if(comprobarPlabra(palabraHuecos.replace(" ",""))){
                     val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
