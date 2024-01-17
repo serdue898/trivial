@@ -6,15 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_preguntas"
-        android:layout_width="355dp"
-        android:layout_height="315dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fr_3" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar5"
         android:layout_width="0dp"
@@ -26,69 +17,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/bt_comprobar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="comprobar"
-        app:layout_constraintEnd_toEndOf="@+id/rv_preguntas"
-        app:layout_constraintStart_toStartOf="@+id/rv_preguntas"
-        app:layout_constraintTop_toBottomOf="@+id/rv_preguntas" />
-
     <FrameLayout
         android:id="@+id/fr_1"
         android:layout_width="99dp"
         android:layout_height="99dp"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="84dp"
         android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar5">
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Rellenar" />
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="@+id/toolbar5" />
 
     <FrameLayout
         android:id="@+id/fr_2"
         android:layout_width="99dp"
         android:layout_height="99dp"
+        android:layout_marginStart="64dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/fr_1"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/fr_1"
         app:layout_constraintTop_toTopOf="@+id/fr_1"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Rellenar" />
-
-    </FrameLayout>
+        app:layout_constraintVertical_bias="0.0" />
 
     <FrameLayout
         android:id="@+id/fr_3"
         android:layout_width="99dp"
         android:layout_height="99dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:foregroundGravity="center"
         app:layout_constraintEnd_toEndOf="@+id/fr_1"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/fr_1"
-        app:layout_constraintTop_toBottomOf="@+id/fr_1">
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Rellenar" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/fr_1" />
 
     <FrameLayout
         android:id="@+id/fr_4"
@@ -96,34 +55,8 @@
         android:layout_height="99dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/fr_3"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/fr_3">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Rellenar" />
-
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="56dp"
-        android:layout_height="51dp"
-        app:layout_constraintBottom_toBottomOf="@+id/fr_1"
-        app:layout_constraintStart_toEndOf="@+id/fr_1"
-        app:layout_constraintTop_toTopOf="@+id/fr_1"
-        app:srcCompat="@drawable/flecha_derecha" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="56dp"
-        android:layout_height="51dp"
-        app:layout_constraintBottom_toBottomOf="@+id/fr_3"
-        app:layout_constraintStart_toEndOf="@+id/fr_3"
-        app:layout_constraintTop_toTopOf="@+id/fr_3"
-        app:srcCompat="@drawable/flecha_derecha" />
+        app:layout_constraintEnd_toEndOf="@+id/fr_2"
+        app:layout_constraintStart_toStartOf="@+id/fr_2"
+        app:layout_constraintTop_toTopOf="@+id/fr_3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
