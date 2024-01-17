@@ -130,7 +130,7 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
                 true
             }
             R.id.mItm_acerca -> {
-                val msnEmergente = androidx.appcompat.app.AlertDialog.Builder(contexto as AppCompatActivity)
+                val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
                 msnEmergente.setMessage(getString(R.string.acercaDe))
                 msnEmergente.show()
                 true
