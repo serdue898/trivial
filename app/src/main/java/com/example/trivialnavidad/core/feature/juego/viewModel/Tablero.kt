@@ -1,5 +1,6 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,29 +9,30 @@ import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.widget.GridLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
-import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
+import com.example.trivialnavidad.core.feature.juego.Test
 import com.example.trivialnavidad.core.feature.juego.view.Juego
+import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.example.trivialnavidad.core.feature.minijuegos.repaso.view.Repaso
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>) {
-    private var JugadorActual : JugadorEnPartida? = null
+class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>,private val tipo :String
+) {
+    private var jugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
-    private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
-    private val preguntas = preguntas()
+    private val preguntas = Preguntas()
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
     private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
@@ -78,57 +80,17 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                casilla.dificultad = dificultad
+                casilla.dificultad = 3
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
-                    moverVista( casilla)
-                    conexion.actualizarCasillaActual(JugadorActual!!)
-                    casilla.dificultad = 4
 
-                    val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
-                    val pregunta = preguntasMinijuego?.random()
-
-
-                    var minijuego : Fragment? = null
-                    when (casilla.dificultad) {
-                        1 -> {
-                            minijuego = Adivina(pregunta!!, JugadorActual!!)
-                        }
-                        2 -> {
-                            val listaPtreguntas :MutableList<Pregunta> = mutableListOf()
-                            for  (k in 0 until 1){
-                                var repetida=true
-                                var preguntaNueva : Pregunta? = null
-                                while (repetida){
-                                    preguntaNueva = preguntasMinijuego?.random()
-                                    if (!listaPtreguntas.contains(preguntaNueva)){
-                                        repetida = false
-                                    }
-                                }
-
-                                listaPtreguntas.add(preguntaNueva!!)
-                            }
-                            juego.resultadoMiniJuego(true)
-                        }
-                        4 -> {
-                            minijuego = Parejas(pregunta!!, JugadorActual!!)
-                        }
-                        else -> {
-                            juego.resultadoMiniJuego(true)
-                        }
-                    }
-                    if(minijuego!=null) {
-                        if (contexto is AppCompatActivity) {
-                            val fragmentManager =
-                                (contexto as AppCompatActivity).supportFragmentManager
-                            fragmentManager.beginTransaction()
-                                .replace(R.id.contenedor, minijuego)
-                                .commit()
-
-                        }
-                    }
-
+                      if (tipo=="offline")  {
+                          moverVista( casilla)
+                      }else{
+                          jugadorActual?.casillaActual = casilla.fila.toString() +"_"+ casilla.columna.toString()
+                      }
+                    asignarMinijuegos(casilla)
                 }
                 casilla.isEnabled = false
 
@@ -143,17 +105,132 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
 
     }
+    private fun asignarMinijuegos(casilla: Casilla){
+        val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
+
+        if (preguntasMinijuego == null) {
+
+            val alert = AlertDialog.Builder(contexto)
+            alert.setTitle(contexto.getString(R.string.juego))
+            alert.setCancelable(false)
+            alert.setMessage(contexto.getString(R.string.internet_mensaje))
+            alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, _ ->
+                (contexto as? Activity)?.finish()
+                dialog.dismiss()
+
+            }
+            alert.show()
+            juego.resultadoMiniJuego(true)
+        }else {
+            val pregunta = preguntasMinijuego.random()
+            var minijuego: Fragment? = null
+            when (casilla.dificultad) {
+                1 -> {
+                    minijuego =Test(pregunta, jugadorActual!!, false)
+
+
+                }
+
+                2 -> {
+                    minijuego = Adivina(pregunta, jugadorActual!!)
+
+                    //falta terminar
+                    val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
+                    for (k in 0 until 1) {
+                        var repetida = true
+                        var preguntaNueva: Pregunta? = null
+                        while (repetida) {
+                            preguntaNueva = preguntasMinijuego.random()
+                            if (!listaPtreguntas.contains(preguntaNueva)) {
+                                repetida = false
+                            }
+                        }
+                        listaPtreguntas.add(preguntaNueva!!)
+                    }
+
+                }
+
+                3 -> {
+                    minijuego = Repaso(pregunta, jugadorActual!!)
+
+
+                }
+
+                4 -> {
+                    minijuego = Parejas(pregunta, jugadorActual!!)
+                }
+
+                5 -> {
+                    var entrar = true
+                    jugadorActual?.juegos?.forEach {
+                        if (!it) {
+                            entrar = false
+                        }
+                    }
+                    if (entrar) {
+                        minijuego =
+                            Test(pregunta, jugadorActual!!, true)
+                    } else {
+                        val alert = AlertDialog.Builder(contexto)
+                        alert.setTitle(contexto.getString(R.string.juego_final))
+                        alert.setMessage(contexto.getString(R.string.mensaje_no_minijuego))
+                        alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        alert.show()
+                        juego.resultadoMiniJuego(true)
+                    }
+                }
+
+                else -> {
+                    juego.resultadoMiniJuego(true)
+                }
+            }
+            if (minijuego != null) {
+                if (contexto is AppCompatActivity) {
+                    val fragmentManager =
+                        (contexto as AppCompatActivity).supportFragmentManager
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.contenedor, minijuego)
+                        .commit()
+
+                }
+
+            }
+        }
+    }
+    fun moverOnline(jugador: JugadorEnPartida,jugadorAntiguo: String){
+        val fila  = jugador.casillaActual.split("_")[0].toInt()
+        val columna = jugador.casillaActual.split("_")[1].toInt()
+        val casilla = obtenerCasilla(fila,columna)
+        val casillaAntigua = obtenerCasilla(jugadorAntiguo.split("_")[0].toInt(),jugadorAntiguo.split("_")[1].toInt())
+        if (jugador.casillaActual==jugadorAntiguo ){
+            return
+        }
+
+
+        val continuar = casillaAntigua?.removeJugador(jugador.id_jugador)
+        if (continuar==false){
+            return
+        }
+        rellenarCasilla(casillaAntigua!!)
+        casilla?.addJugador(jugador)
+        rellenarCasilla(casilla!!)
+        jugadorActual = jugador
+        reiniciarMovimientos()
+    }
     fun moverJugador(jugador:JugadorEnPartida , movimientos : Int){
         val x  = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
-        JugadorActual = jugador
+        jugadorActual = jugador
         posiblesMovimientos(x, y, movimientos,"",jugador)
+
     }
 
 
     private fun posiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (movimientos == 0) {
-            GlobalScope.launch(Dispatchers.Default) {
+            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 withContext(Dispatchers.Main) {
 
                     val casilla = obtenerCasilla(fila, columna)
@@ -199,22 +276,22 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     }
 
     private fun moverVista(casillaNueva: Casilla){
-        val fila  = JugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
-        val columna = JugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
+        val fila  = jugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
+        val columna = jugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
         val casilla = obtenerCasilla(fila!!,columna!!)
 
-        casillaNueva.addJugador(JugadorActual!!)
+        casillaNueva.addJugador(jugadorActual!!)
         rellenarCasilla(casillaNueva)
-        casilla?.removeJugador(JugadorActual!!)
+        casilla?.removeJugador(jugadorActual!!)
         rellenarCasilla(casilla!!)
 
-        JugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
+        jugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
         reiniciarMovimientos()
 
     }
-    @OptIn(DelicateCoroutinesApi::class)
-    fun reiniciarMovimientos(){
-        GlobalScope.launch(Dispatchers.Default) {
+
+    private fun reiniciarMovimientos(){
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 for ( casilla in posiblesMovimientos){
                     casilla.setBackgroundColor(casilla.color)

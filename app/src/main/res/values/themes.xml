@@ -7,5 +7,8 @@
         <item name="android:colorBackground">@color/fondo</item>
         <!-- Agrega el color del texto para el tema claro -->
     </style>
+    <style name="Estilo1" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/negro</item>
+    </style>
     <style name="Theme.TrivialNavidad" parent="Base.Theme.TrivialNavidad" />
 </resources>

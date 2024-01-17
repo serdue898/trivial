@@ -12,11 +12,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AlertDialog.Builder
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.app.Reproductor
 import com.example.trivialnavidad.app.Vibracion
 
-class Dado(private val imageViewDado: ImageView, private val vibracion: Vibracion?,private val reproductor: Reproductor? ) {
+class Dado(private val contexto:Context ,private val imageViewDado: ImageView, private val vibracion: Vibracion?,private val reproductor: Reproductor? ) {
 
     private var lastRandomNumber = 0
 
@@ -30,14 +32,14 @@ class Dado(private val imageViewDado: ImageView, private val vibracion: Vibracio
 
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             repeat(10) {
                 val randomImageName = "dado${(1..6).random()}"
                 val resourceId = obtenerResourceId(randomImageName)
                 imageViewDado.setImageResource(resourceId)
 
                 lastRandomNumber = randomImageName.last().toString().toInt()
-                if (vibracion != null) vibracion.vibrar(100)
+                vibracion?.vibrar(100)
                 delay(300)
             }
             val resourceId = obtenerResourceId("dado${lastRandomNumber}")

@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugadores.adapter
+package com.example.trivialnavidad.core.feature.unirseOnline.adapter
 
 import android.content.Context
 import android.graphics.drawable.Drawable

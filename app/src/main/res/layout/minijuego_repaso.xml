@@ -1,8 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/t_enunciadoRepaso"
+        android:layout_width="375dp"
+        android:layout_height="378dp"
+        android:layout_marginTop="16dp"
+        android:text="jdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/sp_hueco1"
+        android:layout_width="218dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <Spinner
+        android:id="@+id/sp_hueco2"
+        android:layout_width="215dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <Spinner
+        android:id="@+id/sp_hueco3"
+        android:layout_width="211dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.935"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <Spinner
+        android:id="@+id/sp_hueco4"
+        android:layout_width="211dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="168dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <TextView
+        android:id="@+id/t_hueco1"
+        android:layout_width="145dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:text="Primer hueco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <TextView
+        android:id="@+id/t_hueco4"
+        android:layout_width="145dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="168dp"
+        android:text="Cuarto hueco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <TextView
+        android:id="@+id/t_hueco3"
+        android:layout_width="145dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="120dp"
+        android:text="Tcercer hueco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <TextView
+        android:id="@+id/t_hueco2"
+        android:layout_width="145dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="72dp"
+        android:text="Segundo hueco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
+
+    <Button
+        android:id="@+id/bt_repasoCorregir"
+        android:layout_width="257dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="212dp"
+        android:text="Corregir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t_enunciadoRepaso" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,4 +7,5 @@ import android.content.Context
  */
 interface ComunicadorClasificacion {
     fun volver(context: Context)
+    fun inicio(contexto: Context)
 }

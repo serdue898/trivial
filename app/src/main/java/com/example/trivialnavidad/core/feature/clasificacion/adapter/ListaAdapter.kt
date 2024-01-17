@@ -30,7 +30,7 @@ class ListaAdapter(private val jugadores: List<JugadorEnPartida>) : RecyclerView
             holder.puntuacion.text = "Puntuacion"
         } else {
             val jugador = jugadores[position-1]
-            holder.nombre.text = jugador.jugador.nombre
+            holder.nombre.text = jugador.jugador?.nombre
             holder.puntuacion.text = jugador.puntosJugador().toString()
         }
     }

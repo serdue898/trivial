@@ -14,7 +14,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
     // Son como los valores estáticos en Java
     companion object {
         private const val DATABASE_NAME = "trivial"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
         private const val TABLE_JUGADORES = "jugador"
         private const val KEY_ID_J = "id_jugador"
         private const val KEY_NOMBRE_J = "nombre"
@@ -22,6 +22,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
         private const val TABLE_PARTIDA = "partida"
         private const val KEY_ID_P = "id_partida"
         private const val KEY_NOMBRE_P = "nombre"
+        private const val KEY_finalizada_P = "finalizada"
 
         private const val TABLE_JUGADOR_EN_PARTIDA = "jugador_en_partida"
         private const val KEY_CASILLA_ACTUAL = "casilla_actual"
@@ -39,7 +40,7 @@ class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, nul
                 + ")")
 
         val createPartidaTable = ("CREATE TABLE " + TABLE_PARTIDA + " ( "
-                + "$KEY_ID_P INTEGER PRIMARY KEY, $KEY_NOMBRE_P TEXT "
+                + "$KEY_ID_P INTEGER PRIMARY KEY, $KEY_NOMBRE_P TEXT , $KEY_finalizada_P INTEGER"
                 + " ) ")
 
         val createJugadorEnPartidaTable = ("CREATE TABLE " + TABLE_JUGADOR_EN_PARTIDA + " ( "

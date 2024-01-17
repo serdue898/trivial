@@ -1,6 +1,7 @@
 package com.example.trivialnavidad.core.feature.cargarPartida.adapter
 
 import Partidas
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +11,13 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.ComunicadorPartida
 
-class PartidaAdapter(private val partidas: List<Partida>, var comunicador: ComunicadorPartida) : RecyclerView.Adapter<PartidaAdapter.PostViewHolder>() {
+class PartidaAdapter(private val partidas: List<Partida>, var comunicador: ComunicadorPartida,var tipo :String,var contexto :Context) : RecyclerView.Adapter<PartidaAdapter.PostViewHolder>() {
 
     // Definición del ViewHolder que proporciona una referencia a las vistas para cada elemento de datos.
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var nombre: TextView = itemView.findViewById(R.id.tx_nombrePartida)
         var id: TextView = itemView.findViewById(R.id.tx_id)
-        var numjugadores: TextView = itemView.findViewById(R.id.tx_numJugadores)
+        var finalizada: TextView = itemView.findViewById(R.id.tx_numJugadores)
 
     }
 
@@ -32,15 +33,20 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
             // Configurar encabezados
             holder.id.text = "ID"
             holder.nombre.text = "Partida"
-            holder.numjugadores.text = "Número"
+            holder.finalizada.text = "Finalizada"
         } else {
             val partida = partidas[position - 1]  // Resta 1 para compensar el encabezado
             holder.id.text = partida.idPartida.toString()
             holder.nombre.text = partida.nombre
+            holder.finalizada.text = if (partida.finalizada)"Sí" else "No"
 
             // Agregar un clic listener para cargar la partida
             holder.itemView.setOnClickListener {
-                comunicador.cargarPartida(partida.idPartida)
+                if (tipo == "online"){
+                    comunicador.unirseAPartida(partida.idPartida,contexto)
+                }else {
+                    comunicador.cargarPartida(partida)
+                }
             }
         }
     }

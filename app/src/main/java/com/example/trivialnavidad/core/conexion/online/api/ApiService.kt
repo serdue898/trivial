@@ -10,4 +10,6 @@ interface ApiService {
     // que es una solicitud GET HTTP. La función devuelve un objeto Call que encapsula una lista de Posts.
     @GET("preguntas.json")
     fun getPreguntas(): Call<List<Pregunta>>
+    @GET("/preguntas")
+    fun getPreguntasApi(): Call<List<Pregunta>>
 }

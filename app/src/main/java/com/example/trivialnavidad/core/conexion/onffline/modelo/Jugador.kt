@@ -1,7 +1,26 @@
 package com.example.trivialnavidad.core.conexion.onffline.modelo
 
-data class Jugador(
-    var id: Int,
-    val nombre: String,
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class Jugador (
+    var id_jugador: Int,
+    var nombre: String,
     val avatar: String
-)
+) {
+    var partida: Int = 0
+    var host = false
+    var contraseña = ""
+    fun toJson(): String {
+        return Json.encodeToString(this)
+    }
+
+    companion object {
+        fun fromJson(json: String): Jugador {
+            return Json.decodeFromString(json)
+        }
+    }
+}

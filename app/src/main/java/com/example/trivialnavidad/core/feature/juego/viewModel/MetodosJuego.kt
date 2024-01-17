@@ -12,7 +12,7 @@ class MetodosJuego : ComunicadorJuego {
 
 
         if (context is AppCompatActivity) {
-            val clasificacion = Clasifiaccion(jugadores)
+            val clasificacion = Clasifiaccion(jugadores.sortedBy { it.puntosJugador() },false)
             val fragmentManager = context.supportFragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.contenedor, clasificacion)

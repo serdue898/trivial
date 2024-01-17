@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugadores.view
+package com.example.trivialnavidad.core.feature.unirseOnline.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -26,16 +26,20 @@ import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
-import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.ListaAdapterSeleccion
-import com.example.trivialnavidad.core.feature.seleccionJugadores.adapter.SpinnerAdapter
-import com.example.trivialnavidad.core.feature.seleccionJugadores.viewModel.MetodosSeleccion
+import com.example.trivialnavidad.core.feature.unirseOnline.adapter.ListaAdapterSeleccion
+import com.example.trivialnavidad.core.feature.unirseOnline.adapter.SpinnerAdapter
+import com.example.trivialnavidad.core.feature.unirseOnline.viewModel.MetodosUnirse
+import org.json.JSONArray
 
-class SeleccionJugador : Fragment() {
+class UnirseOnline(var id_partida :Int) : Fragment() {
 
-    private var comunicador: MetodosSeleccion = MetodosSeleccion()
+    private var comunicador: MetodosUnirse = MetodosUnirse()
     private var contexto: Context? = null
     private var jugadoresEnPartida = mutableListOf<Jugador>()
-    private var avatarImages :TypedArray? = null
+    private var avatarImages : TypedArray? = null
+    private var emepzar = false
+    var host = false
+    var eligiendo = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,6 +52,7 @@ class SeleccionJugador : Fragment() {
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
+
         /*
         // codigo de clasificacion y no se si es necesario o no
 
@@ -58,7 +63,9 @@ class SeleccionJugador : Fragment() {
     */
         return view
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
         inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
@@ -88,50 +95,95 @@ class SeleccionJugador : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val nombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
+        nombreJugador.isEnabled = false
+        nombreJugador.setText(MainActivity.jugadorActual?.nombre)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
         val avatares = List(avatarImages!!.length()) { i -> i }
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
-
-
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
-
-
-
-        // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
-        //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
+        val socket = MainActivity.socket
+        if (!host)socket?.emit("actualizarJugadores")
+        socket?.on("listaJugadores") { args ->
+            val listaJugadores = args[0] as JSONArray
+            // Manejar la lista de jugadores en tu aplicación Android
+            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
+
+            jugadoresEnPartida.clear()
+            for (i in 0 until listaJugadores.length()) {
+                val jugador = Jugador.fromJson(listaJugadores[i].toString())
+                if (jugador.partida == id_partida)jugadoresEnPartida.add(jugador)
+            }
+            val hostPreparado  = jugadoresEnPartida.find { it.nombre == MainActivity.jugadorActual?.nombre}?.host
+            if (hostPreparado!=null) {
+                host = hostPreparado
+            }
+
+            activity?.runOnUiThread {
+                if (jugadoresEnPartida.size >=2 && host) {
+                    bt_empezarPartida?.visibility = View.VISIBLE
+                }else{
+                    bt_empezarPartida?.visibility = View.INVISIBLE
+                }
+                actualizarLista()
+            }
+
+        }
+        socket?.on("empezarPartida") { args ->
+            val listaJugadores = args[0] as JSONArray
+            emepzar = true
+            // Manejar la lista de jugadores en tu aplicación Android
+            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
+            var jugadores:MutableList<JugadorEnPartida> = mutableListOf()
+            for (i in 0 until listaJugadores.length()) {
+                val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
+                jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
+                jugadores.add(jugador)
+            }
+            empezarPartida(jugadores)
+        }
         b_guardarJugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
             }else{
-
+                eligiendo = true
                 agregarJugadorLista( )
 
-                actualizarLista()
-
-                if (jugadoresEnPartida.size >=2) {
-                    bt_empezarPartida?.visibility = View.VISIBLE
-                }
+                b_guardarJugador.isEnabled = false
             }
 
         }
         bt_empezarPartida?.setOnClickListener {
-            empezarPartida()
+            val socket = MainActivity.socket
+            socket?.emit("empezarPartida", id_partida)
         }
     }
+
+
+
+    fun addJugadorOnline(jugador: Jugador){
+        val socket = MainActivity.socket
+        jugador.host = host
+        val jugadorJson = jugador.toJson()
+        socket?.emit("addJugador", jugadorJson)
+    }
+
+
     fun actualizarSpinner(){
         val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
 
         spinerAvatares?.adapter = listaspinner()
     }
-    private fun listaspinner(): SpinnerAdapter {
+    fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
         jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
         val avatares: MutableList<Int> = mutableListOf()
@@ -148,26 +200,27 @@ class SeleccionJugador : Fragment() {
         popup.setView(view)
         val nombreJugador = view.findViewById<EditText>(R.id.et_nombre)
         val avatarJugador = view.findViewById<Spinner>(R.id.sp_avatar)
+        nombreJugador.isEnabled = false
         nombreJugador.setText(jugador.nombre)
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
 
-        popup.setPositiveButton("Guardar") { _, _ ->
+        popup.setPositiveButton("Guardar") { dialog, which ->
             if (nombreJugador.text.toString().isEmpty()) {
                 Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
 
             }else{
 
-                val vistaSeleccionada = avatarJugador?.selectedView
-                val avatar=   vistaSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
+                val view = avatarJugador?.selectedView
+                val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
-                jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
-                actualizarLista()
-                actualizarSpinner()
+                nuevoJugador.partida = id_partida
+                val socket = MainActivity.socket
+                socket?.emit("actualizarJugador", nuevoJugador.toJson())
             }
         }
-        popup.setNegativeButton("Cancelar") { dialog, _ ->
+        popup.setNegativeButton("Cancelar") { dialog, which ->
             dialog.dismiss()
         }
         popup.show()
@@ -184,44 +237,36 @@ class SeleccionJugador : Fragment() {
 
     }
 
-    private fun agregarJugadorLista() {
+    fun agregarJugadorLista() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
         if (nombreJugador?.text.toString().isEmpty()) {
             Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
             return
         }
-        if (nombreJugador?.text.toString() in jugadoresEnPartida.map { it.nombre }) {
-            nombreJugador?.setText("")
-            Toast.makeText(contexto, "El jugador no puede estar repetido", Toast.LENGTH_SHORT).show()
-            return
-        }
         val view = avatarJugador?.selectedView
-         val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
-        val posicion =avatar?.tag.toString().toInt()
+        val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
+        var posicion =avatar?.tag.toString().toInt()
 
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
-
-        // Agregar el nuevo jugador a la lista
-          jugadoresEnPartida.add(jugadorNuevo)
+        jugadorNuevo.partida = id_partida
+        jugadoresEnPartida.add(jugadorNuevo)
 
         // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
         nombreJugador?.setText("")
         avatarJugador?.setSelection(0)
+        addJugadorOnline(jugadorNuevo)
     }
-    private fun empezarPartida() {
-        val conexion = Conexion(contexto!!)
-        val idPartida = conexion.agregarPartida(Partida(0,"partida",false))
-        val juegos = MutableList(4){ _ -> false}
-        for (jugador in jugadoresEnPartida) {
-            conexion.agregarJugador(jugador)
-            val jugadorEnPartida = JugadorEnPartida(jugador.id_jugador, idPartida, "4_4",
-                jugadoresEnPartida[0]==jugador, juegos, jugador.avatar)
-            jugadorEnPartida.jugador = jugador
-            conexion.agregarJugadorEnPartida(jugadorEnPartida)
+    private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
+        comunicador?.empezarPartida(contexto!!,id_partida,jugadores)
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (eligiendo) {
+            MainActivity.socket?.emit("desconectar", MainActivity.jugadorActual?.toJson())
         }
-        comunicador.empezarPartida(contexto!!,idPartida)
+
     }
 
 

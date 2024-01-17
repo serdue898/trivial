@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.seleccionJugadores.adapter
+package com.example.trivialnavidad.core.feature.unirseOnline.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,13 +9,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.seleccionJugadores.view.SeleccionJugador
+import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
 
 class ListaAdapterSeleccion(
     private val jugadores: MutableList<Jugador>,
     var contexto: Context,
-    val seleccionJugador: SeleccionJugador
+    val seleccionJugador: UnirseOnline
 ) : RecyclerView.Adapter<ListaAdapterSeleccion.PostViewHolder>()  {
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,10 +41,11 @@ class ListaAdapterSeleccion(
         val jugador = jugadores[position]
         holder.nombre.text = jugador.nombre
         holder.avatar.setImageDrawable(avatarImages.getDrawable(jugador.avatar.toInt()))
-        holder.eliminar.setOnClickListener {
-            jugadores.removeAt(position)
-            seleccionJugador.actualizarLista()
-            seleccionJugador.actualizarSpinner()
+        holder.eliminar.visibility = View.GONE
+        if (jugador.nombre == MainActivity.jugadorActual?.nombre) {
+            holder.editar.visibility = View.VISIBLE
+        } else {
+            holder.editar.visibility = View.GONE
         }
         holder.editar.setOnClickListener {
             seleccionJugador.editarJugadorLista(jugador)
