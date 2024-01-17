@@ -1,30 +1,22 @@
-package com.example.trivialnavidad.core.feature.juego.view
+package com.example.trivialnavidad.core.feature.minijuegos.adivina.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.marginLeft
-import androidx.core.view.marginRight
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.ComunicadorAdivina
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.MetodosAdivina
-import java.util.Locale
 
 class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment() {
     private var comunicador: ComunicadorAdivina? = MetodosAdivina()
@@ -32,7 +24,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
 
 
-    @SuppressLint("ResourceAsColor")
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.minijuego_adivina, container, false)
         contexto = container?.context
@@ -40,10 +32,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
 
         val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
-        var palabraAdivinar = pregunta.correcta[0].lowercase()
-        palabraAdivinar="patata"
+        val palabraAdivinar = pregunta.correcta[0].lowercase()
         val palabraDividida = view.findViewById<TextView>(R.id.t_palabraAdivina)
-        var ganado = false
         tx_pregunta.text = pregunta.pregunta
         val gr_abecedario = view.findViewById<GridLayout>(R.id.gr_botonesLetras)
 
@@ -55,9 +45,9 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         gr_abecedario.rowCount=9
         gr_abecedario.columnCount=4
         for (letra in abecedario){
-            var botonLetra: Button = Button(contexto)
+            val botonLetra = Button(contexto)
             botonLetra.text= letra.toString()
-            botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra)
+            botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra)
 
 
             val params = GridLayout.LayoutParams()
@@ -71,18 +61,18 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
             botonLetra.setOnClickListener(){
                 botonLetra.isEnabled = false
                 if(comprobarLetra(botonLetra, palabraAdivinar )){
-                    botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra_acertada)
+                    botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra_acertada)
                     palabraHuecos=rellenarPalabra(palabraHuecos.replace(" ",""), palabraAdivinar, botonLetra.text.toString())
                     palabraDividida.text= palabraHuecos
                 }else {
-                    botonLetra.background = contexto!!.getDrawable(R.drawable.fondo_letra_fallada)
+                    botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra_fallada)
                 }
                 if(comprobarPlabra(palabraHuecos.replace(" ",""))){
                     val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
                     mensaje.setCancelable(false)
 
                     mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
-                    mensaje.setPositiveButton("Aceptar") { dialog, which ->
+                    mensaje.setPositiveButton("Aceptar") { _, _ ->
                         terminarJuego(true)
                     }
                     mensaje.show()
@@ -93,8 +83,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         return view
     }
 
-    fun desgranarPalabra(palabra: String) : String{
-       var palabraDividida : String= ""
+    private fun desgranarPalabra(palabra: String) : String{
+       var palabraDividida = ""
         val arrayDeLetras = palabra.toCharArray().map { it.toString() }.toTypedArray()
         for(hueco in arrayDeLetras){
             palabraDividida += "_ "
@@ -102,7 +92,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         return palabraDividida
     }
 
-    fun comprobarLetra(botonPulsado :Button, palabra: String): Boolean {
+    private fun comprobarLetra(botonPulsado :Button, palabra: String): Boolean {
         var correcto = false
         val arrayDeLetras = palabra.toCharArray().map { it.toString() }.toTypedArray()
         for(hueco in arrayDeLetras){
@@ -113,7 +103,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         }
         return correcto
     }
-    fun comprobarPlabra(palabraDividida:String): Boolean{
+    private fun comprobarPlabra(palabraDividida:String): Boolean{
 
         val arrayDeLetras = palabraDividida.toCharArray().map { it.toString() }.toTypedArray()
         for (hueco in arrayDeLetras){
@@ -124,19 +114,17 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
         return true
     }
-    fun rellenarPalabra(palabraHuecos: String, palabraAdivinar: String, letra: String) : String{
+    private fun rellenarPalabra(palabraHuecos: String, palabraAdivinar: String, letra: String) : String{
         var palabraHuecosActualizados = ""
         val letrasAdivinar = palabraAdivinar.toCharArray().map { it.toString() }.toTypedArray()
         val letrasDividida = palabraHuecos.toCharArray().map { it.toString() }.toTypedArray()
-        var posicion = 0
 
-        for (hueco in letrasDividida){
-            if (letrasAdivinar[posicion]==letra){
-                palabraHuecosActualizados += "$letra "
+        for ((posicion, hueco) in letrasDividida.withIndex()){
+            palabraHuecosActualizados += if (letrasAdivinar[posicion]==letra){
+                "$letra "
             }else{
-                palabraHuecosActualizados += "$hueco "
+                "$hueco "
             }
-            posicion++
         }
         return  palabraHuecosActualizados
     }
@@ -155,7 +143,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+        msnEmergente.setPositiveButton("Aceptar") { _, _ ->
             comunicador?.volver(contexto!!,ganado)
         }
         msnEmergente.show()

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.app.Reproductor
@@ -30,10 +31,8 @@ import com.example.trivialnavidad.core.feature.juego.viewModel.Dado
 import com.example.trivialnavidad.core.feature.juego.viewModel.MetodosJuego
 import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 import org.json.JSONObject
 
 class Juego : Fragment() {
@@ -50,10 +49,10 @@ class Juego : Fragment() {
     private lateinit var metodosTablero: Tablero
     private var avatarImages : TypedArray? = null
     var tipo : String = "offline"
-    val socket = MainActivity.socket
-    var casillaTemp :String = ""
-    var jugadorTemp :JugadorEnPartida? = null
-    var cargarOnline : Boolean = false
+    private val socket = MainActivity.socket
+    private var casillaTemp :String = ""
+    private var jugadorTemp :JugadorEnPartida? = null
+    private var cargarOnline : Boolean = false
 
 
 
@@ -88,7 +87,7 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
-        GlobalScope.launch(Dispatchers.Main) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
                 socket?.on("moverJugadorOnline") { args ->
                     Log.d("DEBUG", "Evento moverJugadorOnline recibido")
                     val jugadorjson = args[0] as JSONObject
@@ -103,7 +102,7 @@ class Juego : Fragment() {
 
         dado?.setOnClickListener {
             dado.isEnabled = false
-            GlobalScope.launch {
+            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
                     tirarDado()
                 }}
@@ -174,7 +173,6 @@ class Juego : Fragment() {
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-            val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
             inflater.inflate(R.menu.menu_juego_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
@@ -256,10 +254,10 @@ class Juego : Fragment() {
         val construido = msnEmergente.create()
         construido.show()
 
-        GlobalScope.launch {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
             withContext(Dispatchers.Main) {
                 var vibracion = null as Vibracion?
-                var sonido = null as Reproductor?
+                val sonido = null as Reproductor?
                 if (MainActivity.configuracion?.obtenerOpcionVibracion()!!) vibracion = Vibracion(contexto!!)
                 //if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.lobby_music)
                 val movimientos = Dado(dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
@@ -271,7 +269,7 @@ class Juego : Fragment() {
     }
     private fun tirada(movimientos: Int, alertDialog: AlertDialog){
         alertDialog.dismiss()
-        GlobalScope.launch {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
             withContext(Dispatchers.Main) {
                 if (tipo=="offline")jugadorActual = jugadoresEnPartida[jugador]
                 metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())

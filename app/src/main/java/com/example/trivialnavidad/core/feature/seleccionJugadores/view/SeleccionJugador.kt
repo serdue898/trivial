@@ -59,7 +59,6 @@ class SeleccionJugador : Fragment() {
         return view
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
         inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
@@ -72,7 +71,7 @@ class SeleccionJugador : Fragment() {
                 true
             }
             R.id.mItm_inicio -> {
-                comunicador?.volver(contexto!!)
+                comunicador.volver(contexto!!)
                 true
             }
             R.id.mItm_acerca -> {
@@ -112,6 +111,7 @@ class SeleccionJugador : Fragment() {
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
             }else{
+
                 agregarJugadorLista( )
 
                 actualizarLista()
@@ -131,9 +131,9 @@ class SeleccionJugador : Fragment() {
 
         spinerAvatares?.adapter = listaspinner()
     }
-    fun listaspinner(): SpinnerAdapter {
+    private fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
-        jugadoresEnPartida.forEach({ jugador -> avataresUsados.add(jugador.avatar.toInt()) })
+        jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
         val avatares: MutableList<Int> = mutableListOf()
         for (i in 0 until avatarImages!!.length()) {
             if (!avataresUsados.contains(i)) {
@@ -152,14 +152,14 @@ class SeleccionJugador : Fragment() {
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
 
-        popup.setPositiveButton("Guardar") { dialog, which ->
+        popup.setPositiveButton("Guardar") { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
                 Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
 
             }else{
 
-                var view = avatarJugador?.selectedView
-                val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
+                val vistaSeleccionada = avatarJugador?.selectedView
+                val avatar=   vistaSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
                 jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
@@ -167,7 +167,7 @@ class SeleccionJugador : Fragment() {
                 actualizarSpinner()
             }
         }
-        popup.setNegativeButton("Cancelar") { dialog, which ->
+        popup.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
         }
         popup.show()
@@ -184,16 +184,21 @@ class SeleccionJugador : Fragment() {
 
     }
 
-    fun agregarJugadorLista() {
+    private fun agregarJugadorLista() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
         if (nombreJugador?.text.toString().isEmpty()) {
             Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
             return
         }
+        if (nombreJugador?.text.toString() in jugadoresEnPartida.map { it.nombre }) {
+            nombreJugador?.setText("")
+            Toast.makeText(contexto, "El jugador no puede estar repetido", Toast.LENGTH_SHORT).show()
+            return
+        }
         val view = avatarJugador?.selectedView
          val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
-        var posicion =avatar?.tag.toString().toInt()
+        val posicion =avatar?.tag.toString().toInt()
 
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
@@ -208,7 +213,7 @@ class SeleccionJugador : Fragment() {
     private fun empezarPartida() {
         val conexion = Conexion(contexto!!)
         val idPartida = conexion.agregarPartida(Partida(0,"partida",false))
-        val juegos = MutableList(4){i -> false}
+        val juegos = MutableList(4){ _ -> false}
         for (jugador in jugadoresEnPartida) {
             conexion.agregarJugador(jugador)
             val jugadorEnPartida = JugadorEnPartida(jugador.id_jugador, idPartida, "4_4",
@@ -216,7 +221,7 @@ class SeleccionJugador : Fragment() {
             jugadorEnPartida.jugador = jugador
             conexion.agregarJugadorEnPartida(jugadorEnPartida)
         }
-        comunicador?.empezarPartida(contexto!!,idPartida)
+        comunicador.empezarPartida(contexto!!,idPartida)
     }
 
 

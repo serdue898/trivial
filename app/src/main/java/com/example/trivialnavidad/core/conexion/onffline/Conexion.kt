@@ -7,11 +7,9 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 
-class Conexion(Context: Context) {
-    private val dbHelper: BaseDatos = BaseDatos(Context)
+class Conexion(context: Context) {
+    private val dbHelper: BaseDatos = BaseDatos(context)
     companion object {
-        private const val DATABASE_NAME = "trivial"
-        private const val DATABASE_VERSION = 4
         private const val TABLE_JUGADORES = "jugador"
         private const val KEY_ID_J = "id_jugador"
         private const val KEY_NOMBRE_J = "nombre"
@@ -106,7 +104,7 @@ class Conexion(Context: Context) {
             put(KEY_JUGADOR_ACTUAL, if (jugadorEnPartida.jugadorActual) 1 else 0)
             put(KEY_AVATAR_JP, jugadorEnPartida.avatar)
         }
-       var funciona= db.insert(TABLE_JUGADOR_EN_PARTIDA, null, values)
+        db.insert(TABLE_JUGADOR_EN_PARTIDA, null, values)
     }
     fun actualizarPartida(partida: Partida){
         val db = dbHelper.writableDatabase

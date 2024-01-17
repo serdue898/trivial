@@ -56,12 +56,12 @@
         android:id="@+id/fr_2"
         android:layout_width="99dp"
         android:layout_height="99dp"
-        android:layout_marginStart="28dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/fr_1"
-        app:layout_constraintStart_toEndOf="@+id/fr_1"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/fr_1"
         app:layout_constraintVertical_bias="0.0">
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -96,9 +96,9 @@
         android:layout_height="99dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/fr_3"
-        app:layout_constraintEnd_toEndOf="@+id/fr_2"
-        app:layout_constraintStart_toStartOf="@+id/fr_2"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/fr_3">
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
@@ -107,5 +107,23 @@
             android:text="Rellenar" />
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fr_1"
+        app:layout_constraintStart_toEndOf="@+id/fr_1"
+        app:layout_constraintTop_toTopOf="@+id/fr_1"
+        app:srcCompat="@drawable/flecha_derecha" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="56dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fr_3"
+        app:layout_constraintStart_toEndOf="@+id/fr_3"
+        app:layout_constraintTop_toTopOf="@+id/fr_3"
+        app:srcCompat="@drawable/flecha_derecha" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

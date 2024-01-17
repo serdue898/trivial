@@ -13,19 +13,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
-import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.Test
-import com.example.trivialnavidad.core.feature.juego.view.Adivina
+import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
 import com.example.trivialnavidad.core.feature.minijuegos.repaso.view.Repaso
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -33,7 +31,6 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 ) {
     private var jugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
-    private val conexion = Conexion(contexto)
     val juego = MainActivity.juego as Juego
     private val preguntas = preguntas()
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
@@ -108,7 +105,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
 
     }
-    fun asignarMinijuegos(casilla: Casilla){
+    private fun asignarMinijuegos(casilla: Casilla){
         val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
 
         if (preguntasMinijuego == null) {
@@ -117,7 +114,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
             alert.setTitle(contexto.getString(R.string.juego))
             alert.setCancelable(false)
             alert.setMessage(contexto.getString(R.string.internet_mensaje))
-            alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, which ->
+            alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, _ ->
                 (contexto as? Activity)?.finish()
                 dialog.dismiss()
 
@@ -125,15 +122,15 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
             alert.show()
             juego.resultadoMiniJuego(true)
         }else {
-            val pregunta = preguntasMinijuego?.random()
+            val pregunta = preguntasMinijuego.random()
             var minijuego: Fragment? = null
             when (casilla.dificultad) {
                 1 -> {
-                    minijuego = Adivina(pregunta!!, jugadorActual!!)
+                    minijuego = Adivina(pregunta, jugadorActual!!)
                 }
 
                 2 -> {
-                    minijuego = Repaso(pregunta!!, jugadorActual!!)
+                    minijuego = Repaso(pregunta, jugadorActual!!)
                     //falta terminar
                     val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                     for (k in 0 until 1) {
@@ -151,12 +148,12 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 }
 
                 3 -> {
-                    minijuego =Test(pregunta!!, jugadorActual!!, false)
+                    minijuego =Test(pregunta, jugadorActual!!, false)
 
                 }
 
                 4 -> {
-                    minijuego = Parejas(pregunta!!, jugadorActual!!)
+                    minijuego = Parejas(pregunta, jugadorActual!!)
                 }
 
                 5 -> {
@@ -168,12 +165,12 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     }
                     if (entrar) {
                         minijuego =
-                            Test(pregunta!!, jugadorActual!!, true)
+                            Test(pregunta, jugadorActual!!, true)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))
                         alert.setMessage(contexto.getString(R.string.mensaje_no_minijuego))
-                        alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, which ->
+                        alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, _ ->
                             dialog.dismiss()
                         }
                         alert.show()
@@ -229,7 +226,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
     private fun posiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (movimientos == 0) {
-            GlobalScope.launch(Dispatchers.Default) {
+            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
                 withContext(Dispatchers.Main) {
 
                     val casilla = obtenerCasilla(fila, columna)
@@ -288,9 +285,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
         reiniciarMovimientos()
 
     }
-    @OptIn(DelicateCoroutinesApi::class)
-    fun reiniciarMovimientos(){
-        GlobalScope.launch(Dispatchers.Default) {
+
+    private fun reiniciarMovimientos(){
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
             withContext(Dispatchers.Main) {
                 for ( casilla in posiblesMovimientos){
                     casilla.setBackgroundColor(casilla.color)

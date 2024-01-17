@@ -9,11 +9,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.conexion.onffline.Conexion
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.MetodosTest
@@ -26,18 +25,18 @@ class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Bo
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.fragment_minijuego_test, container, false)
+        val view = inflater.inflate(R.layout.minijuego_test, container, false)
         contexto = container?.context
         var correcto = false
 
-        val b_opcionA= view.findViewById<Button>(R.id.bt_opcionA)
+        val botonA= view.findViewById<Button>(R.id.bt_opcionA)
         val b_opcionB= view.findViewById<Button>(R.id.bt_opcionB)
         val b_opcionC= view.findViewById<Button>(R.id.bt_opcionC)
         val b_opcionD= view.findViewById<Button>(R.id.bt_opcionD)
         val texto = view.findViewById<TextView>(R.id.tx_enunciado)
-        b_opcionA.background = contexto!!.getDrawable(R.color.negro)
+        botonA.setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.amarillo))
         texto.text = pregunta.pregunta
-        b_opcionA.text = pregunta.respuestas[0]
+        botonA.text = pregunta.respuestas[0]
         b_opcionB.text = pregunta.respuestas[1]
         b_opcionC.text = pregunta.respuestas[2]
         b_opcionD.text = pregunta.respuestas[3]
@@ -48,7 +47,7 @@ class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Bo
 
             when (boton.id) {
                 R.id.bt_opcionA -> {
-                   if(b_opcionA.text.equals(pregunta.correcta[0])){
+                   if(botonA.text.equals(pregunta.correcta[0])){
                        correcto= true
                    }
 
@@ -73,7 +72,7 @@ class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Bo
             terminarJuego(correcto,final)
         }
 
-        b_opcionA.setOnClickListener(listener)
+        botonA.setOnClickListener(listener)
         b_opcionB.setOnClickListener(listener)
         b_opcionC.setOnClickListener(listener)
         b_opcionD.setOnClickListener(listener)
