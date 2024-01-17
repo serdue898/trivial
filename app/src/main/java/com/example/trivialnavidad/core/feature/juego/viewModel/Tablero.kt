@@ -19,8 +19,8 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.juego.Test
-import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.juego.view.Juego
+import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
 import com.example.trivialnavidad.core.feature.minijuegos.repaso.view.Repaso
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +32,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     private var jugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     val juego = MainActivity.juego as Juego
-    private val preguntas = preguntas()
+    private val preguntas = Preguntas()
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
     private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
@@ -80,7 +80,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                casilla.dificultad = 1
+                casilla.dificultad = 3
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
@@ -126,11 +126,14 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
             var minijuego: Fragment? = null
             when (casilla.dificultad) {
                 1 -> {
-                    minijuego = Adivina(pregunta, jugadorActual!!)
+                    minijuego =Test(pregunta, jugadorActual!!, false)
+
+
                 }
 
                 2 -> {
-                    minijuego = Repaso(pregunta, jugadorActual!!)
+                    minijuego = Adivina(pregunta, jugadorActual!!)
+
                     //falta terminar
                     val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                     for (k in 0 until 1) {
@@ -148,7 +151,8 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 }
 
                 3 -> {
-                    minijuego =Test(pregunta, jugadorActual!!, false)
+                    minijuego = Repaso(pregunta, jugadorActual!!)
+
 
                 }
 
@@ -226,7 +230,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
     private fun posiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (movimientos == 0) {
-            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 withContext(Dispatchers.Main) {
 
                     val casilla = obtenerCasilla(fila, columna)
@@ -287,7 +291,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     }
 
     private fun reiniciarMovimientos(){
-        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 for ( casilla in posiblesMovimientos){
                     casilla.setBackgroundColor(casilla.color)

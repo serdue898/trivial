@@ -17,6 +17,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.ComunicadorAdivina
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.viewModel.MetodosAdivina
+import java.text.Normalizer
 
 class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment() {
     private var comunicador: ComunicadorAdivina? = MetodosAdivina()
@@ -32,7 +33,9 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
 
 
         val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
-        val palabraAdivinar = pregunta.correcta[0].lowercase()
+        val palabraAdivinar = Normalizer.normalize(pregunta.correcta[0], Normalizer.Form.NFD)
+            .replace("[^\\p{ASCII}]".toRegex(), "")
+            .lowercase()
         val palabraDividida = view.findViewById<TextView>(R.id.t_palabraAdivina)
         tx_pregunta.text = pregunta.pregunta
         val gr_abecedario = view.findViewById<GridLayout>(R.id.gr_botonesLetras)
@@ -68,14 +71,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
                     botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra_fallada)
                 }
                 if(comprobarPlabra(palabraHuecos.replace(" ",""))){
-                    val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
-                    mensaje.setCancelable(false)
-
-                    mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
-                    mensaje.setPositiveButton("Aceptar") { _, _ ->
-                        terminarJuego(true)
-                    }
-                    mensaje.show()
+                    terminarJuego(true)
                 }
             }
         }

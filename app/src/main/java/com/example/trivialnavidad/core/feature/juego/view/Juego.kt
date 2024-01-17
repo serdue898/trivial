@@ -87,7 +87,7 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
-        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 socket?.on("moverJugadorOnline") { args ->
                     Log.d("DEBUG", "Evento moverJugadorOnline recibido")
                     val jugadorjson = args[0] as JSONObject
@@ -102,7 +102,7 @@ class Juego : Fragment() {
 
         dado?.setOnClickListener {
             dado.isEnabled = false
-            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+            (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 withContext(Dispatchers.Main) {
                     tirarDado()
                 }}
@@ -254,13 +254,13 @@ class Juego : Fragment() {
         val construido = msnEmergente.create()
         construido.show()
 
-        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 var vibracion = null as Vibracion?
                 val sonido = null as Reproductor?
                 if (MainActivity.configuracion?.obtenerOpcionVibracion()!!) vibracion = Vibracion(contexto!!)
                 //if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.lobby_music)
-                val movimientos = Dado(dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
+                val movimientos = Dado(contexto as AppCompatActivity,dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
                 boton.setOnClickListener {
                     tirada(movimientos,construido)
                 }
@@ -269,7 +269,7 @@ class Juego : Fragment() {
     }
     private fun tirada(movimientos: Int, alertDialog: AlertDialog){
         alertDialog.dismiss()
-        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Default) {
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 if (tipo=="offline")jugadorActual = jugadoresEnPartida[jugador]
                 metodosTablero.moverJugador(jugadorActual!!, movimientos.toString().toInt())

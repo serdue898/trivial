@@ -39,6 +39,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     private var avatarImages : TypedArray? = null
     private var emepzar = false
     var host = false
+    var eligiendo = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,7 +65,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
+
         inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
@@ -93,6 +94,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val nombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
@@ -144,9 +146,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
                 val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
                 jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
                 jugadores.add(jugador)
-
             }
-            MainActivity.jugadorActual = jugadores.find { it.jugador?.nombre == MainActivity.jugadorActual?.nombre }!!.jugador
             empezarPartida(jugadores)
         }
         b_guardarJugador?.setOnClickListener {
@@ -155,6 +155,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
             }else{
+                eligiendo = true
                 agregarJugadorLista( )
 
                 b_guardarJugador.isEnabled = false
@@ -184,7 +185,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     }
     fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
-        jugadoresEnPartida.forEach({ jugador -> avataresUsados.add(jugador.avatar.toInt()) })
+        jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
         val avatares: MutableList<Int> = mutableListOf()
         for (i in 0 until avatarImages!!.length()) {
             if (!avataresUsados.contains(i)) {
@@ -210,7 +211,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
             }else{
 
-                var view = avatarJugador?.selectedView
+                val view = avatarJugador?.selectedView
                 val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
@@ -250,8 +251,6 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
         jugadorNuevo.partida = id_partida
-        // Agregar el nuevo jugador a la lista
-        MainActivity.jugadorActual = jugadorNuevo
         jugadoresEnPartida.add(jugadorNuevo)
 
         // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
@@ -262,12 +261,12 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
         comunicador?.empezarPartida(contexto!!,id_partida,jugadores)
     }
-    override fun onDestroy() {
-        super.onDestroy()
-        // Liberar recursos cuando la actividad se destruye¡
-        if (!emepzar) {
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (eligiendo) {
             MainActivity.socket?.emit("desconectar", MainActivity.jugadorActual?.toJson())
         }
+
     }
 
 

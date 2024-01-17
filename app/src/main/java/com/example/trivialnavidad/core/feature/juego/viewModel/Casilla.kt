@@ -1,8 +1,6 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.widget.GridLayout
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -59,7 +60,7 @@ class Principal : Fragment() {
 
         }
         botonOn.setOnClickListener {
-            if (MainActivity.socket == null) {
+            if (MainActivity.socket == null || !MainActivity.socket?.connected()!!) {
                 try {
                     MainActivity.socket = IO.socket("http://192.168.0.202:5000")
                     MainActivity.socket?.connect()
@@ -67,7 +68,17 @@ class Principal : Fragment() {
                     e.printStackTrace()
                 }
             }
-            login()
+            if (!MainActivity.socket?.connected()!!){
+                val alerta = AlertDialog.Builder(contexto as AppCompatActivity)
+                alerta.setTitle("Error")
+                alerta.setMessage("No se ha podido conectar con el servidor")
+                alerta.setPositiveButton("Aceptar") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                alerta.show()
+            }else {
+                login()
+            }
 
 
         }
@@ -82,7 +93,7 @@ class Principal : Fragment() {
         // Se devuelve la vista inflada.
         return view
     }
-    fun mostrarOnline(){
+    private fun mostrarOnline(){
         val botonOff = view?.findViewById<Button>(R.id.bt_offline)
         val botonOn = view?.findViewById<Button>(R.id.bt_online)
         val botonNuevaPartida = view?.findViewById<Button>(R.id.bt_nueva)
@@ -97,19 +108,19 @@ class Principal : Fragment() {
         botonVolver?.visibility = View.VISIBLE
 
     }
-    fun login(){
+    private fun login(){
         val popupLogin = AlertDialog.Builder(contexto as AppCompatActivity)
         popupLogin.setTitle("Login")
         val view = (contexto as AppCompatActivity).layoutInflater.inflate(R.layout.login, null)
         popupLogin.setView(view)
-        popupLogin.setPositiveButton("Aceptar") { dialog, which ->
-            val nombre = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.ed_nombre).text.toString()
-            val contraseña = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_contrasena).text.toString()
+        popupLogin.setPositiveButton("Aceptar") { _, _ ->
+            val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
+            val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             val socket = MainActivity.socket
             val jugador = Jugador(0,nombre,"0")
-            jugador.contraseña = contraseña
+            jugador.contraseña = contrasena
             socket?.emit("login",jugador.toJson())
-            socket?.on("login") { args ->
+            socket?.on("login_respuesta") { args ->
                 val id = args[0]
                 if (id == "null" || id=="error") {
                     (contexto as AppCompatActivity).runOnUiThread {
@@ -121,7 +132,20 @@ class Principal : Fragment() {
                         }
                         errorPopup.show()
                     }
-                } else {
+
+                }
+                else if (id == "loggeado"){
+                    (contexto as AppCompatActivity).runOnUiThread {
+                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                        errorPopup.setTitle("Error")
+                        errorPopup.setMessage("Usuario ya esta loggeado")
+                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        errorPopup.show()
+                    }
+                }
+                else {
                     MainActivity.jugadorActual= Jugador.fromJson(id.toString())
                     activity?.runOnUiThread {
                         mostrarOnline()
@@ -130,15 +154,15 @@ class Principal : Fragment() {
                 }
             }
         }
-        popupLogin.setNegativeButton("Cancelar") { dialog, which ->
+        popupLogin.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
         }
-        popupLogin.setNeutralButton ("Registrarse"){dialog, which ->
-            val nombre = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.ed_nombre).text.toString()
-            val contraseña = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_contrasena).text.toString()
+        popupLogin.setNeutralButton ("Registrarse"){_, _ ->
+            val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
+            val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             val socket = MainActivity.socket
             val jugador = Jugador(0,nombre,"0")
-            jugador.contraseña = contraseña
+            jugador.contraseña = contrasena
             socket?.emit("registrarJugador", jugador.toJson())
             socket?.on("registrarJugador") { args ->
                 val jugador = args[0]
@@ -148,7 +172,7 @@ class Principal : Fragment() {
                         val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
                         errorPopup.setTitle("Error")
                         errorPopup.setMessage("Ya existe un usuario con ese nombre")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
+                        errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
                             dialog.dismiss()
                         }
                         errorPopup.show()
@@ -176,7 +200,6 @@ class Principal : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
         inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }

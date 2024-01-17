@@ -17,6 +17,7 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.repaso.viewModel.ComunicadorRepaso
 import com.example.trivialnavidad.core.feature.minijuegos.repaso.viewModel.MetodosRepaso
+import java.text.Normalizer
 
 class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment() {
 
@@ -44,7 +45,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         val sp_hueco4 = view.findViewById<Spinner>(R.id.sp_hueco4)
 
         // para suplir el error que se muestra al poner this en el contexto hay que poner requireContext()
-        val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, respuestasRepaso)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, respuestasRepaso)
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_hueco1.adapter = adapter
@@ -57,30 +58,47 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         val bt_corregir = view.findViewById<Button>(R.id.bt_repasoCorregir)
 
         bt_corregir.setOnClickListener(){
-            val mensaje = AlertDialog.Builder(contexto as AppCompatActivity)
-            if((sp_hueco1.isSelected.toString()== pregunta.correcta [0])&&
-                (sp_hueco2.isSelected.toString()== pregunta.correcta[1])&&
-                (sp_hueco3.isSelected.toString()== pregunta.correcta[2])&&
-                (sp_hueco4.isSelected.toString()== pregunta.correcta[3])){
-                mensaje.setMessage("Enhorabuena, has resuelto correctamente la prueba.")
 
-            }else{
-                mensaje.setMessage("Desgraciadamente te has confundido al resolver la prueba. Más suerte para la próxima.")
+            val seleccion1 = sp_hueco1.selectedItem.toString()
+            val seleccion2 = sp_hueco2.selectedItem.toString()
+            val seleccion3 = sp_hueco3.selectedItem.toString()
+            val seleccion4 = sp_hueco4.selectedItem.toString()
+
+            if (seleccion1 == pregunta.correcta[0] &&
+                seleccion2 == pregunta.correcta[1] &&
+                seleccion3 == pregunta.correcta[2] &&
+                seleccion4 == pregunta.correcta[3]
+            ) {
+                terminarJuego(true)
+            } else {
+                terminarJuego(false)
             }
-            mensaje.show()
 
         }
         return view
     }
 
-    fun generarHuecosTexto(enunciado: String, respuestas : List<String>): String{
-        var i =1
-        var enunciadoHuecos =""
-        for (palabra in respuestas){
-            enunciadoHuecos = enunciado.replace(palabra, "hueco" + i)
-            i++
+    fun quitarTildes(palabra: String): String {
+        val normalized = Normalizer.normalize(palabra, Normalizer.Form.NFD)
+        return Regex("\\p{InCombiningDiacriticalMarks}+").replace(normalized, "")
+    }
+
+    fun generarHuecosTexto(enunciado: String, respuestas: List<String>): String {
+        var i = 1
+        val enunciado_temporal = enunciado.split(" ")
+        val enunciado_temporal2: MutableList<String> = mutableListOf()
+
+        for (palabra in enunciado_temporal) {
+            val palabraSinTilde = quitarTildes(palabra.lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            if (palabraSinTilde in respuestas.map { quitarTildes(it.lowercase()) }) {
+                enunciado_temporal2.add("hueco$i")
+                i++
+            } else {
+                enunciado_temporal2.add(palabra)
+            }
         }
-        return  enunciadoHuecos
+
+        return enunciado_temporal2.joinToString(" ")
     }
     private fun terminarJuego(resultado: Boolean){
         var ganado = false
@@ -102,4 +120,5 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         }
         msnEmergente.show()
     }
+
 }
