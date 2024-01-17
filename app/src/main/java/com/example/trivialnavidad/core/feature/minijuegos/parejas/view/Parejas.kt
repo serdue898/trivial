@@ -93,7 +93,7 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
     }
 
 
-    fun actualizarCelda(frame : FrameLayout){
+    private fun actualizarCelda(frame : FrameLayout){
         if (seleccionado!=null){
             if (seleccionado!!.tag.toString()==frame.tag.toString()){
                 frame.visibility = View.INVISIBLE
@@ -114,7 +114,6 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
         inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
@@ -155,8 +154,8 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
-            comunicador?.volver(contexto!!,ganado)
+        msnEmergente.setPositiveButton("Aceptar") { _, _ ->
+            comunicador.volver(contexto!!,ganado)
         }
         msnEmergente.show()
     }
