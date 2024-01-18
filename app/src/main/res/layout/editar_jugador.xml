@@ -9,7 +9,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
         android:text="Nombre"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,19 +17,20 @@
 
     <Spinner
         android:id="@+id/sp_avatar"
-        android:layout_width="80dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
         android:layout_margin="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_nombre"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/et_nombre"
         app:layout_constraintTop_toTopOf="@+id/et_nombre"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/et_nombre"
-        android:layout_width="234dp"
+        android:layout_width="187dp"
         android:layout_height="57dp"
         android:ems="10"
         android:inputType="text"
