@@ -174,7 +174,12 @@ class Juego : Fragment() {
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             inflater.inflate(R.menu.menu_juego_view, menu)// OJO- se pasa la vista que se quiere inflar
-
+            if (tipo == "online"){
+                val item = menu.findItem(R.id.mItm_guardar)
+                item.isVisible = false
+                val item2 = menu.findItem(R.id.mItm_GuardarSalir)
+                item2.title = "Salir"
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -182,7 +187,11 @@ class Juego : Fragment() {
         return when (item.itemId) {
 
             R.id.mItm_GuardarSalir -> {
-                guardarDatos()
+                if (tipo == "online"){
+                    socket?.emit("salirPartida",jugadorActual?.toJson())
+                }else {
+                    guardarDatos()
+                }
                 comunicador?.salir(contexto!!)
                 true
             }
@@ -257,9 +266,9 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 var vibracion = null as Vibracion?
-                val sonido = null as Reproductor?
+                var sonido = null as Reproductor?
                 if (MainActivity.configuracion?.obtenerOpcionVibracion()!!) vibracion = Vibracion(contexto!!)
-                //if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.lobby_music)
+                if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.tirada)
                 val movimientos = Dado(contexto as AppCompatActivity,dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
                 boton.setOnClickListener {
                     tirada(movimientos,construido)

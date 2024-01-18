@@ -22,10 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
-import com.example.trivialnavidad.core.conexion.onffline.Conexion
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.unirseOnline.adapter.ListaAdapterSeleccion
 import com.example.trivialnavidad.core.feature.unirseOnline.adapter.SpinnerAdapter
 import com.example.trivialnavidad.core.feature.unirseOnline.viewModel.MetodosUnirse
@@ -110,7 +108,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         val socket = MainActivity.socket
-        if (!host)socket?.emit("actualizarJugadores")
+        if (!host)socket?.emit("actualizarJugadores",id_partida)
         socket?.on("listaJugadores") { args ->
             val listaJugadores = args[0] as JSONArray
             // Manejar la lista de jugadores en tu aplicación Android
@@ -259,11 +257,13 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         addJugadorOnline(jugadorNuevo)
     }
     private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
-        comunicador?.empezarPartida(contexto!!,id_partida,jugadores)
+        eligiendo = false
+        comunicador.empezarPartida(contexto!!,id_partida,jugadores)
     }
     override fun onDestroyView() {
         super.onDestroyView()
         if (eligiendo) {
+            MainActivity.jugadorActual?.partida = id_partida
             MainActivity.socket?.emit("desconectar", MainActivity.jugadorActual?.toJson())
         }
 

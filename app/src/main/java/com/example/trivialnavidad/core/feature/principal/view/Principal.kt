@@ -19,6 +19,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
 import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrincipal
 import io.socket.client.IO
+import java.lang.Thread.sleep
 
 class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
@@ -64,6 +65,7 @@ class Principal : Fragment() {
                 try {
                     MainActivity.socket = IO.socket("http://192.168.0.202:5000")
                     MainActivity.socket?.connect()
+                    sleep(100)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

@@ -2,15 +2,13 @@ package com.example.trivialnavidad.core.feature.principal.viewModel
 
 import Partidas
 import android.content.Context
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.feature.juego.view.Juego
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
-import com.example.trivialnavidad.app.MainActivity.Companion.socket
 import com.example.trivialnavidad.core.feature.seleccionJugadores.view.SeleccionJugador
 import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
-import io.socket.client.IO
 
 
 class MetodosPrincipal: ComunicadorPrincipal {
@@ -37,7 +35,7 @@ class MetodosPrincipal: ComunicadorPrincipal {
                 popup.setView(view)
 
                 popup.setPositiveButton("Crear") { dialog, which ->
-                    val nombre = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.et_nombre_partida).text.toString()
+                    val nombre = view.findViewById<EditText>(R.id.et_nombre_partida).text.toString()
                     val socket = MainActivity.socket
                     socket?.emit("crearPartida", nombre)
                     socket?.on("partidaCreada") { args ->
