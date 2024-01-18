@@ -45,6 +45,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.seleccion_jugadores, container, false)
         contexto = container?.context
+        MainActivity.jugadorActual?.partida = id_partida
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar3)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)

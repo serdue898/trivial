@@ -1,8 +1,8 @@
 package com.example.trivialnavidad.app
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.juego.view.Juego
@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // Liberar recursos cuando la actividad se destruye
         reproductor?.liberarRecursos()
+        if (jugadorActual != null) {
+            if (jugadorActual?.partida != 0) {
+                socket?.emit("desconectar", jugadorActual?.toJson())
+            }
+
+            socket?.emit("desloggear", jugadorActual?.nombre)
+        }
     }
 
 

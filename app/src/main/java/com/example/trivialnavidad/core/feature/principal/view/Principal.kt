@@ -31,6 +31,8 @@ class Principal : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.principal, container, false)
         contexto = container?.context
+        desloggear()
+
 
         val botonOff = view.findViewById<Button>(R.id.bt_offline)
         val botonOn = view.findViewById<Button>(R.id.bt_online)
@@ -90,6 +92,7 @@ class Principal : Fragment() {
             botonOff.visibility = View.VISIBLE
             botonOn.visibility = View.VISIBLE
             botonVolver.visibility = View.INVISIBLE
+            desloggear()
         }
 
         // Se devuelve la vista inflada.
@@ -109,6 +112,12 @@ class Principal : Fragment() {
         botonOn?.visibility = View.INVISIBLE
         botonVolver?.visibility = View.VISIBLE
 
+    }
+    private fun desloggear(){
+        if (MainActivity.jugadorActual != null) {
+            val socket = MainActivity.socket
+            socket?.emit("desloggear", MainActivity.jugadorActual?.nombre)
+        }
     }
     private fun login(){
         val popupLogin = AlertDialog.Builder(contexto as AppCompatActivity)
