@@ -16,10 +16,13 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.MetodosTest
+import kotlin.random.Random
 
-class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Boolean): Fragment() {
+class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val final :Boolean): Fragment() {
     private var comunicador: ComunicadorTest? =MetodosTest();
     private var contexto: Context? = null
+    private var puntos = 0
+    private var opciones = mutableListOf(0, 1, 2, 3)
 
 
 
@@ -27,58 +30,58 @@ class Test(val pregunta: Pregunta ,val  jugador: JugadorEnPartida ,val final :Bo
 
         val view = inflater.inflate(R.layout.minijuego_test, container, false)
         contexto = container?.context
+        empezarJuego(preguntas[puntos],view)
+        return view
+    }
+
+    private fun empezarJuego(pregunta: Pregunta, view: View) {
         var correcto = false
 
-        val botonA= view.findViewById<Button>(R.id.bt_opcionA)
-        val b_opcionB= view.findViewById<Button>(R.id.bt_opcionB)
-        val b_opcionC= view.findViewById<Button>(R.id.bt_opcionC)
-        val b_opcionD= view.findViewById<Button>(R.id.bt_opcionD)
+        val botones = listOf(
+            view.findViewById<Button>(R.id.bt_opcionA),
+            view.findViewById<Button>(R.id.bt_opcionB),
+            view.findViewById<Button>(R.id.bt_opcionC),
+            view.findViewById<Button>(R.id.bt_opcionD)
+        )
+
         val texto = view.findViewById<TextView>(R.id.tx_enunciado)
-        botonA.setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.amarillo))
         texto.text = pregunta.pregunta
-        botonA.text = pregunta.respuestas[0]
-        b_opcionB.text = pregunta.respuestas[1]
-        b_opcionC.text = pregunta.respuestas[2]
-        b_opcionD.text = pregunta.respuestas[3]
 
-        // se declara y asigna un listener para todos los botones
-        // entiendo que se tiene que hacer la comprobacion de la respuesta pero no se como, tomamos los datos de la base de datos?
-        val listener = View.OnClickListener { boton->
-
-            when (boton.id) {
-                R.id.bt_opcionA -> {
-                   if(botonA.text.equals(pregunta.correcta[0])){
-                       correcto= true
-                   }
-
-                }
-                R.id.bt_opcionB -> {
-                    if(b_opcionB.text.equals(pregunta.correcta[0])){
-                        correcto= true
-                    }
-                }
-                R.id.bt_opcionC -> {
-                    if(b_opcionC.text.equals(pregunta.correcta[0])){
-                        correcto= true
-                    }
-                }
-                R.id.bt_opcionD -> {
-                    if(b_opcionD.text.equals(pregunta.correcta[0])){
-                        correcto= true
-                    }
-                }
-            }
-           // comunicador?.enviarDatos("la respuesta ha sido " + correcto)
-            terminarJuego(correcto,final)
+        botones.forEach { boton ->
+            setRandomOption(boton, opciones, pregunta.respuestas)
+            boton.setOnClickListener { verificarRespuesta(it as Button, pregunta,view) }
         }
 
-        botonA.setOnClickListener(listener)
-        b_opcionB.setOnClickListener(listener)
-        b_opcionC.setOnClickListener(listener)
-        b_opcionD.setOnClickListener(listener)
+        botones[0].setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.amarillo))
+    }
 
+    private fun verificarRespuesta(boton: Button, pregunta: Pregunta , view: View) {
+        val correcto = boton.text.equals(pregunta.correcta[0])
+        if (correcto) puntos++
 
-        return view
+        if (final) {
+            terminarJuego(false, true)
+        } else {
+            if (puntos == 5) {
+                terminarJuego(correcto, false)
+            } else if (!correcto) {
+                terminarJuego(false, final = false)
+            } else {
+                val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
+                msnEmergente.setCancelable(false)
+                msnEmergente.setMessage(getString(R.string.has_acertado_sigue_jugando))
+                msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+                    opciones = mutableListOf(0, 1, 2, 3)
+                    empezarJuego(preguntas[puntos], view)
+                }
+                msnEmergente.show()
+            }
+        }
+    }
+    private fun setRandomOption(button: Button, opciones: MutableList<Int>, respuestas: List<String>) {
+        val opcion = opciones[Random.nextInt(0, opciones.size)]
+        opciones.remove(opcion)
+        button.text = respuestas[opcion]
     }
     private fun terminarJuego(resultado: Boolean,final: Boolean){
         var ganado = false

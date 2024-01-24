@@ -8,8 +8,13 @@ class Casilla(contexto: Context, val fila: Int, val columna: Int ) : GridLayout(
     var jugadores :MutableList<JugadorEnPartida> = mutableListOf()
     var dificultad : Int = 0
     var color : Int= 0
-    fun addJugador(jugador: JugadorEnPartida){
-         jugadores.add(jugador)
+    fun addJugador(jugador: JugadorEnPartida) :Boolean{
+        val posicion = jugadores.indexOfFirst { it.id_jugador == id }
+        if (posicion == -1) {
+            jugadores.add(jugador)
+            return true
+        }
+        return false
     }
     fun removeJugador(jugador: JugadorEnPartida){
          jugadores.remove(jugador)

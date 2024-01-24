@@ -1,11 +1,12 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
-import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.provider.Settings
 import android.util.Log
 import android.widget.GridLayout
 import android.widget.ImageView
@@ -29,7 +30,8 @@ import kotlinx.coroutines.withContext
 
 class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>,private val tipo :String
 ) {
-    private var jugadorActual : JugadorEnPartida? = null
+    public var jugadorActual : JugadorEnPartida? = null
+    public var casillaonline = ""
     private var posiblesMovimientos = mutableListOf<Casilla>()
     val juego = MainActivity.juego as Juego
     private val preguntas = Preguntas()
@@ -47,6 +49,17 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
         arrayOf("4","3","2","1","4","3","2","1","4"),
     )
     fun asignarJugadores(){
+        for (jugador in jugadores){
+            val fila  = jugador.casillaActual.split("_")[0].toInt()
+            val columna = jugador.casillaActual.split("_")[1].toInt()
+            val casilla = obtenerCasilla(fila,columna)
+            casilla?.addJugador(jugador)
+            rellenarCasilla(casilla!!)
+        }
+    }
+    fun actualizartablero(jugadores: List<JugadorEnPartida>){
+        gridTablero.removeAllViews()
+        crearTablero()
         for (jugador in jugadores){
             val fila  = jugador.casillaActual.split("_")[0].toInt()
             val columna = jugador.casillaActual.split("_")[1].toInt()
@@ -80,7 +93,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
-                casilla.dificultad = 4
+                casilla.dificultad = dificultad
                 casilla.color = colores.getColor(dificultad,0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
@@ -89,6 +102,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                           moverVista( casilla)
                       }else{
                           jugadorActual?.casillaActual = casilla.fila.toString() +"_"+ casilla.columna.toString()
+                          val socket = MainActivity.socket
+                          socket?.emit("moverJugador",jugadorActual?.toJson())
+                          reiniciarMovimientos()
                       }
                     asignarMinijuegos(casilla)
                 }
@@ -115,28 +131,19 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
             alert.setCancelable(false)
             alert.setMessage(contexto.getString(R.string.internet_mensaje))
             alert.setPositiveButton(contexto.getString(R.string.aceptar)) { dialog, _ ->
-                (contexto as? Activity)?.finish()
+                val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                contexto.startActivity(intent)
                 dialog.dismiss()
 
             }
             alert.show()
-            juego.resultadoMiniJuego(true)
         }else {
             val pregunta = preguntasMinijuego.random()
             var minijuego: Fragment? = null
             when (casilla.dificultad) {
                 1 -> {
-                    minijuego =Test(pregunta, jugadorActual!!, false)
-
-
-                }
-
-                2 -> {
-                    minijuego = Adivina(pregunta, jugadorActual!!)
-
-                    //falta terminar
                     val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
-                    for (k in 0 until 1) {
+                    for (k in 0 until 5) {
                         var repetida = true
                         var preguntaNueva: Pregunta? = null
                         while (repetida) {
@@ -147,6 +154,16 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         listaPtreguntas.add(preguntaNueva!!)
                     }
+                    minijuego =Test(listaPtreguntas, jugadorActual!!, false)
+
+
+                }
+
+                2 -> {
+                    minijuego = Adivina(pregunta, jugadorActual!!)
+
+                    //falta terminar
+
 
                 }
 
@@ -168,8 +185,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                     }
                     if (entrar) {
-                        minijuego =
-                            Test(pregunta, jugadorActual!!, true)
+                        val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
+                        listaPtreguntas.add(pregunta)
+                        minijuego =Test(listaPtreguntas, jugadorActual!!, true)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))
@@ -210,10 +228,10 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
 
 
         val continuar = casillaAntigua?.removeJugador(jugador.id_jugador)
-        if (continuar==false){
-            return
+        if (continuar!!){
+            rellenarCasilla(casillaAntigua)
         }
-        rellenarCasilla(casillaAntigua!!)
+
         casilla?.addJugador(jugador)
         rellenarCasilla(casilla!!)
         jugadorActual = jugador
