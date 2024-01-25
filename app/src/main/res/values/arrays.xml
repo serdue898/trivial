@@ -26,4 +26,12 @@
         <item>@drawable/avatar3</item>
         <item>@drawable/avatar4</item>
     </array>
+    <array name="imagenesAhorcado">
+        <item>@drawable/ahorcado_1</item>
+        <item>@drawable/ahorcado_2</item>
+        <item>@drawable/ahorcado_3</item>
+        <item>@drawable/ahorcado_4</item>
+        <item>@drawable/ahorcado_5</item>
+        <item>@drawable/ahorcado_6</item>
+    </array>
 </resources>
