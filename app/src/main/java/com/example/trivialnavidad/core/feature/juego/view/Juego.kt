@@ -62,6 +62,7 @@ class Juego : Fragment() {
         avatarImages  = contexto?.resources!!.obtainTypedArray(R.array.avatar_images)
         val conexion = Conexion(contexto!!)
         if (vista == null){
+            MainActivity.jugadorActual?.partida = partida!!
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
             if (partida != null) partidaActual = partida!!
@@ -98,6 +99,34 @@ class Juego : Fragment() {
                 actualizarJugadorOnline(jugador)
             }
 
+
+        }
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                socket?.on("ganador") { args ->
+                    Log.d("DEBUG", "Evento partidaGanada recibido")
+                    val jugadorjson = args[0]
+                    val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
+                    jugador.jugador =
+                        jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
+
+
+                    val popup = AlertDialog.Builder(contexto as AppCompatActivity)
+                    popup.setTitle("Partida ganada")
+                    popup.setCancelable(false)
+                    popup.setMessage("jugador" + jugador.jugador?.nombre + "ha ganado la partida")
+                    popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, which ->
+                        MainActivity.jugadorActual?.partida = 0
+                        socket?.emit("desloggear",jugadorActual?.toJson())
+                        comunicador?.salir(contexto!!)
+                    }
+                    (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
+                        withContext(Dispatchers.Main) {
+                            popup.show()
+                        }
+                    }
+                }
+            }
         }
 
         dado?.setOnClickListener {
@@ -106,8 +135,6 @@ class Juego : Fragment() {
                 withContext(Dispatchers.Main) {
                     tirarDado()
                 }}
-
-
         }
         clasificacion?.setOnClickListener {
             comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)

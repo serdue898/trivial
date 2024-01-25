@@ -34,7 +34,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         var respuestasRepaso : List<String> = listOf()
         respuestasRepaso= pregunta.respuestas
         val enunciado = view?.findViewById<TextView>(R.id.t_enunciadoRepaso)
-        enunciado?.text= generarHuecosTexto(enunciadoComodin, respuestasRepaso)
+        enunciado?.text =generarHuecosTexto(enunciadoComodin, respuestasRepaso)
 
         // falta coger las respuestas de la base de datos
 
@@ -91,7 +91,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         for (palabra in enunciado_temporal) {
             val palabraSinTilde = quitarTildes(palabra.lowercase()).replace("[^a-zA-Z]".toRegex(), "")
             if (palabraSinTilde in respuestas.map { quitarTildes(it.lowercase()) }) {
-                enunciado_temporal2.add("hueco$i")
+                enunciado_temporal2.add("HUECO$i")
                 i++
             } else {
                 enunciado_temporal2.add(palabra)

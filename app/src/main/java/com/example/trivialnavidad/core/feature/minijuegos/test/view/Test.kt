@@ -18,7 +18,7 @@ import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.Comunic
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.MetodosTest
 import kotlin.random.Random
 
-class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val final :Boolean): Fragment() {
+class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val final :Boolean,val tipo:String): Fragment() {
     private var comunicador: ComunicadorTest? =MetodosTest();
     private var contexto: Context? = null
     private var puntos = 0
@@ -102,7 +102,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
         msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
-            comunicador?.volver(contexto!!,ganado,final)
+            comunicador?.volver(contexto!!,ganado,final,jugador, tipo)
         }
         msnEmergente.show()
     }

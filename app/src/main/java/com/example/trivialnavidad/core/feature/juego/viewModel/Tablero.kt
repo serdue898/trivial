@@ -154,7 +154,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         listaPtreguntas.add(preguntaNueva!!)
                     }
-                    minijuego =Test(listaPtreguntas, jugadorActual!!, false)
+                    minijuego =Test(listaPtreguntas, jugadorActual!!, false,tipo)
 
 
                 }
@@ -187,7 +187,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     if (entrar) {
                         val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                         listaPtreguntas.add(pregunta)
-                        minijuego =Test(listaPtreguntas, jugadorActual!!, true)
+                        minijuego =Test(listaPtreguntas, jugadorActual!!, true,tipo)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))
