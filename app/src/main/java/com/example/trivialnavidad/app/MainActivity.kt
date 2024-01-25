@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 socket?.emit("desconectar", jugadorActual?.toJson())
             }
 
-            socket?.emit("desloggear", jugadorActual?.nombre)
+            socket?.emit("desloggear", jugadorActual?.id_jugador)
         }
     }
 

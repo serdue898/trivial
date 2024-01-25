@@ -203,7 +203,7 @@ class Juego : Fragment() {
 
             R.id.mItm_GuardarSalir -> {
                 if (tipo == "online"){
-                    socket?.emit("salirPartida",jugadorActual?.toJson())
+                    socket?.emit("desconectar",jugadorActual?.toJson())
                 }else {
                     guardarDatos()
                 }
