@@ -5,9 +5,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -19,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.viewModel.ComunicadorParejas
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.viewModel.MetodosParejas
@@ -44,9 +40,6 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
             val drawable = ContextCompat.getDrawable(contexto!!, id)
             imagenesBase.add(drawable!!)
         }
-        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar5)
-        (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
-        setHasOptionsMenu(true)
         val fr1 = view.findViewById<FrameLayout>(R.id.fr_1)
         val fr2 = view.findViewById<FrameLayout>(R.id.fr_2)
         val fr3 = view.findViewById<FrameLayout>(R.id.fr_3)
@@ -95,6 +88,8 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
 
     private fun actualizarCelda(frame : FrameLayout){
         if (seleccionado!=null){
+
+
             if (seleccionado!!.tag.toString()==frame.tag.toString()){
                 frame.visibility = View.INVISIBLE
                 seleccionado?.visibility = View.INVISIBLE
@@ -110,35 +105,11 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
 
         }
         else{
+            frame.isEnabled = false
             seleccionado = frame
         }
     }
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
-            R.id.mItm_configuracion -> {
-                MainActivity.configuracion?.mostrarConfiguracion(contexto!!)
-                true
-            }
-            R.id.mItm_inicio -> {
-
-                true
-            }
-            R.id.mItm_acerca -> {
-                val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
-                msnEmergente.setMessage(getString(R.string.acercaDe))
-                msnEmergente.show()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
     private fun terminarJuego(resultado: Boolean){
         var ganado = false
         val acercaDe: Int

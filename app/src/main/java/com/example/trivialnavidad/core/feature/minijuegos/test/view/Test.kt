@@ -11,11 +11,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.ComunicadorTest
 import com.example.trivialnavidad.core.feature.minijuegos.test.viewmodel.MetodosTest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val final :Boolean,val tipo:String): Fragment() {
@@ -23,6 +28,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
     private var contexto: Context? = null
     private var puntos = 0
     private var opciones = mutableListOf(0, 1, 2, 3)
+    private var botones = listOf<Button>()
 
 
 
@@ -37,7 +43,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
     private fun empezarJuego(pregunta: Pregunta, view: View) {
         var correcto = false
 
-        val botones = listOf(
+         botones = listOf(
             view.findViewById<Button>(R.id.bt_opcionA),
             view.findViewById<Button>(R.id.bt_opcionB),
             view.findViewById<Button>(R.id.bt_opcionC),
@@ -52,10 +58,10 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
             boton.setOnClickListener { verificarRespuesta(it as Button, pregunta,view) }
         }
 
-        botones[0].setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.amarillo))
     }
 
-    private fun verificarRespuesta(boton: Button, pregunta: Pregunta , view: View) {
+
+    private fun verificarRespuesta(boton: Button, pregunta: Pregunta, view: View) {
         val correcto = boton.text.equals(pregunta.correcta[0])
         if (correcto) puntos++
 
@@ -65,7 +71,20 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
             if (puntos == 5) {
                 terminarJuego(correcto, false)
             } else if (!correcto) {
-                terminarJuego(false, final = false)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    withContext(Dispatchers.Main) {
+                        boton.setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.rojo))
+
+                        botones.forEach { boton1 ->
+                            if (boton1.text.equals(pregunta.correcta[0])) {
+                                boton1.setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.verde))
+                            }
+                        }
+                        delay(500)
+                        terminarJuego(false, final = false)
+                    }
+                }
+
             } else {
                 val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
                 msnEmergente.setCancelable(false)

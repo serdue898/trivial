@@ -119,6 +119,7 @@ class Juego : Fragment() {
                         MainActivity.jugadorActual?.partida = 0
                         socket?.emit("desloggear",jugadorActual?.toJson())
                         comunicador?.salir(contexto!!)
+                        dialog.dismiss()
                     }
                     (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                         withContext(Dispatchers.Main) {

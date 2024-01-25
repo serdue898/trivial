@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.t8_ej03_persistenciaapi.ui.adapter.ListaAdapter
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
@@ -52,7 +52,7 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>,var finaliza
         lista?.layoutManager = LinearLayoutManager(contexto)
         val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)
         lista?.addItemDecoration(dividerItemDecoration)
-        val adapter = ListaAdapter(jugadoresEnPartida)
+        val adapter = ListaAdapter(jugadoresEnPartida,contexto!!)
         lista?.adapter = adapter
     }
 }
