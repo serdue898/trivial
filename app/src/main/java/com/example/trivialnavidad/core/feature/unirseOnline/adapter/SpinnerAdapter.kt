@@ -1,7 +1,6 @@
 package com.example.trivialnavidad.core.feature.unirseOnline.adapter
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import android.widget.ImageView
 import com.example.trivialnavidad.R
 
 class SpinnerAdapter(context: Context, private val avatars: List<Int?>) : ArrayAdapter<Int>(context, 0, avatars) {
-    val avatarImages = context.resources.obtainTypedArray(R.array.avatar_images)
+    private val avatarImages = context.resources.obtainTypedArray(R.array.avatar_images)
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createView(position, convertView, parent)
     }

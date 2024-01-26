@@ -36,4 +36,7 @@
     <string name="juego_final">Juego final</string>
     <string name="bt_volver">volver</string>
     <string name="has_acertado_sigue_jugando">Has acertado, sigue jugando</string>
+    <string name="partida">Partida</string>
+    <string name="finalizada">Finalizada</string>
+    <string name="nombre">Nombre</string>
 </resources>

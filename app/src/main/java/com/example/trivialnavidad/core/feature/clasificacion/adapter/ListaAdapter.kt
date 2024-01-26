@@ -1,4 +1,4 @@
-package com.example.t8_ej03_persistenciaapi.ui.adapter
+package com.example.trivialnavidad.core.feature.clasificacion.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
 class ListaAdapter(private val jugadores: List<JugadorEnPartida>,val contexto :Context) : RecyclerView.Adapter<ListaAdapter.PostViewHolder>() {
     // Creación de nuevas vistas (invocadas por el layout manager).
     private val colores = contexto.resources.getIntArray(R.array.colores)
-     var textos = mutableListOf<TextView>()
+     private var textos = mutableListOf<TextView>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.lista_clasificacion, parent, false)
@@ -28,7 +28,7 @@ class ListaAdapter(private val jugadores: List<JugadorEnPartida>,val contexto :C
         var minijuego2:TextView = itemView.findViewById(R.id.tx_minijuego1)
         var minijuego3:TextView = itemView.findViewById(R.id.tx_minijuego2)
         var minijuego4:TextView = itemView.findViewById(R.id.tx_minijuego3)
-        val textos2 = mutableListOf<TextView>(nombre,minijuego1,minijuego2,minijuego3,minijuego4)
+        val textos2 = mutableListOf(nombre,minijuego1,minijuego2,minijuego3,minijuego4)
     }
 
     // Reemplazo del contenido de una vista (invocado por el layout manager).
@@ -39,7 +39,7 @@ class ListaAdapter(private val jugadores: List<JugadorEnPartida>,val contexto :C
         holder.minijuego4.text = ""
         if (position == 0) {
             // Configurar encabezados
-            holder.nombre.text = "Nombre"
+            holder.nombre.text = contexto.getString(R.string.nombre)
             holder.minijuego1.setBackgroundColor(colores[1])
             holder.minijuego2.setBackgroundColor(colores[2])
             holder.minijuego3.setBackgroundColor(colores[3])
@@ -50,9 +50,9 @@ class ListaAdapter(private val jugadores: List<JugadorEnPartida>,val contexto :C
             holder.nombre.text = jugador.jugador?.nombre
             jugador.juegos.forEachIndexed { index, b ->
                 if (b) {
-                    textos[index+1].setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.verde))
+                    textos[index+1].setBackgroundColor(ContextCompat.getColor(contexto, R.color.verde))
                 } else {
-                    textos[index+1].setBackgroundColor(ContextCompat.getColor(contexto!!, R.color.rojo))
+                    textos[index+1].setBackgroundColor(ContextCompat.getColor(contexto, R.color.rojo))
                 }
             }
 

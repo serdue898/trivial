@@ -27,7 +27,6 @@ class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
     private var contexto: Context? = null
     private var empezado = false
-    var tipo = "offline"
     var volver = "inicio"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -134,36 +133,37 @@ class Principal : Fragment() {
             jugador.contraseña = contrasena
             socket?.emit("login",jugador.toJson())
             socket?.on("login_respuesta") { args ->
-                val id = args[0]
-                if (id == "null" || id=="error") {
-                    (contexto as AppCompatActivity).runOnUiThread {
-                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                        errorPopup.setTitle("Error")
-                        errorPopup.setMessage("Usuario o contraseña incorrectos")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
-                            dialog.dismiss()
+                when (val id = args[0]) {
+                    "null", "error" -> {
+                        (contexto as AppCompatActivity).runOnUiThread {
+                            val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                            errorPopup.setTitle("Error")
+                            errorPopup.setMessage("Usuario o contraseña incorrectos")
+                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            errorPopup.show()
                         }
-                        errorPopup.show()
-                    }
 
-                }
-                else if (id == "loggeado"){
-                    (contexto as AppCompatActivity).runOnUiThread {
-                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                        errorPopup.setTitle("Error")
-                        errorPopup.setMessage("Usuario ya esta loggeado")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
-                            dialog.dismiss()
+                    }
+                    "loggeado" -> {
+                        (contexto as AppCompatActivity).runOnUiThread {
+                            val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                            errorPopup.setTitle("Error")
+                            errorPopup.setMessage("Usuario ya esta loggeado")
+                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            errorPopup.show()
                         }
-                        errorPopup.show()
                     }
-                }
-                else {
-                    MainActivity.jugadorActual= Jugador.fromJson(id.toString())
-                    activity?.runOnUiThread {
-                        mostrarOnline()
-                    }
+                    else -> {
+                        MainActivity.jugadorActual= Jugador.fromJson(id.toString())
+                        activity?.runOnUiThread {
+                            mostrarOnline()
+                        }
 
+                    }
                 }
             }
         }
@@ -187,9 +187,9 @@ class Principal : Fragment() {
                 jugador.contraseña = contrasena
                 socket?.emit("registrarJugador", jugador.toJson())
                 socket?.on("registrarJugador") { args ->
-                    val jugador = args[0]
+                    val jugadorLLegado = args[0]
 
-                    if (jugador == "null") {
+                    if (jugadorLLegado == "null") {
                         (contexto as AppCompatActivity).runOnUiThread {
                             val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
                             errorPopup.setTitle("Error")
@@ -201,7 +201,7 @@ class Principal : Fragment() {
                         }
                     } else {
 
-                        MainActivity.jugadorActual = Jugador.fromJson(jugador.toString())
+                        MainActivity.jugadorActual = Jugador.fromJson(jugadorLLegado.toString())
                         activity?.runOnUiThread {
                             mostrarOnline()
                         }
@@ -216,7 +216,7 @@ class Principal : Fragment() {
         }
 
     }
-    fun isValidPassword(password: String): Boolean {
+    private fun isValidPassword(password: String): Boolean {
         val passwordPattern = "^(?=.*[0-9])(?=.*[A-Z]).{5,}$"
         val pattern = Pattern.compile(passwordPattern)
         val matcher = pattern.matcher(password)
@@ -256,7 +256,7 @@ class Principal : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (empezado) {
             val configuracion = MainActivity.configuracion
-            configuracion?.toggleDarkMode(contexto!!,configuracion.obtenerOpcionTemas())
+            configuracion?.toggleDarkMode(configuracion.obtenerOpcionTemas())
         }
     }
     fun empezar(){

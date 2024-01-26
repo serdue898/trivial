@@ -1,25 +1,21 @@
 package com.example.trivialnavidad.app
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat.recreate
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.feature.principal.view.Principal
 
 class Configuracion( context: Context) {
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences("Configuracion", Context.MODE_PRIVATE)
     //musica
-    fun guardarOpcionMusica(reproducir: Boolean) {
+    private fun guardarOpcionMusica(reproducir: Boolean) {
         prefs.edit().putBoolean("ReproducirMusica", reproducir).apply()
     }
 
@@ -27,21 +23,21 @@ class Configuracion( context: Context) {
         return prefs.getBoolean("ReproducirMusica", true) // Valor predeterminado: true
     }
     //sonido
-    fun guardarOpcionSonido(reproducir: Boolean) {
+    private fun guardarOpcionSonido(reproducir: Boolean) {
         prefs.edit().putBoolean("ReproducirSonido", reproducir).apply()
     }
     fun obtenerOpcionSonido(): Boolean {
         return prefs.getBoolean("ReproducirSonido", true) // Valor predeterminado: true
     }
     //vibracion
-    fun guardarOpcionVibracion(reproducir: Boolean) {
+    private fun guardarOpcionVibracion(reproducir: Boolean) {
         prefs.edit().putBoolean("ReproducirVibracion", reproducir).apply()
     }
     fun obtenerOpcionVibracion(): Boolean {
         return prefs.getBoolean("ReproducirVibracion", true) // Valor predeterminado: true
     }
     //temas
-    fun guardarOcionTemas(tema: Boolean) {
+    private fun guardarOcionTemas(tema: Boolean) {
         prefs.edit().putBoolean("Tema", tema).apply()
     }
     fun obtenerOpcionTemas(): Boolean {
@@ -72,7 +68,7 @@ class Configuracion( context: Context) {
         }
         temas.setOnCheckedChangeListener { _, isChecked ->
             if (tema ) {
-                toggleDarkMode(contexto,isChecked)
+                toggleDarkMode(isChecked)
                 guardarOcionTemas(isChecked)
             }else{
                 Toast.makeText(contexto,"Solo se cambia el tema en la pantalla de inicio",Toast.LENGTH_LONG).show()
@@ -91,7 +87,7 @@ class Configuracion( context: Context) {
         alert.show()
     }
     private var modoOscuroActual: Int = -1
-     fun toggleDarkMode(  context: Context,encender: Boolean) {
+     fun toggleDarkMode(encender: Boolean) {
          val nuevoModo = if (encender) {
              AppCompatDelegate.MODE_NIGHT_YES
          } else {

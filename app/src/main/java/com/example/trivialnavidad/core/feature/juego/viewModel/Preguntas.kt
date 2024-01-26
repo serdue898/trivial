@@ -25,7 +25,7 @@ class Preguntas(private val contexto: Context) {
         return preguntas?.filter { it.dificultad == dificultad }
     }
 
-    fun mostrarAlertaSinConexion() {
+    private fun mostrarAlertaSinConexion() {
         val alert = AlertDialog.Builder(contexto)
         alert.setTitle(contexto.getString(R.string.juego))
         alert.setCancelable(false)
@@ -39,7 +39,7 @@ class Preguntas(private val contexto: Context) {
 
 
 
-    fun mostrarConfiguracionWifi() {
+    private fun mostrarConfiguracionWifi() {
         val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
         contexto.startActivity(intent)
     }

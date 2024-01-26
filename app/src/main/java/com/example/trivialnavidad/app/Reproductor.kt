@@ -3,7 +3,7 @@ package com.example.trivialnavidad.app
 import android.content.Context
 import android.media.MediaPlayer
 
-class Reproductor(private val context: Context, private val resourceId: Int) {
+class Reproductor(context: Context, resourceId: Int) {
 
     private var mediaPlayer: MediaPlayer? = null
     private val configuracion = Configuracion(context)

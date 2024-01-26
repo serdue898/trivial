@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.t8_ej03_persistenciaapi.ui.adapter.ListaAdapter
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
+import com.example.trivialnavidad.core.feature.clasificacion.adapter.ListaAdapter
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.ComunicadorClasificacion
 import com.example.trivialnavidad.core.feature.clasificacion.viewModel.MetodosClasifiacion
 
-class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>,var finalizada:Boolean): Fragment() {
+class Clasifiaccion (private var jugadoresEnPartida: List<JugadorEnPartida>, private var finalizada:Boolean): Fragment() {
     private var comunicador: ComunicadorClasificacion? = MetodosClasifiacion()
     private var contexto: Context? = null
 
@@ -24,8 +24,8 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>,var finaliza
         val view = inflater.inflate(R.layout.clasificacion, container, false)
         contexto = container?.context
 
-        val bt_volver = view.findViewById<Button>(R.id.bt_volver)
-        bt_volver.setOnClickListener {
+        val btVolver = view.findViewById<Button>(R.id.bt_volver)
+        btVolver.setOnClickListener {
             if (finalizada) {
                 comunicador?.inicio(contexto!!)
             }
@@ -47,7 +47,7 @@ class Clasifiaccion (var jugadoresEnPartida: List<JugadorEnPartida>,var finaliza
 
     }
 
-    fun actualizarLista(jugadoresEnPartida: List<JugadorEnPartida>) {
+    private fun actualizarLista(jugadoresEnPartida: List<JugadorEnPartida>) {
         val lista = view?.findViewById<RecyclerView>(R.id.rv_jugadores)
         lista?.layoutManager = LinearLayoutManager(contexto)
         val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)

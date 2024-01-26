@@ -31,26 +31,26 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.minijuego_adivina, container, false)
         contexto = container?.context
-        var imagenes = arrayOf(R.drawable.ahorcado_1, R.drawable.ahorcado_2, R.drawable.ahorcado_3, R.drawable.ahorcado_4, R.drawable.ahorcado_5, R.drawable.ahorcado_6)
+        val imagenes = arrayOf(R.drawable.ahorcado_1, R.drawable.ahorcado_2, R.drawable.ahorcado_3, R.drawable.ahorcado_4, R.drawable.ahorcado_5, R.drawable.ahorcado_6)
 
 
 
         val imagen = view.findViewById<androidx.appcompat.widget.AppCompatImageView>(R.id.imagenAhorcado)
-        val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
+        val txPregunta = view.findViewById<TextView>(R.id.t_pregunta)
         val palabraAdivinar = Normalizer.normalize(pregunta.correcta[0], Normalizer.Form.NFD)
             .replace("[^\\p{ASCII}]".toRegex(), "")
             .lowercase()
         val palabraDividida = view.findViewById<TextView>(R.id.t_palabraAdivina)
-        tx_pregunta.text = pregunta.pregunta
-        val gr_abecedario = view.findViewById<GridLayout>(R.id.gr_botonesLetras)
+        txPregunta.text = pregunta.pregunta
+        val grAbecedario = view.findViewById<GridLayout>(R.id.gr_botonesLetras)
 
-        val abecedario = CharArray(27) { ('a' + it).toChar() }
+        val abecedario = CharArray(27) { ('a' + it) }
         abecedario[26] = 'ñ'
         var palabraHuecos = desgranarPalabra(palabraAdivinar)
         // no entiendo porque no me esta dejando asignar el string al txtview de la palabra hecha trocitos
         palabraDividida.text= palabraHuecos
-        gr_abecedario.rowCount=9
-        gr_abecedario.columnCount=4
+        grAbecedario.rowCount=9
+        grAbecedario.columnCount=4
         for (letra in abecedario){
             val botonLetra = Button(contexto)
             botonLetra.text= letra.toString()
@@ -63,9 +63,9 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
             params.setMargins(5,5,5,5)
 
             // Agrega el botón al GridLayout con los parámetros de diseño
-            gr_abecedario.addView(botonLetra, params)
+            grAbecedario.addView(botonLetra, params)
 
-            botonLetra.setOnClickListener(){
+            botonLetra.setOnClickListener{
                 if (mostradoFinal)
                     return@setOnClickListener
                 botonLetra.isEnabled = false

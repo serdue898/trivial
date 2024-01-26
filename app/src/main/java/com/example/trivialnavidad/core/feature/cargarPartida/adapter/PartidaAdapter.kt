@@ -1,6 +1,5 @@
 package com.example.trivialnavidad.core.feature.cargarPartida.adapter
 
-import Partidas
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,8 @@ import com.example.trivialnavidad.R
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 import com.example.trivialnavidad.core.feature.cargarPartida.viewModel.ComunicadorPartida
 
-class PartidaAdapter(private val partidas: List<Partida>, var comunicador: ComunicadorPartida,var tipo :String,var contexto :Context) : RecyclerView.Adapter<PartidaAdapter.PostViewHolder>() {
+class PartidaAdapter(private val partidas: List<Partida>, var comunicador: ComunicadorPartida,
+                     private var tipo :String, var contexto :Context) : RecyclerView.Adapter<PartidaAdapter.PostViewHolder>() {
 
     // Definición del ViewHolder que proporciona una referencia a las vistas para cada elemento de datos.
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,8 +32,8 @@ class PartidaAdapter(private val partidas: List<Partida>, var comunicador: Comun
         if (position == 0) {
             // Configurar encabezados
             holder.id.text = "ID"
-            holder.nombre.text = "Partida"
-            holder.finalizada.text = "Finalizada"
+            holder.nombre.text = contexto.getString(R.string.partida)
+            holder.finalizada.text = contexto.getString(R.string.finalizada)
         } else {
             val partida = partidas[position - 1]  // Resta 1 para compensar el encabezado
             holder.id.text = partida.idPartida.toString()

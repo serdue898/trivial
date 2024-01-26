@@ -19,22 +19,21 @@ import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.JugadorEnPartida
-import com.example.trivialnavidad.core.feature.juego.Test
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.minijuegos.adivina.view.Adivina
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
 import com.example.trivialnavidad.core.feature.minijuegos.repaso.view.Repaso
+import com.example.trivialnavidad.core.feature.minijuegos.test.view.Test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>,private val tipo :String
 ) {
-    public var jugadorActual : JugadorEnPartida? = null
-    public var casillaonline = ""
+    var jugadorActual : JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     val juego = MainActivity.juego as Juego
-    public val preguntas = Preguntas(contexto)
+    val preguntas = Preguntas(contexto)
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
     private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
@@ -154,7 +153,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         listaPtreguntas.add(preguntaNueva!!)
                     }
-                    minijuego =Test(listaPtreguntas, jugadorActual!!, false,tipo)
+                    minijuego = Test(listaPtreguntas, jugadorActual!!, false,tipo)
 
 
                 }
@@ -187,7 +186,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     if (entrar) {
                         val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                         listaPtreguntas.add(pregunta)
-                        minijuego =Test(listaPtreguntas, jugadorActual!!, true,tipo)
+                        minijuego = Test(listaPtreguntas, jugadorActual!!, true,tipo)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))

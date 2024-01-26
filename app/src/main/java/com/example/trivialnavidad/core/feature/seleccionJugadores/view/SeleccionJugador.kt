@@ -88,7 +88,7 @@ class SeleccionJugador : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val bGuardarjugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
@@ -103,9 +103,9 @@ class SeleccionJugador : Fragment() {
 
         // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
-        val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
+        val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
-        b_guardarJugador?.setOnClickListener {
+        bGuardarjugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
@@ -117,12 +117,12 @@ class SeleccionJugador : Fragment() {
                 actualizarLista()
 
                 if (jugadoresEnPartida.size >=2) {
-                    bt_empezarPartida?.visibility = View.VISIBLE
+                    btEmpezarpartida?.visibility = View.VISIBLE
                 }
             }
 
         }
-        bt_empezarPartida?.setOnClickListener {
+        btEmpezarpartida?.setOnClickListener {
             empezarPartida()
         }
     }

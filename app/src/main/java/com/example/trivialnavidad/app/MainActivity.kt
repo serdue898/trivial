@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             setContentView(R.layout.activity_main) // Reemplaza con tu diseño
 
         if (savedInstanceState == null) {
-            var principal = Principal()
+            val principal = Principal()
             principal.empezar()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.contenedor, principal)
