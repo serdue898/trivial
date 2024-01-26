@@ -337,4 +337,8 @@ class Juego : Fragment() {
 
 
     }
+    override fun onResume() {
+        super.onResume()
+        metodosTablero.preguntas.verificarConexionYRecargarPreguntas()
+    }
 }

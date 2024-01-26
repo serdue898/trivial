@@ -34,7 +34,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     public var casillaonline = ""
     private var posiblesMovimientos = mutableListOf<Casilla>()
     val juego = MainActivity.juego as Juego
-    private val preguntas = Preguntas()
+    public val preguntas = Preguntas(contexto)
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
     private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
@@ -70,7 +70,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
     }
 
     fun  crearTablero(){
-        preguntas.cogerpreguntas()
+        preguntas.cargarPreguntas()
         gridTablero.rowCount=9
         gridTablero.columnCount=9
         ////

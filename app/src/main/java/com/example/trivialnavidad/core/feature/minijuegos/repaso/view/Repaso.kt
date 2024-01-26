@@ -91,7 +91,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         for (palabra in enunciado_temporal) {
             val palabraSinTilde = quitarTildes(palabra.lowercase()).replace("[^a-zA-Z]".toRegex(), "")
             if (palabraSinTilde in respuestas.map { quitarTildes(it.lowercase()) }) {
-                enunciado_temporal2.add("HUECO$i")
+                enunciado_temporal2.add("__($i)__")
                 i++
             } else {
                 enunciado_temporal2.add(palabra)
