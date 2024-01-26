@@ -116,7 +116,7 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
         if (resultado) {
 
             acercaDe = R.string.acierto
-            jugador.juegos[1] = true
+            jugador.juegos[3] = true
 
             ganado = true
         } else {

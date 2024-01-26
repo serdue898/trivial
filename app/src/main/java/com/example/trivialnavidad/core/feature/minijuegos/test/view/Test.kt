@@ -29,7 +29,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
     private var puntos = 0
     private var opciones = mutableListOf(0, 1, 2, 3)
     private var botones = listOf<Button>()
-
+    private var mostradoFinal = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -111,7 +111,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
 
             } else {
                 acercaDe = R.string.acierto
-                jugador.juegos[2] = true
+                jugador.juegos[0] = true
             }
             ganado = true
         } else {
