@@ -23,6 +23,8 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
 
     private var comunicador: ComunicadorRepaso? = MetodosRepaso()
     private var contexto: Context? = null
+    private val respuestascorrectas = mutableListOf<String>()
+
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle? ): View {
         val view = inflater.inflate(R.layout.minijuego_repaso, container, false)
         contexto = container?.context
@@ -34,7 +36,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         var respuestasRepaso : List<String> = listOf()
         respuestasRepaso= pregunta.respuestas
         val enunciado = view?.findViewById<TextView>(R.id.t_enunciadoRepaso)
-        enunciado?.text= generarHuecosTexto(enunciadoComodin, respuestasRepaso)
+        enunciado?.text =generarHuecosTexto(enunciadoComodin, respuestasRepaso)
 
         // falta coger las respuestas de la base de datos
 
@@ -58,16 +60,16 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         val bt_corregir = view.findViewById<Button>(R.id.bt_repasoCorregir)
 
         bt_corregir.setOnClickListener(){
+            val seleccion1 = quitarTildes( sp_hueco1.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion2 = quitarTildes( sp_hueco2.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion3 = quitarTildes( sp_hueco3.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion4 = quitarTildes( sp_hueco4.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val prueba = respuestascorrectas
 
-            val seleccion1 = sp_hueco1.selectedItem.toString()
-            val seleccion2 = sp_hueco2.selectedItem.toString()
-            val seleccion3 = sp_hueco3.selectedItem.toString()
-            val seleccion4 = sp_hueco4.selectedItem.toString()
-
-            if (seleccion1 == pregunta.correcta[0] &&
-                seleccion2 == pregunta.correcta[1] &&
-                seleccion3 == pregunta.correcta[2] &&
-                seleccion4 == pregunta.correcta[3]
+            if (seleccion1 == respuestascorrectas[0] &&
+                seleccion2 == respuestascorrectas[1] &&
+                seleccion3 == respuestascorrectas[2] &&
+                seleccion4 == respuestascorrectas[3]
             ) {
                 terminarJuego(true)
             } else {
@@ -91,8 +93,11 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         for (palabra in enunciado_temporal) {
             val palabraSinTilde = quitarTildes(palabra.lowercase()).replace("[^a-zA-Z]".toRegex(), "")
             if (palabraSinTilde in respuestas.map { quitarTildes(it.lowercase()) }) {
-                enunciado_temporal2.add("hueco$i")
-                i++
+                if (i <=4) {
+                    respuestascorrectas.add(palabraSinTilde)
+                    enunciado_temporal2.add("__($i)__")
+                    i++
+                }
             } else {
                 enunciado_temporal2.add(palabra)
             }
@@ -106,7 +111,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         if (resultado) {
 
             acercaDe = R.string.acierto
-            jugador.juegos[1] = true
+            jugador.juegos[2] = true
 
             ganado = true
         } else {

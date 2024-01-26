@@ -22,6 +22,8 @@ import java.text.Normalizer
 class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment() {
     private var comunicador: ComunicadorAdivina? = MetodosAdivina()
     private var contexto: Context? = null
+    private var fallos = 0
+    private var mostradoFinal = false
 
 
 
@@ -29,9 +31,11 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.minijuego_adivina, container, false)
         contexto = container?.context
+        var imagenes = arrayOf(R.drawable.ahorcado_1, R.drawable.ahorcado_2, R.drawable.ahorcado_3, R.drawable.ahorcado_4, R.drawable.ahorcado_5, R.drawable.ahorcado_6)
 
 
 
+        val imagen = view.findViewById<androidx.appcompat.widget.AppCompatImageView>(R.id.imagenAhorcado)
         val tx_pregunta = view.findViewById<TextView>(R.id.t_pregunta)
         val palabraAdivinar = Normalizer.normalize(pregunta.correcta[0], Normalizer.Form.NFD)
             .replace("[^\\p{ASCII}]".toRegex(), "")
@@ -62,6 +66,8 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
             gr_abecedario.addView(botonLetra, params)
 
             botonLetra.setOnClickListener(){
+                if (mostradoFinal)
+                    return@setOnClickListener
                 botonLetra.isEnabled = false
                 if(comprobarLetra(botonLetra, palabraAdivinar )){
                     botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra_acertada)
@@ -69,8 +75,17 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
                     palabraDividida.text= palabraHuecos
                 }else {
                     botonLetra.background = ContextCompat.getDrawable(contexto!!, R.drawable.fondo_letra_fallada)
+                    fallos++
+                    if (fallos>6)
+                        fallos=6
+                    imagen.setImageResource(imagenes[fallos-1])
+                }
+                if (fallos>=6 ){
+                    mostradoFinal=true
+                    terminarJuego(false)
                 }
                 if(comprobarPlabra(palabraHuecos.replace(" ",""))){
+                    mostradoFinal=true
                     terminarJuego(true)
                 }
             }
@@ -130,7 +145,7 @@ class Adivina(var pregunta :Pregunta,var jugador :JugadorEnPartida) : Fragment()
         if (resultado) {
 
                 acercaDe = R.string.acierto
-                jugador.juegos[0] = true
+                jugador.juegos[1] = true
 
             ganado = true
         } else {

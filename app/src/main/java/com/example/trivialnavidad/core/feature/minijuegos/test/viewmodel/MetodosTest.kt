@@ -11,18 +11,25 @@ import com.example.trivialnavidad.core.feature.clasificacion.view.Clasifiaccion
 import com.example.trivialnavidad.core.feature.juego.view.Juego
 
 class MetodosTest : ComunicadorTest {
-    override fun volver(context: Context, ganado: Boolean, final: Boolean) {
+    override fun volver(context: Context, ganado: Boolean, final: Boolean,jugadorEnPartida: JugadorEnPartida,tipo:String) {
         if (context is AppCompatActivity) {
             var fragment :Fragment? = null
             if (final && ganado) {
-                if (context is AppCompatActivity) {
-                    val jugadores = MainActivity.juego?.jugadoresEnPartida as List<JugadorEnPartida>
-                    fragment= Clasifiaccion(jugadores,true)
-                    val conexion = Conexion(context)
-                    val partida = conexion.obtenerPartida( MainActivity.juego?.partidaActual!!)
-                    partida.finalizada = true
-                    conexion.actualizarPartida(partida)
-                }
+                if (tipo=="online") {
+                    val socket = MainActivity.socket
+                    socket?.emit("partidaGanada", jugadorEnPartida)
+                }else{
+                        if (context is AppCompatActivity) {
+                            val jugadores =
+                                MainActivity.juego?.jugadoresEnPartida as List<JugadorEnPartida>
+                            fragment = Clasifiaccion(jugadores, true)
+                            val conexion = Conexion(context)
+                            val partida =
+                                conexion.obtenerPartida(MainActivity.juego?.partidaActual!!)
+                            partida.finalizada = true
+                            conexion.actualizarPartida(partida)
+                        }
+                    }
             } else {
                 fragment = MainActivity.juego as Juego
                 fragment.resultadoMiniJuego(ganado)

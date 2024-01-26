@@ -1,22 +1,19 @@
 package com.example.trivialnavidad.core.feature.juego.viewModel
 
 import android.content.Context
-import android.content.DialogInterface
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import com.example.trivialnavidad.R
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import androidx.appcompat.app.AlertDialog.Builder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.app.Reproductor
 import com.example.trivialnavidad.app.Vibracion
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class Dado(private val contexto:Context ,private val imageViewDado: ImageView, private val vibracion: Vibracion?,private val reproductor: Reproductor? ) {
 
@@ -48,9 +45,11 @@ class Dado(private val contexto:Context ,private val imageViewDado: ImageView, p
             view.findViewById<Button>(R.id.bt_salir).visibility = View.VISIBLE
             deferred.complete(lastRandomNumber)
 
+            if(reproductor != null){
+                reproductor.detenerReproduccion()
+                if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.iniciarReproduccion()
+            }
         }
-        reproductor?.detenerReproduccion()
-        if (MainActivity.configuracion?.obtenerOpcionMusica()!!)MainActivity.reproductor?.iniciarReproduccion()
 
 
         // Espera a que la corrutina termine y obtén el último número aleatorio

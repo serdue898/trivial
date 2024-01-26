@@ -33,7 +33,6 @@ import com.example.trivialnavidad.core.feature.juego.viewModel.Tablero
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
 class Juego : Fragment() {
 
@@ -56,12 +55,14 @@ class Juego : Fragment() {
 
 
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view : View?
         contexto = container?.context
         avatarImages  = contexto?.resources!!.obtainTypedArray(R.array.avatar_images)
         val conexion = Conexion(contexto!!)
         if (vista == null){
+            MainActivity.jugadorActual?.partida = partida!!
             vista = inflater.inflate(R.layout.juego, container, false)
             view = vista
             if (partida != null) partidaActual = partida!!
@@ -90,7 +91,7 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 socket?.on("moverJugadorOnline") { args ->
                     Log.d("DEBUG", "Evento moverJugadorOnline recibido")
-                    val jugadorjson = args[0] as JSONObject
+                    val jugadorjson = args[0]
                     // Manejar la lista de jugadores en tu aplicación Android
                     // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
                     val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
@@ -98,6 +99,35 @@ class Juego : Fragment() {
                 actualizarJugadorOnline(jugador)
             }
 
+
+        }
+        (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                socket?.on("ganador") { args ->
+                    Log.d("DEBUG", "Evento partidaGanada recibido")
+                    val jugadorjson = args[0]
+                    val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
+                    jugador.jugador =
+                        jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.jugador
+
+
+                    val popup = AlertDialog.Builder(contexto as AppCompatActivity)
+                    popup.setTitle("Partida ganada")
+                    popup.setCancelable(false)
+                    popup.setMessage("jugador" + jugador.jugador?.nombre + "ha ganado la partida")
+                    popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, which ->
+                        MainActivity.jugadorActual?.partida = 0
+                        socket?.emit("desloggear",jugadorActual?.toJson())
+                        comunicador?.salir(contexto!!)
+                        dialog.dismiss()
+                    }
+                    (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
+                        withContext(Dispatchers.Main) {
+                            popup.show()
+                        }
+                    }
+                }
+            }
         }
 
         dado?.setOnClickListener {
@@ -106,8 +136,6 @@ class Juego : Fragment() {
                 withContext(Dispatchers.Main) {
                     tirarDado()
                 }}
-
-
         }
         clasificacion?.setOnClickListener {
             comunicador?.abrirClasificacion(jugadoresEnPartida, contexto!!)
@@ -116,65 +144,58 @@ class Juego : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        jugadorActual = jugadoresEnPartida[jugador]
+        if (tipo == "offline") {
+            jugadorActual = jugadoresEnPartida[jugador]
+        }
         actualizarJugador(jugadorActual)
-        if (cargar){
+        if (cargar && tipo == "offline"){
             val dado = view.findViewById<Button>(R.id.bt_dado)
             dado?.isEnabled = true
             cargar = false
         }
-        if (jugadorTemp != null && cargarOnline){
+        if (jugadorTemp != null){
+            metodosTablero.actualizartablero(jugadoresEnPartida)
+            cargarOnline = true
             actualizarJugadorOnline(jugadorTemp!!)
             jugadorTemp = null
-            cargarOnline = false
-        }else if (jugadorTemp != null ){
-            actualizarJugadorOnline(jugadorTemp!!)
-            jugadorTemp = null
+
         }
     }
     fun actualizarJugadorOnline(jugador: JugadorEnPartida){
+        if (jugadorTemp !=null && !cargarOnline){
+            return
+        }
         if (view == null) {
             jugadorTemp = jugador
             return
         }
+        cargarOnline = false
         val dado = view?.findViewById<Button>(R.id.bt_dado)
         val posicionAntigua = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }?.casillaActual
+        activity?.runOnUiThread {
 
-        if (jugador.partida == partidaActual) {
+                if (jugador.id_jugador == jugadorActual?.id_jugador) {
 
-
-            activity?.runOnUiThread {
-                jugadoresEnPartida[jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador })] =
-                    jugador
-                if (!jugador.jugadorActual) {
-                    if (jugadorActual?.id_jugador == jugador.id_jugador) {
-                        this.jugador++
-                        if (this.jugador >= jugadoresEnPartida.size) {
-                            this.jugador = 0
-                        }
-                        val jugadorNuevo = jugadoresEnPartida[this.jugador]
-                        jugadorNuevo.jugadorActual = true
-                        jugadorActual = jugadorNuevo
-                    }
+                    metodosTablero.moverOnline(jugador, posicionAntigua!!)
 
                 } else {
                     jugadorActual = jugador
                 }
-                if (jugador.id_jugador == MainActivity.jugadorActual?.id_jugador) {
-                    metodosTablero.moverOnline(jugador, casillaTemp)
-                } else {
-                    metodosTablero.moverOnline(jugador, posicionAntigua!!)
-                }
-                dado?.isEnabled =
-                    jugadorActual?.id_jugador == MainActivity.jugadorActual?.id_jugador
-                actualizarJugador(jugadorActual)
+            jugadoresEnPartida[jugadoresEnPartida.indexOf(jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador })] =jugador
+            metodosTablero.actualizartablero(jugadoresEnPartida)
+            dado?.isEnabled = jugadorActual?.id_jugador == MainActivity.jugadorActual?.id_jugador
+            actualizarJugador(jugadorActual)
             }
-        }
+
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
             inflater.inflate(R.menu.menu_juego_view, menu)// OJO- se pasa la vista que se quiere inflar
-
+            if (tipo == "online"){
+                val item = menu.findItem(R.id.mItm_guardar)
+                item.isVisible = false
+                val item2 = menu.findItem(R.id.mItm_GuardarSalir)
+                item2.title = "Salir"
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -182,7 +203,11 @@ class Juego : Fragment() {
         return when (item.itemId) {
 
             R.id.mItm_GuardarSalir -> {
-                guardarDatos()
+                if (tipo == "online"){
+                    socket?.emit("desconectar",jugadorActual?.toJson())
+                }else {
+                    guardarDatos()
+                }
                 comunicador?.salir(contexto!!)
                 true
             }
@@ -209,8 +234,6 @@ class Juego : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 
     private fun guardarDatos() {
         val conexion = Conexion(contexto!!)
@@ -257,9 +280,9 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 var vibracion = null as Vibracion?
-                val sonido = null as Reproductor?
+                var sonido = null as Reproductor?
                 if (MainActivity.configuracion?.obtenerOpcionVibracion()!!) vibracion = Vibracion(contexto!!)
-                //if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.lobby_music)
+                if (MainActivity.configuracion?.obtenerOpcionSonido()!!) sonido = Reproductor(contexto!!,R.raw.tirada)
                 val movimientos = Dado(contexto as AppCompatActivity,dado,vibracion,sonido).cambiarImagenCadaSegundo(view)
                 boton.setOnClickListener {
                     tirada(movimientos,construido)
@@ -278,12 +301,18 @@ class Juego : Fragment() {
     }
     fun resultadoMiniJuego(ganado :Boolean){
         val conexion = Conexion(contexto!!)
-        val jugadorActual = jugadoresEnPartida[jugador]
+        var jugadorenviar : JugadorEnPartida? = null
         val dado = view?.findViewById<Button>(R.id.bt_dado)
         cargarOnline = true
-        if(tipo=="offline") dado?.isEnabled = true
+        if(tipo=="offline"){
+            jugadorenviar =  jugadoresEnPartida[jugador]
+            dado?.isEnabled = true
+        }
+        else{
+            jugadorenviar = jugadorActual
+        }
         if (!ganado){
-            jugadorActual.jugadorActual = false
+            jugadorenviar?.jugadorActual = false
             if (tipo=="offline") {
                 jugador++
                 if (jugador >= jugadoresEnPartida.size) {
@@ -297,11 +326,19 @@ class Juego : Fragment() {
         }
         cargar = true
         if (tipo == "online"){
-            socket?.emit("moverJugador",jugadorActual.toJson())
+
+
+            jugadorenviar?.casillaActual=metodosTablero.jugadorActual?.casillaActual!!
+            jugadorenviar?.jugadorActual = ganado
+            socket?.emit("moverJugador",jugadorenviar?.toJson())
         }
-        if(tipo=="offline")conexion.actualizarCasillaActual(jugadorActual)
+        if(tipo=="offline")conexion.actualizarCasillaActual(jugadorenviar!!)
 
 
 
+    }
+    override fun onResume() {
+        super.onResume()
+        metodosTablero.preguntas.verificarConexionYRecargarPreguntas()
     }
 }

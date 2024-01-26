@@ -10,9 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trivialnavidad.R
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.minijuegos.parejas.view.Parejas
-import com.example.trivialnavidad.core.feature.seleccionJugadores.view.SeleccionJugador
 
 class ListaAdapterParejas(
     private val opciones: List<String>,
@@ -46,7 +44,7 @@ class ListaAdapterParejas(
             holder.contenedor.addView(imagen)
         }
         holder.itemView.setOnClickListener {
-            Parejas.seleccionado = opcion
+            Parejas.seleccionado = holder.contenedor
         }
 
 

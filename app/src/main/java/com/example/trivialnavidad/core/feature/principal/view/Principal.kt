@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,6 +20,8 @@ import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
 import com.example.trivialnavidad.core.feature.principal.viewModel.ComunicadorPrincipal
 import com.example.trivialnavidad.core.feature.principal.viewModel.MetodosPrincipal
 import io.socket.client.IO
+import java.lang.Thread.sleep
+import java.util.regex.Pattern
 
 class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
@@ -30,6 +33,8 @@ class Principal : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.principal, container, false)
         contexto = container?.context
+        desloggear()
+
 
         val botonOff = view.findViewById<Button>(R.id.bt_offline)
         val botonOn = view.findViewById<Button>(R.id.bt_online)
@@ -64,6 +69,7 @@ class Principal : Fragment() {
                 try {
                     MainActivity.socket = IO.socket("http://192.168.0.202:5000")
                     MainActivity.socket?.connect()
+                    sleep(100)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -88,6 +94,7 @@ class Principal : Fragment() {
             botonOff.visibility = View.VISIBLE
             botonOn.visibility = View.VISIBLE
             botonVolver.visibility = View.INVISIBLE
+            desloggear()
         }
 
         // Se devuelve la vista inflada.
@@ -107,6 +114,12 @@ class Principal : Fragment() {
         botonOn?.visibility = View.INVISIBLE
         botonVolver?.visibility = View.VISIBLE
 
+    }
+    private fun desloggear(){
+        if (MainActivity.jugadorActual != null) {
+            val socket = MainActivity.socket
+            socket?.emit("desloggear", MainActivity.jugadorActual?.nombre)
+        }
     }
     private fun login(){
         val popupLogin = AlertDialog.Builder(contexto as AppCompatActivity)
@@ -157,34 +170,44 @@ class Principal : Fragment() {
         popupLogin.setNegativeButton("Cancelar") { dialog, _ ->
             dialog.dismiss()
         }
-        popupLogin.setNeutralButton ("Registrarse"){_, _ ->
+        popupLogin.setNeutralButton ("Registrarse") { _, _ ->
             val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
             val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
-            val socket = MainActivity.socket
-            val jugador = Jugador(0,nombre,"0")
-            jugador.contraseña = contrasena
-            socket?.emit("registrarJugador", jugador.toJson())
-            socket?.on("registrarJugador") { args ->
-                val jugador = args[0]
+            if (nombre == "" || contrasena == "") {
+                Toast.makeText(contexto, "Rellene todos los campos", Toast.LENGTH_SHORT).show()
+            } else if (!isValidPassword(contrasena)) {
+                Toast.makeText(
+                    contexto,
+                    "La contraseña debe tener al menos 5 caracteres y una mayuscula y un numero",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }else{
+                val socket = MainActivity.socket
+                val jugador = Jugador(0, nombre, "0")
+                jugador.contraseña = contrasena
+                socket?.emit("registrarJugador", jugador.toJson())
+                socket?.on("registrarJugador") { args ->
+                    val jugador = args[0]
 
-                if (jugador == "null") {
-                    (contexto as AppCompatActivity).runOnUiThread {
-                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                        errorPopup.setTitle("Error")
-                        errorPopup.setMessage("Ya existe un usuario con ese nombre")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
-                            dialog.dismiss()
+                    if (jugador == "null") {
+                        (contexto as AppCompatActivity).runOnUiThread {
+                            val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                            errorPopup.setTitle("Error")
+                            errorPopup.setMessage("Ya existe un usuario con ese nombre")
+                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            errorPopup.show()
                         }
-                        errorPopup.show()
+                    } else {
+
+                        MainActivity.jugadorActual = Jugador.fromJson(jugador.toString())
+                        activity?.runOnUiThread {
+                            mostrarOnline()
+                        }
+
+
                     }
-                } else {
-
-                    MainActivity.jugadorActual= Jugador.fromJson(jugador.toString())
-                    activity?.runOnUiThread {
-                        mostrarOnline()
-                    }
-
-
                 }
             }
         }
@@ -192,6 +215,12 @@ class Principal : Fragment() {
             popupLogin.show()
         }
 
+    }
+    fun isValidPassword(password: String): Boolean {
+        val passwordPattern = "^(?=.*[0-9])(?=.*[A-Z]).{5,}$"
+        val pattern = Pattern.compile(passwordPattern)
+        val matcher = pattern.matcher(password)
+        return matcher.matches()
     }
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
