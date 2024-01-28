@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.provider.Settings
-import android.util.Log
 import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -28,103 +27,118 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Tablero (private var gridTablero: GridLayout, var contexto: Context, private var jugadores: List<JugadorEnPartida>,private val tipo :String
+/**
+ * Clase Tablero: Gestiona la interfaz y las interacciones del tablero de juego del Trivial.
+ *
+ * @property gridTablero Referencia al GridLayout que representa el tablero de juego.
+ * @property contexto Contexto de la aplicación.
+ * @property jugadores Lista de jugadores en la partida.
+ * @property tipo Tipo de partida ("offline" u "online").
+ * @property jugadorActual Jugador que realiza la acción en el tablero.
+ */
+class Tablero(
+    private var gridTablero: GridLayout,
+    var contexto: Context,
+    private var jugadores: List<JugadorEnPartida>,
+    private val tipo: String
 ) {
-    var jugadorActual : JugadorEnPartida? = null
+    var jugadorActual: JugadorEnPartida? = null
     private var posiblesMovimientos = mutableListOf<Casilla>()
     val juego = MainActivity.juego as Juego
     val preguntas = Preguntas(contexto)
     private val avatarImages = contexto.resources.obtainTypedArray(R.array.avatar_images)
-    private val colores =  contexto.resources.obtainTypedArray(R.array.colores)
+    private val colores = contexto.resources.obtainTypedArray(R.array.colores)
     private val tableroVersionUno = arrayOf(
-        arrayOf("4","1","2","3","4","1","2","3","4"),
-        arrayOf("3","0","0","0","3","0","0","0","1"),
-        arrayOf("2","0","0","0","2","0","0","0","2"),
-        arrayOf("1","0","0","0","1","0","0","0","3"),
-        arrayOf("4","3","2","1","5","1","2","3","4"),
-        arrayOf("3","0","0","0","1","0","0","0","1"),
-        arrayOf("2","0","0","0","2","0","0","0","2"),
-        arrayOf("1","0","0","0","3","0","0","0","3"),
-        arrayOf("4","3","2","1","4","3","2","1","4"),
+        arrayOf("4", "1", "2", "3", "4", "1", "2", "3", "4"),
+        arrayOf("3", "0", "0", "0", "3", "0", "0", "0", "1"),
+        arrayOf("2", "0", "0", "0", "2", "0", "0", "0", "2"),
+        arrayOf("1", "0", "0", "0", "1", "0", "0", "0", "3"),
+        arrayOf("4", "3", "2", "1", "5", "1", "2", "3", "4"),
+        arrayOf("3", "0", "0", "0", "1", "0", "0", "0", "1"),
+        arrayOf("2", "0", "0", "0", "2", "0", "0", "0", "2"),
+        arrayOf("1", "0", "0", "0", "3", "0", "0", "0", "3"),
+        arrayOf("4", "3", "2", "1", "4", "3", "2", "1", "4"),
     )
-    fun asignarJugadores(){
-        for (jugador in jugadores){
-            val fila  = jugador.casillaActual.split("_")[0].toInt()
+
+    /**
+     * Método asignarJugadores: Asigna a cada jugador en la partida a la casilla correspondiente en el tablero.
+     */
+    fun asignarJugadores() {
+        for (jugador in jugadores) {
+            val fila = jugador.casillaActual.split("_")[0].toInt()
             val columna = jugador.casillaActual.split("_")[1].toInt()
-            val casilla = obtenerCasilla(fila,columna)
+            val casilla = obtenerCasilla(fila, columna)
             casilla?.addJugador(jugador)
             rellenarCasilla(casilla!!)
         }
     }
-    fun actualizartablero(jugadores: List<JugadorEnPartida>){
+
+    /**
+     * Método actualizartablero: Actualiza la interfaz del tablero al cambiar la posición de los jugadores.
+     *
+     * @param jugadores Lista actualizada de jugadores en la partida.
+     */
+    fun actualizartablero(jugadores: List<JugadorEnPartida>) {
         gridTablero.removeAllViews()
         crearTablero()
-        for (jugador in jugadores){
-            val fila  = jugador.casillaActual.split("_")[0].toInt()
+        for (jugador in jugadores) {
+            val fila = jugador.casillaActual.split("_")[0].toInt()
             val columna = jugador.casillaActual.split("_")[1].toInt()
-            val casilla = obtenerCasilla(fila,columna)
+            val casilla = obtenerCasilla(fila, columna)
             casilla?.addJugador(jugador)
             rellenarCasilla(casilla!!)
         }
     }
 
-    fun  crearTablero(){
+    /**
+     * Método crearTablero: Inicializa el tablero de juego, asigna dificultades y eventos a las casillas.
+     */
+    fun crearTablero() {
         preguntas.cargarPreguntas()
-        gridTablero.rowCount=9
-        gridTablero.columnCount=9
-        ////
-        // amarillo dorado #FFD700
-        // azul claro HEX: #1E90FF
-        // rojo crimson HEX: #DC143C
-        // verde HEX: #008000
-        // magenta oscuro HEX: #8B008B
-        for(i in 0 until gridTablero.rowCount){
+        gridTablero.rowCount = 9
+        gridTablero.columnCount = 9
 
-            for (j in 0 until gridTablero.columnCount){
-
-                val casilla = Casilla (contexto,i,j)
-                casilla.rowCount=3
-                casilla.columnCount=3
+        for (i in 0 until gridTablero.rowCount) {
+            for (j in 0 until gridTablero.columnCount) {
+                val casilla = Casilla(contexto, i, j)
+                casilla.rowCount = 3
+                casilla.columnCount = 3
                 val dificultad = tableroVersionUno[i][j].toInt()
-                casilla.layoutParams= GridLayout.LayoutParams().apply {
+                casilla.layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
                     height = 0
                     columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                     rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 }
                 casilla.dificultad = dificultad
-                casilla.color = colores.getColor(dificultad,0)
+                casilla.color = colores.getColor(dificultad, 0)
                 casilla.setBackgroundColor(casilla.color)
                 casilla.setOnClickListener {
-
-                      if (tipo=="offline")  {
-                          moverVista( casilla)
-                      }else{
-                          jugadorActual?.casillaActual = casilla.fila.toString() +"_"+ casilla.columna.toString()
-                          val socket = MainActivity.socket
-                          socket?.emit("moverJugador",jugadorActual?.toJson())
-                          reiniciarMovimientos()
-                      }
+                    if (tipo == "offline") {
+                        moverVista(casilla)
+                    } else {
+                        jugadorActual?.casillaActual = casilla.fila.toString() + "_" + casilla.columna.toString()
+                        val socket = MainActivity.socket
+                        socket?.emit("moverJugador", jugadorActual?.toJson())
+                        reiniciarMovimientos()
+                    }
                     asignarMinijuegos(casilla)
                 }
                 casilla.isEnabled = false
-
-
                 gridTablero.addView(casilla)
             }
-
         }
-
-        ////
-
-
-
     }
-    private fun asignarMinijuegos(casilla: Casilla){
+
+    /**
+     * Método asignarMinijuegos: Asigna un minijuego a la casilla según la dificultad.
+     *
+     * @param casilla Casilla en la que se encuentra el jugador.
+     */
+    private fun asignarMinijuegos(casilla: Casilla) {
         val preguntasMinijuego = preguntas.preguntasDificultad(casilla.dificultad)
 
         if (preguntasMinijuego == null) {
-
             val alert = AlertDialog.Builder(contexto)
             alert.setTitle(contexto.getString(R.string.juego))
             alert.setCancelable(false)
@@ -133,10 +147,9 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                 val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
                 contexto.startActivity(intent)
                 dialog.dismiss()
-
             }
             alert.show()
-        }else {
+        } else {
             val pregunta = preguntasMinijuego.random()
             var minijuego: Fragment? = null
             when (casilla.dificultad) {
@@ -153,29 +166,18 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         }
                         listaPtreguntas.add(preguntaNueva!!)
                     }
-                    minijuego = Test(listaPtreguntas, jugadorActual!!, false,tipo)
-
-
+                    minijuego = Test(listaPtreguntas, jugadorActual!!, false, tipo)
                 }
-
                 2 -> {
                     minijuego = Adivina(pregunta, jugadorActual!!)
-
-                    //falta terminar
-
-
+                    // Falta terminar
                 }
-
                 3 -> {
                     minijuego = Repaso(pregunta, jugadorActual!!)
-
-
                 }
-
                 4 -> {
                     minijuego = Parejas(pregunta, jugadorActual!!)
                 }
-
                 5 -> {
                     var entrar = true
                     jugadorActual?.juegos?.forEach {
@@ -186,7 +188,7 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     if (entrar) {
                         val listaPtreguntas: MutableList<Pregunta> = mutableListOf()
                         listaPtreguntas.add(pregunta)
-                        minijuego = Test(listaPtreguntas, jugadorActual!!, true,tipo)
+                        minijuego = Test(listaPtreguntas, jugadorActual!!, true, tipo)
                     } else {
                         val alert = AlertDialog.Builder(contexto)
                         alert.setTitle(contexto.getString(R.string.juego_final))
@@ -198,7 +200,6 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                         juego.resultadoMiniJuego(true)
                     }
                 }
-
                 else -> {
                     juego.resultadoMiniJuego(true)
                 }
@@ -210,24 +211,28 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     fragmentManager.beginTransaction()
                         .replace(R.id.contenedor, minijuego)
                         .commit()
-
                 }
-
             }
         }
     }
-    fun moverOnline(jugador: JugadorEnPartida,jugadorAntiguo: String){
-        val fila  = jugador.casillaActual.split("_")[0].toInt()
+
+    /**
+     * Método moverOnline: Actualiza la posición de un jugador en el tablero durante una partida en línea.
+     *
+     * @param jugador Jugador que se está moviendo.
+     * @param jugadorAntiguo Posición antigua del jugador.
+     */
+    fun moverOnline(jugador: JugadorEnPartida, jugadorAntiguo: String) {
+        val fila = jugador.casillaActual.split("_")[0].toInt()
         val columna = jugador.casillaActual.split("_")[1].toInt()
-        val casilla = obtenerCasilla(fila,columna)
-        val casillaAntigua = obtenerCasilla(jugadorAntiguo.split("_")[0].toInt(),jugadorAntiguo.split("_")[1].toInt())
-        if (jugador.casillaActual==jugadorAntiguo ){
+        val casilla = obtenerCasilla(fila, columna)
+        val casillaAntigua = obtenerCasilla(jugadorAntiguo.split("_")[0].toInt(), jugadorAntiguo.split("_")[1].toInt())
+        if (jugador.casillaActual == jugadorAntiguo) {
             return
         }
 
-
         val continuar = casillaAntigua?.removeJugador(jugador.id_jugador)
-        if (continuar!!){
+        if (continuar!!) {
             rellenarCasilla(casillaAntigua)
         }
 
@@ -236,20 +241,35 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
         jugadorActual = jugador
         reiniciarMovimientos()
     }
-    fun moverJugador(jugador:JugadorEnPartida , movimientos : Int){
-        val x  = jugador.casillaActual.split("_")[0].toInt()
+
+    /**
+     * Método moverJugador: Inicia el movimiento de un jugador en el tablero durante una partida offline.
+     *
+     * @param jugador Jugador que se está moviendo.
+     * @param movimientos Número de casillas que puede avanzar el jugador.
+     */
+    fun moverJugador(jugador: JugadorEnPartida, movimientos: Int) {
+        val x = jugador.casillaActual.split("_")[0].toInt()
         val y = jugador.casillaActual.split("_")[1].toInt()
         jugadorActual = jugador
-        posiblesMovimientos(x, y, movimientos,"",jugador)
-
+        posiblesMovimientos(x, y, movimientos, "", jugador)
     }
 
 
+
+    /**
+     * Método para calcular y mostrar los posibles movimientos de un jugador en el tablero.
+     *
+     * @param fila Fila actual del jugador.
+     * @param columna Columna actual del jugador.
+     * @param movimientos Número de movimientos disponibles.
+     * @param direction Dirección del último movimiento.
+     * @param jugador Jugador actual.
+     */
     private fun posiblesMovimientos(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (movimientos == 0) {
             (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
                 withContext(Dispatchers.Main) {
-
                     val casilla = obtenerCasilla(fila, columna)
                     posiblesMovimientos.add(casilla!!)
                     val colorFondo = (casilla.background as? ColorDrawable)?.color
@@ -262,70 +282,101 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
                     casilla.isEnabled = true
                 }
             }
-
             return
         }
-        if (fila==4 && columna==4 ){
-            Log.d("da","entro")
-        }
-        if (direction!="izquierda")moverEnDireccion(fila, columna+1, movimientos - 1,"derecha",jugador)
-        if (direction!="derecha")moverEnDireccion(fila, columna-1, movimientos - 1,"izquierda",jugador)
-        if (direction!="abajo")moverEnDireccion(fila-1, columna, movimientos - 1,"arriba",jugador)
-        if (direction!="arriba")moverEnDireccion(fila+1, columna, movimientos - 1,"abajo",jugador)
+
+        if (direction != "izquierda") moverEnDireccion(fila, columna + 1, movimientos - 1, "derecha", jugador)
+        if (direction != "derecha") moverEnDireccion(fila, columna - 1, movimientos - 1, "izquierda", jugador)
+        if (direction != "abajo") moverEnDireccion(fila - 1, columna, movimientos - 1, "arriba", jugador)
+        if (direction != "arriba") moverEnDireccion(fila + 1, columna, movimientos - 1, "abajo", jugador)
     }
 
-    private fun moverEnDireccion(fila: Int, columna: Int, movimientos: Int,direction:String,jugador: JugadorEnPartida) {
+    /**
+     * Método auxiliar para realizar un movimiento en una dirección específica.
+     *
+     * @param fila Fila actual del jugador.
+     * @param columna Columna actual del jugador.
+     * @param movimientos Número de movimientos disponibles.
+     * @param direction Dirección del último movimiento.
+     * @param jugador Jugador actual.
+     */
+    private fun moverEnDireccion(fila: Int, columna: Int, movimientos: Int, direction: String, jugador: JugadorEnPartida) {
         if (fila in 0 until gridTablero.columnCount && columna in 0 until gridTablero.rowCount) {
-            if (!comprobarCasilla(fila,columna)) {
-                posiblesMovimientos( fila, columna, movimientos,direction,jugador)
+            if (!comprobarCasilla(fila, columna)) {
+                posiblesMovimientos(fila, columna, movimientos, direction, jugador)
             }
         }
     }
 
+    /**
+     * Método auxiliar para obtener la casilla en una posición específica del tablero.
+     *
+     * @param fila Fila de la casilla.
+     * @param columna Columna de la casilla.
+     * @return La casilla correspondiente a la posición dada.
+     */
     private fun obtenerCasilla(fila: Int, columna: Int): Casilla? {
-        return gridTablero.getChildAt(fila  * gridTablero.columnCount + columna) as? Casilla
+        return gridTablero.getChildAt(fila * gridTablero.columnCount + columna) as? Casilla
     }
 
-    private fun comprobarCasilla(fila :Int, columna:Int):Boolean{
+    /**
+     * Método auxiliar para comprobar si una casilla es válida (no es de color negro).
+     *
+     * @param fila Fila de la casilla.
+     * @param columna Columna de la casilla.
+     * @return `true` si la casilla es válida, `false` en caso contrario.
+     */
+    private fun comprobarCasilla(fila: Int, columna: Int): Boolean {
         val casilla = gridTablero.getChildAt(fila * gridTablero.columnCount + columna) as Casilla
         val colorDeFondo = (casilla.background as? ColorDrawable)?.color
         return colorDeFondo == ContextCompat.getColor(contexto, R.color.negro)
     }
 
-    private fun moverVista(casillaNueva: Casilla){
-        val fila  = jugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
+    /**
+     * Método auxiliar para realizar el movimiento en la interfaz gráfica al seleccionar una casilla.
+     *
+     * @param casillaNueva Casilla de destino del movimiento.
+     */
+    private fun moverVista(casillaNueva: Casilla) {
+        val fila = jugadorActual?.casillaActual?.split("_")?.get(0)?.toInt()
         val columna = jugadorActual?.casillaActual?.split("_")?.get(1)?.toInt()
-        val casilla = obtenerCasilla(fila!!,columna!!)
+        val casilla = obtenerCasilla(fila!!, columna!!)
 
         casillaNueva.addJugador(jugadorActual!!)
         rellenarCasilla(casillaNueva)
         casilla?.removeJugador(jugadorActual!!)
         rellenarCasilla(casilla!!)
 
-        jugadorActual!!.casillaActual= casillaNueva.fila.toString() +"_"+ casillaNueva.columna.toString()
+        jugadorActual!!.casillaActual = "${casillaNueva.fila}_${casillaNueva.columna}"
         reiniciarMovimientos()
-
     }
 
-    private fun reiniciarMovimientos(){
+    /**
+     * Método auxiliar para reiniciar los movimientos posibles y sus colores en el tablero.
+     */
+    private fun reiniciarMovimientos() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
-                for ( casilla in posiblesMovimientos){
+                for (casilla in posiblesMovimientos) {
                     casilla.setBackgroundColor(casilla.color)
                     casilla.isEnabled = false
                 }
                 posiblesMovimientos.clear()
             }
         }
-
     }
 
-    private fun rellenarCasilla(casilla: Casilla){
+    /**
+     * Método auxiliar para rellenar visualmente una casilla con los avatares de los jugadores presentes en ella.
+     *
+     * @param casilla Casilla que se va a rellenar.
+     */
+    private fun rellenarCasilla(casilla: Casilla) {
         casilla.removeAllViews()
-        for (jugador in casilla.jugadores){
+        for (jugador in casilla.jugadores) {
             val nuevoJugador = ImageView(contexto)
             nuevoJugador.setImageDrawable(avatarImages.getDrawable(jugador.avatar.toInt()))
-            nuevoJugador.layoutParams= GridLayout.LayoutParams().apply {
+            nuevoJugador.layoutParams = GridLayout.LayoutParams().apply {
                 width = 0
                 height = 0
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
@@ -333,7 +384,6 @@ class Tablero (private var gridTablero: GridLayout, var contexto: Context, priva
             }
             casilla.addView(nuevoJugador)
         }
-
     }
 
 

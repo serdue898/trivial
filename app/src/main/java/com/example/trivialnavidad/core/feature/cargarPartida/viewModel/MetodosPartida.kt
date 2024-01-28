@@ -12,15 +12,26 @@ import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.principal.view.Principal
 import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
 
-class MetodosPartida(val context: Context): ComunicadorPartida {
-    override fun cargarPartida(partida: Partida ) {
-        val fragment :Fragment
+/**
+ * Clase MetodosPartida: Implementa la interfaz ComunicadorPartida para gestionar la carga de partidas y la navegación
+ * entre fragmentos relacionados con las partidas en la aplicación Trivial Navidad.
+ *
+ * @property context Contexto de la aplicación.
+ */
+class MetodosPartida(val context: Context) : ComunicadorPartida {
+
+    /**
+     * Carga la partida correspondiente según su estado y muestra el fragmento correspondiente.
+     *
+     * @param partida Partida a cargar.
+     */
+    override fun cargarPartida(partida: Partida) {
+        val fragment: Fragment
         if (context is AppCompatActivity) {
             if (partida.finalizada) {
                 val conexion = Conexion(context)
                 val jugadores = conexion.obtenerJugadoresEnPartida(partida.idPartida).sortedBy { it.puntosJugador() }
-
-                fragment = Clasifiaccion(jugadores,true)
+                fragment = Clasifiaccion(jugadores, true)
             } else {
                 MainActivity.juego = Juego()
                 MainActivity.juego?.partida = partida.idPartida
@@ -30,11 +41,13 @@ class MetodosPartida(val context: Context): ComunicadorPartida {
             fragmentManager.beginTransaction()
                 .replace(R.id.contenedor, fragment)
                 .commit()
-
         }
-
     }
-    override fun volver( ) {
+
+    /**
+     * Vuelve al fragmento principal de la aplicación.
+     */
+    override fun volver() {
         if (context is AppCompatActivity) {
             val inicio = Principal()
             val fragmentManager = context.supportFragmentManager
@@ -42,9 +55,14 @@ class MetodosPartida(val context: Context): ComunicadorPartida {
                 .replace(R.id.contenedor, inicio)
                 .commit()
         }
-
     }
 
+    /**
+     * Inicia el proceso para unirse a una partida en línea.
+     *
+     * @param idPartida Identificador de la partida a unirse.
+     * @param contexto Contexto de la aplicación.
+     */
     override fun unirseAPartida(idPartida: Int, contexto: Context) {
         if (context is AppCompatActivity) {
             val unirse = UnirseOnline(idPartida)
@@ -54,6 +72,4 @@ class MetodosPartida(val context: Context): ComunicadorPartida {
                 .commit()
         }
     }
-
-
 }

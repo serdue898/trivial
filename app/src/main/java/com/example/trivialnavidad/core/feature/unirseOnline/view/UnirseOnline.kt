@@ -57,7 +57,7 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
-        inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
+        inflater.inflate(R.menu.menu_general_view, menu)
 
     }
 
@@ -86,94 +86,111 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        // Obtener referencias a las vistas necesarias
         val bGuardarjugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val nombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
         nombreJugador.isEnabled = false
         nombreJugador.setText(MainActivity.jugadorActual?.nombre)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
+        // Obtener las imágenes de avatar
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
         val avatares = List(avatarImages!!.length()) { i -> i }
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
+
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
+
         val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         val socket = MainActivity.socket
-        if (!host)socket?.emit("actualizarJugadores",idPartida)
+
+        // Si no es el host, solicitar la lista de jugadores
+        if (!host) socket?.emit("actualizarJugadores", idPartida)
+
         socket?.on("listaJugadores") { args ->
             val listaJugadores = args[0] as JSONArray
-            // Manejar la lista de jugadores en tu aplicación Android
-            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
 
+            // Manejar la lista de jugadores en tu aplicación Android
             jugadoresEnPartida.clear()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = Jugador.fromJson(listaJugadores[i].toString())
-                if (jugador.partida == idPartida)jugadoresEnPartida.add(jugador)
+                if (jugador.partida == idPartida) jugadoresEnPartida.add(jugador)
             }
-            val hostPreparado  = jugadoresEnPartida.find { it.nombre == MainActivity.jugadorActual?.nombre}?.host
-            if (hostPreparado!=null) {
+
+            // Obtener si el jugador local es el host
+            val hostPreparado = jugadoresEnPartida.find { it.nombre == MainActivity.jugadorActual?.nombre }?.host
+            if (hostPreparado != null) {
                 host = hostPreparado
             }
 
+            // Actualizar la interfaz de usuario en el hilo principal
             activity?.runOnUiThread {
-                if (jugadoresEnPartida.size >=2 && host) {
+                // Mostrar o ocultar el botón de empezar partida según las condiciones
+                if (jugadoresEnPartida.size >= 2 && host) {
                     btEmpezarpartida?.visibility = View.VISIBLE
-                }else{
+                } else {
                     btEmpezarpartida?.visibility = View.INVISIBLE
                 }
                 actualizarLista()
             }
-
         }
+
+        // Manejar la señal de inicio de partida
         socket?.on("empezarPartida") { args ->
             val listaJugadores = args[0] as JSONArray
             emepzar = true
+
             // Manejar la lista de jugadores en tu aplicación Android
-            // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
-            val jugadores:MutableList<JugadorEnPartida> = mutableListOf()
+            val jugadores: MutableList<JugadorEnPartida> = mutableListOf()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
                 jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
                 jugadores.add(jugador)
             }
+
+            // Iniciar la partida
             empezarPartida(jugadores)
         }
+
+        // Configurar el botón de guardar jugador
         bGuardarjugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
+            // Evitar la creación de más jugadores si ya se alcanzó el límite
             if (jugadoresEnPartida.size >= 6) {
                 Toast.makeText(contexto, getString(R.string.limite_jugadores), Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
+                // Permitir la elección de un avatar y agregar al jugador a la lista
                 eligiendo = true
-                agregarJugadorLista( )
-
+                agregarJugadorLista()
                 bGuardarjugador.isEnabled = false
             }
-
         }
+
+        // Configurar el botón de empezar partida
         btEmpezarpartida?.setOnClickListener {
-            
+            // Emitir la señal de inicio de partida al servidor
             socket?.emit("empezarPartida", idPartida)
         }
     }
 
-
-
-    private fun addJugadorOnline(jugador: Jugador){
+    // Método para agregar un jugador al juego online
+    private fun addJugadorOnline(jugador: Jugador) {
         val socket = MainActivity.socket
         jugador.host = host
         val jugadorJson = jugador.toJson()
         socket?.emit("addJugador", jugadorJson)
     }
 
-
-    private fun actualizarSpinner(){
+    // Método para actualizar el Spinner de avatares
+    private fun actualizarSpinner() {
         val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
-
         spinerAvatares?.adapter = listaspinner()
     }
+
+    // Método para obtener la lista de avatares disponibles
     private fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
         jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
@@ -185,6 +202,8 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
         }
         return SpinnerAdapter(contexto!!, avatares)
     }
+
+    // Método para editar la información de un jugador en la lista
     fun editarJugadorLista(jugador: Jugador) {
         val popup = AlertDialog.Builder(contexto)
         val view = layoutInflater.inflate(R.layout.editar_jugador, null)
@@ -199,12 +218,13 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
         popup.setPositiveButton(getString(R.string.guardar)) { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
                 Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
-
-            }else{
-
+            } else {
+                // Obtener la vista seleccionada en el Spinner
                 val viewSeleccionada = avatarJugador?.selectedView
-                val avatar=   viewSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
-                val posicion =avatar?.tag.toString().toInt()
+                val avatar = viewSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
+                val posicion = avatar?.tag.toString().toInt()
+
+                // Crear un nuevo jugador con la información actualizada
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
                 nuevoJugador.partida = idPartida
                 val socket = MainActivity.socket
