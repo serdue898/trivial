@@ -71,14 +71,14 @@ class Configuracion( context: Context) {
                 toggleDarkMode(isChecked)
                 guardarOcionTemas(isChecked)
             }else{
-                Toast.makeText(contexto,"Solo se cambia el tema en la pantalla de inicio",Toast.LENGTH_LONG).show()
+                Toast.makeText(contexto, contexto.getString(R.string.error_tema),Toast.LENGTH_LONG).show()
                 temas.isChecked = configuracion.obtenerOpcionTemas()
             }
         }
         popup.setView(vista)
-        popup.setTitle("Configuración")
+        popup.setTitle(contexto.getString(R.string.configuracion))
         popup.setCancelable(false)
-        popup.setPositiveButton("Aceptar") { _, _ ->
+        popup.setPositiveButton(contexto.getString(R.string.aceptar)) { _, _ ->
             configuracion.guardarOpcionMusica(musica.isChecked)
             configuracion.guardarOpcionSonido(sonido.isChecked)
             configuracion.guardarOpcionVibracion(vibracion.isChecked)

@@ -52,14 +52,6 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
 
-        /*
-        // codigo de clasificacion y no se si es necesario o no
-
-      val b_guardar = view.findViewById<Button>(R.id.bt_volver)
-        bt_volver.setOnClickListener {
-            comunicador?.volver(contexto!!)
-          }
-    */
         return view
     }
 
@@ -152,7 +144,7 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
-                Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.limite_jugadores), Toast.LENGTH_SHORT).show()
             }else{
                 eligiendo = true
                 agregarJugadorLista( )
@@ -204,9 +196,9 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
 
-        popup.setPositiveButton("Guardar") { _, _ ->
+        popup.setPositiveButton(getString(R.string.guardar)) { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
-                Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
 
             }else{
 
@@ -219,7 +211,7 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
                 socket?.emit("actualizarJugador", nuevoJugador.toJson())
             }
         }
-        popup.setNegativeButton("Cancelar") { dialog, _ ->
+        popup.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
         popup.show()
@@ -240,7 +232,7 @@ class UnirseOnline(private var idPartida :Int) : Fragment() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
         if (nombreJugador?.text.toString().isEmpty()) {
-            Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+            Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
             return
         }
         val view = avatarJugador?.selectedView

@@ -51,4 +51,21 @@
     <string name="cambiar_tema">Change Theme</string>
     <string name="empezar_a_jugar">Start playing</string>
     <string name="anadir_jugador">Add player</string>
+    <string name="error_tema">Theme can only be changed on the home screen</string>
+    <string name="configuracion">Settings</string>
+    <string name="partida_ganada">Game won</string>
+    <string name="jugador">Player</string>
+    <string name="ha_ganado_la_partida">has won the game</string>
+    <string name="error">Error</string>
+    <string name="error_server">Could not connect to the server</string>
+    <string name="fallo_login_usuario">Incorrect username or password</string>
+    <string name="usuario_loggeado">User is already logged in</string>
+    <string name="rellenar_campos">Fill in all fields</string>
+    <string name="requisitos_contrasena">Password must be at least 5 characters long and include one uppercase letter and one number</string>
+    <string name="error_registro">A user with that name already exists</string>
+    <string name="limite_jugadores">Cannot add more players</string>
+    <string name="nombre_vacio">Player name cannot be empty</string>
+    <string name="nombre_repetido">Player name cannot be repeated</string>
+    <string name="guardar">Save</string>
+    <string name="cancelar">Cancel</string>
 </resources>

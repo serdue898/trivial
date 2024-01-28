@@ -49,4 +49,21 @@
     <string name="cambiar_tema">Cambiar Tema</string>
     <string name="empezar_a_jugar">Empezar a jugar</string>
     <string name="anadir_jugador">Añadir jugador</string>
+    <string name="error_tema">Solo se cambia el tema en la pantalla de inicio</string>
+    <string name="configuracion">Configuración</string>
+    <string name="partida_ganada">Partida ganada</string>
+    <string name="jugador">jugador</string>
+    <string name="ha_ganado_la_partida">ha ganado la partida</string>
+    <string name="error">Error</string>
+    <string name="error_server">No se ha podido conectar con el servidor</string>
+    <string name="fallo_login_usuario">Usuario o contraseña incorrectos</string>
+    <string name="usuario_loggeado">Usuario ya esta loggeado</string>
+    <string name="rellenar_campos">Rellene todos los campos</string>
+    <string name="requisitos_contrasena">La contraseña debe tener al menos 5 caracteres y una mayuscula y un numero</string>
+    <string name="error_registro">Ya existe un usuario con ese nombre</string>
+    <string name="limite_jugadores">No se pueden añadir mas jugadores</string>
+    <string name="nombre_vacio">El nombre del jugador no puede estar vacío</string>
+    <string name="nombre_repetido">El jugador no puede estar repetido</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

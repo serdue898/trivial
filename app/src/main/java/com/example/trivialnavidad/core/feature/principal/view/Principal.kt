@@ -75,9 +75,9 @@ class Principal : Fragment() {
             }
             if (!MainActivity.socket?.connected()!!){
                 val alerta = AlertDialog.Builder(contexto as AppCompatActivity)
-                alerta.setTitle("Error")
-                alerta.setMessage("No se ha podido conectar con el servidor")
-                alerta.setPositiveButton("Aceptar") { dialog, _ ->
+                alerta.setTitle(getString(R.string.error))
+                alerta.setMessage(getString(R.string.error_server))
+                alerta.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 alerta.show()
@@ -125,7 +125,7 @@ class Principal : Fragment() {
         popupLogin.setTitle("Login")
         val view = (contexto as AppCompatActivity).layoutInflater.inflate(R.layout.login, null)
         popupLogin.setView(view)
-        popupLogin.setPositiveButton("Aceptar") { _, _ ->
+        popupLogin.setPositiveButton(getString(R.string.aceptar)) { _, _ ->
             val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
             val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             val socket = MainActivity.socket
@@ -137,9 +137,9 @@ class Principal : Fragment() {
                     "null", "error" -> {
                         (contexto as AppCompatActivity).runOnUiThread {
                             val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                            errorPopup.setTitle("Error")
-                            errorPopup.setMessage("Usuario o contraseña incorrectos")
-                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.fallo_login_usuario))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                                 dialog.dismiss()
                             }
                             errorPopup.show()
@@ -149,9 +149,9 @@ class Principal : Fragment() {
                     "loggeado" -> {
                         (contexto as AppCompatActivity).runOnUiThread {
                             val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                            errorPopup.setTitle("Error")
-                            errorPopup.setMessage("Usuario ya esta loggeado")
-                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.usuario_loggeado))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                                 dialog.dismiss()
                             }
                             errorPopup.show()
@@ -174,11 +174,11 @@ class Principal : Fragment() {
             val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
             val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             if (nombre == "" || contrasena == "") {
-                Toast.makeText(contexto, "Rellene todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.rellenar_campos), Toast.LENGTH_SHORT).show()
             } else if (!isValidPassword(contrasena)) {
                 Toast.makeText(
                     contexto,
-                    "La contraseña debe tener al menos 5 caracteres y una mayuscula y un numero",
+                    getString(R.string.requisitos_contrasena),
                     Toast.LENGTH_SHORT
                 ).show()
             }else{
@@ -192,9 +192,9 @@ class Principal : Fragment() {
                     if (jugadorLLegado == "null") {
                         (contexto as AppCompatActivity).runOnUiThread {
                             val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                            errorPopup.setTitle("Error")
-                            errorPopup.setMessage("Ya existe un usuario con ese nombre")
-                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.error_registro))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                                 dialog.dismiss()
                             }
                             errorPopup.show()

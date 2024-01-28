@@ -118,7 +118,7 @@ class Test(private val preguntas: List<Pregunta>, val  jugador: JugadorEnPartida
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { _, _ ->
+        msnEmergente.setPositiveButton((contexto as AppCompatActivity).getString(R.string.aceptar)) { _, _ ->
             comunicador?.volver(contexto!!,ganado,final,jugador, tipo)
         }
         msnEmergente.show()

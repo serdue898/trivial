@@ -104,7 +104,6 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 socket?.on("ganador") { args ->
-                    Log.d("DEBUG", "Evento partidaGanada recibido")
                     val jugadorjson = args[0]
                     val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
                     jugador.jugador =
@@ -112,9 +111,11 @@ class Juego : Fragment() {
 
 
                     val popup = AlertDialog.Builder(contexto as AppCompatActivity)
-                    popup.setTitle("Partida ganada")
+                    popup.setTitle(getString(R.string.partida_ganada))
                     popup.setCancelable(false)
-                    popup.setMessage("jugador" + jugador.jugador?.nombre + "ha ganado la partida")
+                    popup.setMessage(getString(R.string.jugador) + jugador.jugador?.nombre + getString(
+                        R.string.ha_ganado_la_partida
+                    ))
                     popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, _ ->
                         MainActivity.jugadorActual?.partida = 0
                         socket.emit("desloggear",jugadorActual?.toJson())

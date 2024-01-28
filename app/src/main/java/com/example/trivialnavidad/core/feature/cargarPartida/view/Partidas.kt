@@ -2,7 +2,6 @@ package com.example.trivialnavidad.core.feature.cargarPartida.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -105,8 +104,6 @@ class Partidas (private var tipo:String): Fragment() {
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
-                // Aquí puedes manejar la lista de partidas iniciales
-                Log.d("SocketIO", "com.example.trivialnavidad.core.feature.cargarPartida.view.Partidas iniciales recibidas: $partidasOnline")
 
             })
         partidas= partidasOnline

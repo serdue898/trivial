@@ -125,7 +125,7 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { _, _ ->
+        msnEmergente.setPositiveButton((contexto as AppCompatActivity).getString(R.string.aceptar)) { _, _ ->
             comunicador.volver(contexto!!,ganado)
         }
         msnEmergente.show()
