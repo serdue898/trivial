@@ -15,7 +15,7 @@ import com.example.trivialnavidad.core.feature.seleccionJugadores.view.Seleccion
 class ListaAdapterSeleccion(
     private val jugadores: MutableList<Jugador>,
     var contexto: Context,
-    val seleccionJugador: SeleccionJugador
+    private val seleccionJugador: SeleccionJugador
 ) : RecyclerView.Adapter<ListaAdapterSeleccion.PostViewHolder>()  {
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

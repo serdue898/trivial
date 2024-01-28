@@ -7,9 +7,9 @@ import android.net.NetworkCapabilities
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import com.example.t8_ej03_persistenciaapi.api.RetrofitClient.obtenerTodasLasPreguntas
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
 import com.example.trivialnavidad.R
+import com.example.trivialnavidad.core.conexion.online.api.RetrofitClient.obtenerTodasLasPreguntas
 
 class Preguntas(private val contexto: Context) {
     private var preguntas: List<Pregunta>? = null
@@ -25,7 +25,7 @@ class Preguntas(private val contexto: Context) {
         return preguntas?.filter { it.dificultad == dificultad }
     }
 
-    fun mostrarAlertaSinConexion() {
+    private fun mostrarAlertaSinConexion() {
         val alert = AlertDialog.Builder(contexto)
         alert.setTitle(contexto.getString(R.string.juego))
         alert.setCancelable(false)
@@ -39,7 +39,7 @@ class Preguntas(private val contexto: Context) {
 
 
 
-    fun mostrarConfiguracionWifi() {
+    private fun mostrarConfiguracionWifi() {
         val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
         contexto.startActivity(intent)
     }

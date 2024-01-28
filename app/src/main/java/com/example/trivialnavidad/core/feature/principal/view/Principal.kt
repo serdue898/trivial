@@ -27,7 +27,6 @@ class Principal : Fragment() {
     private var comunicador: ComunicadorPrincipal? = MetodosPrincipal()
     private var contexto: Context? = null
     private var empezado = false
-    var tipo = "offline"
     var volver = "inicio"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,10 +47,10 @@ class Principal : Fragment() {
 
 
         botonNuevaPartida.setOnClickListener {
-            comunicador?.abrir_juego(botonNuevaPartida.tag.toString(),contexto!!)
+            comunicador?.abrirJuego(botonNuevaPartida.tag.toString(),contexto!!)
         }
         botonCargarPartida.setOnClickListener {
-            comunicador?.abrir_juego(botonCargarPartida.tag.toString(),contexto!!)
+            comunicador?.abrirJuego(botonCargarPartida.tag.toString(),contexto!!)
         }
         botonOff.setOnClickListener {
 
@@ -76,9 +75,9 @@ class Principal : Fragment() {
             }
             if (!MainActivity.socket?.connected()!!){
                 val alerta = AlertDialog.Builder(contexto as AppCompatActivity)
-                alerta.setTitle("Error")
-                alerta.setMessage("No se ha podido conectar con el servidor")
-                alerta.setPositiveButton("Aceptar") { dialog, _ ->
+                alerta.setTitle(getString(R.string.error))
+                alerta.setMessage(getString(R.string.error_server))
+                alerta.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 alerta.show()
@@ -126,7 +125,7 @@ class Principal : Fragment() {
         popupLogin.setTitle("Login")
         val view = (contexto as AppCompatActivity).layoutInflater.inflate(R.layout.login, null)
         popupLogin.setView(view)
-        popupLogin.setPositiveButton("Aceptar") { _, _ ->
+        popupLogin.setPositiveButton(getString(R.string.aceptar)) { _, _ ->
             val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
             val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             val socket = MainActivity.socket
@@ -134,36 +133,37 @@ class Principal : Fragment() {
             jugador.contraseña = contrasena
             socket?.emit("login",jugador.toJson())
             socket?.on("login_respuesta") { args ->
-                val id = args[0]
-                if (id == "null" || id=="error") {
-                    (contexto as AppCompatActivity).runOnUiThread {
-                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                        errorPopup.setTitle("Error")
-                        errorPopup.setMessage("Usuario o contraseña incorrectos")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
-                            dialog.dismiss()
+                when (val id = args[0]) {
+                    "null", "error" -> {
+                        (contexto as AppCompatActivity).runOnUiThread {
+                            val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.fallo_login_usuario))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            errorPopup.show()
                         }
-                        errorPopup.show()
-                    }
 
-                }
-                else if (id == "loggeado"){
-                    (contexto as AppCompatActivity).runOnUiThread {
-                        val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                        errorPopup.setTitle("Error")
-                        errorPopup.setMessage("Usuario ya esta loggeado")
-                        errorPopup.setPositiveButton("Aceptar") { dialog, which ->
-                            dialog.dismiss()
+                    }
+                    "loggeado" -> {
+                        (contexto as AppCompatActivity).runOnUiThread {
+                            val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.usuario_loggeado))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            errorPopup.show()
                         }
-                        errorPopup.show()
                     }
-                }
-                else {
-                    MainActivity.jugadorActual= Jugador.fromJson(id.toString())
-                    activity?.runOnUiThread {
-                        mostrarOnline()
-                    }
+                    else -> {
+                        MainActivity.jugadorActual= Jugador.fromJson(id.toString())
+                        activity?.runOnUiThread {
+                            mostrarOnline()
+                        }
 
+                    }
                 }
             }
         }
@@ -174,11 +174,11 @@ class Principal : Fragment() {
             val nombre = view.findViewById<EditText>(R.id.ed_nombre).text.toString()
             val contrasena = view.findViewById<EditText>(R.id.et_contrasena).text.toString()
             if (nombre == "" || contrasena == "") {
-                Toast.makeText(contexto, "Rellene todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.rellenar_campos), Toast.LENGTH_SHORT).show()
             } else if (!isValidPassword(contrasena)) {
                 Toast.makeText(
                     contexto,
-                    "La contraseña debe tener al menos 5 caracteres y una mayuscula y un numero",
+                    getString(R.string.requisitos_contrasena),
                     Toast.LENGTH_SHORT
                 ).show()
             }else{
@@ -187,21 +187,21 @@ class Principal : Fragment() {
                 jugador.contraseña = contrasena
                 socket?.emit("registrarJugador", jugador.toJson())
                 socket?.on("registrarJugador") { args ->
-                    val jugador = args[0]
+                    val jugadorLLegado = args[0]
 
-                    if (jugador == "null") {
+                    if (jugadorLLegado == "null") {
                         (contexto as AppCompatActivity).runOnUiThread {
                             val errorPopup = AlertDialog.Builder(contexto as AppCompatActivity)
-                            errorPopup.setTitle("Error")
-                            errorPopup.setMessage("Ya existe un usuario con ese nombre")
-                            errorPopup.setPositiveButton("Aceptar") { dialog, _ ->
+                            errorPopup.setTitle(getString(R.string.error))
+                            errorPopup.setMessage(getString(R.string.error_registro))
+                            errorPopup.setPositiveButton(getString(R.string.aceptar)) { dialog, _ ->
                                 dialog.dismiss()
                             }
                             errorPopup.show()
                         }
                     } else {
 
-                        MainActivity.jugadorActual = Jugador.fromJson(jugador.toString())
+                        MainActivity.jugadorActual = Jugador.fromJson(jugadorLLegado.toString())
                         activity?.runOnUiThread {
                             mostrarOnline()
                         }
@@ -216,7 +216,7 @@ class Principal : Fragment() {
         }
 
     }
-    fun isValidPassword(password: String): Boolean {
+    private fun isValidPassword(password: String): Boolean {
         val passwordPattern = "^(?=.*[0-9])(?=.*[A-Z]).{5,}$"
         val pattern = Pattern.compile(passwordPattern)
         val matcher = pattern.matcher(password)
@@ -256,7 +256,7 @@ class Principal : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (empezado) {
             val configuracion = MainActivity.configuracion
-            configuracion?.toggleDarkMode(contexto!!,configuracion.obtenerOpcionTemas())
+            configuracion?.toggleDarkMode(configuracion.obtenerOpcionTemas())
         }
     }
     fun empezar(){

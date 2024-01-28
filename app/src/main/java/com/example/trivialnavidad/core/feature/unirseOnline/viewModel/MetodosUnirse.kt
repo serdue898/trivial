@@ -9,10 +9,10 @@ import com.example.trivialnavidad.core.feature.juego.view.Juego
 import com.example.trivialnavidad.core.feature.principal.view.Principal
 
 class MetodosUnirse {
-    fun empezarPartida(contexto: Context,id_partida: Int,jugadores :List<JugadorEnPartida>) {
+    fun empezarPartida(contexto: Context, idPartida: Int, jugadores :List<JugadorEnPartida>) {
         if (contexto is AppCompatActivity) {
             val juego = Juego()
-            juego.partida = id_partida
+            juego.partida = idPartida
             juego.tipo = "online"
             juego.jugadoresEnPartida = jugadores.toMutableList()
 

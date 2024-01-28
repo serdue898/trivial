@@ -33,38 +33,36 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         val enunciadoComodin = pregunta.pregunta
 
         // asignar las preguntas a los elementos de la vista
-        var respuestasRepaso : List<String> = listOf()
-        respuestasRepaso= pregunta.respuestas
+        val respuestasRepaso : List<String> = pregunta.respuestas
         val enunciado = view?.findViewById<TextView>(R.id.t_enunciadoRepaso)
         enunciado?.text =generarHuecosTexto(enunciadoComodin, respuestasRepaso)
 
         // falta coger las respuestas de la base de datos
 
         // declarar cada uno de spinner que va a contener la información aunque está seá repetida
-        val sp_hueco1 = view.findViewById<Spinner>(R.id.sp_hueco1)
-        val sp_hueco2 = view.findViewById<Spinner>(R.id.sp_hueco2)
-        val sp_hueco3 = view.findViewById<Spinner>(R.id.sp_hueco3)
-        val sp_hueco4 = view.findViewById<Spinner>(R.id.sp_hueco4)
+        val spHueco1 = view.findViewById<Spinner>(R.id.sp_hueco1)
+        val spHueco2 = view.findViewById<Spinner>(R.id.sp_hueco2)
+        val spHueco3 = view.findViewById<Spinner>(R.id.sp_hueco3)
+        val spHueco4 = view.findViewById<Spinner>(R.id.sp_hueco4)
 
         // para suplir el error que se muestra al poner this en el contexto hay que poner requireContext()
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, respuestasRepaso)
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_hueco1.adapter = adapter
-        sp_hueco2.adapter = adapter
-        sp_hueco3.adapter = adapter
-        sp_hueco4.adapter = adapter
+        spHueco1.adapter = adapter
+        spHueco2.adapter = adapter
+        spHueco3.adapter = adapter
+        spHueco4.adapter = adapter
 
 
 
-        val bt_corregir = view.findViewById<Button>(R.id.bt_repasoCorregir)
+        val btCorregir = view.findViewById<Button>(R.id.bt_repasoCorregir)
 
-        bt_corregir.setOnClickListener(){
-            val seleccion1 = quitarTildes( sp_hueco1.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
-            val seleccion2 = quitarTildes( sp_hueco2.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
-            val seleccion3 = quitarTildes( sp_hueco3.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
-            val seleccion4 = quitarTildes( sp_hueco4.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
-            val prueba = respuestascorrectas
+        btCorregir.setOnClickListener{
+            val seleccion1 = quitarTildes( spHueco1.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion2 = quitarTildes( spHueco2.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion3 = quitarTildes( spHueco3.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
+            val seleccion4 = quitarTildes( spHueco4.selectedItem.toString().lowercase()).replace("[^a-zA-Z]".toRegex(), "")
 
             if (seleccion1 == respuestascorrectas[0] &&
                 seleccion2 == respuestascorrectas[1] &&
@@ -80,30 +78,30 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         return view
     }
 
-    fun quitarTildes(palabra: String): String {
+    private fun quitarTildes(palabra: String): String {
         val normalized = Normalizer.normalize(palabra, Normalizer.Form.NFD)
         return Regex("\\p{InCombiningDiacriticalMarks}+").replace(normalized, "")
     }
 
-    fun generarHuecosTexto(enunciado: String, respuestas: List<String>): String {
+    private fun generarHuecosTexto(enunciado: String, respuestas: List<String>): String {
         var i = 1
-        val enunciado_temporal = enunciado.split(" ")
-        val enunciado_temporal2: MutableList<String> = mutableListOf()
+        val enunciadoTemporal = enunciado.split(" ")
+        val enunciadoTemporal2: MutableList<String> = mutableListOf()
 
-        for (palabra in enunciado_temporal) {
+        for (palabra in enunciadoTemporal) {
             val palabraSinTilde = quitarTildes(palabra.lowercase()).replace("[^a-zA-Z]".toRegex(), "")
             if (palabraSinTilde in respuestas.map { quitarTildes(it.lowercase()) }) {
                 if (i <=4) {
                     respuestascorrectas.add(palabraSinTilde)
-                    enunciado_temporal2.add("__($i)__")
+                    enunciadoTemporal2.add("__($i)__")
                     i++
                 }
             } else {
-                enunciado_temporal2.add(palabra)
+                enunciadoTemporal2.add(palabra)
             }
         }
 
-        return enunciado_temporal2.joinToString(" ")
+        return enunciadoTemporal2.joinToString(" ")
     }
     private fun terminarJuego(resultado: Boolean){
         var ganado = false
@@ -120,7 +118,7 @@ class Repaso(var pregunta : Pregunta, var jugador : JugadorEnPartida) : Fragment
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+        msnEmergente.setPositiveButton((contexto as AppCompatActivity).getString(R.string.aceptar)) { _, _ ->
             comunicador?.volver(contexto!!,ganado)
         }
         msnEmergente.show()

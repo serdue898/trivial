@@ -30,7 +30,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clasificacion:"
+                android:text="@string/clasificacion"
                 tools:layout_editor_absoluteX="30dp"
                 tools:layout_editor_absoluteY="659dp" />
 
@@ -52,7 +52,7 @@
         android:id="@+id/bt_volver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="volver"
+        android:text="@string/volver"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

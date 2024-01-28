@@ -1,9 +1,7 @@
+package com.example.trivialnavidad.core.feature.cargarPartida.view
 
-
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -28,7 +26,7 @@ import org.json.JSONArray
 import org.json.JSONException
 
 
-class Partidas (var tipo:String): Fragment() {
+class Partidas (private var tipo:String): Fragment() {
 
     private var contexto: Context? = null
     private var comunicador: ComunicadorPartida? = null
@@ -37,19 +35,19 @@ class Partidas (var tipo:String): Fragment() {
         val view = inflater.inflate(R.layout.partidas, container, false)
         contexto = container?.context
         comunicador = MetodosPartida(contexto!!)
-        val bt_volver = view.findViewById<Button>(R.id.bt_volver)
+        val btVolver = view.findViewById<Button>(R.id.bt_volver)
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar4)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
-        bt_volver.setOnClickListener {
+        btVolver.setOnClickListener {
             comunicador?.volver()
         }
         return view
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val inflater: MenuInflater = (contexto as AppCompatActivity).menuInflater
-        inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
+        val inflaternuevo: MenuInflater = (contexto as AppCompatActivity).menuInflater
+        inflaternuevo.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
     }
 
@@ -106,14 +104,12 @@ class Partidas (var tipo:String): Fragment() {
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
-                // Aquí puedes manejar la lista de partidas iniciales
-                Log.d("SocketIO", "Partidas iniciales recibidas: $partidasOnline")
 
             })
         partidas= partidasOnline
     }
 
-    fun actualizarLista(partidas: List<Partida>) {
+    private fun actualizarLista(partidas: List<Partida>) {
         val lista = view?.findViewById<RecyclerView>(R.id.rv_partidas)
         lista?.layoutManager = LinearLayoutManager(contexto)
         val dividerItemDecoration = DividerItemDecoration(lista?.context, (lista?.layoutManager as LinearLayoutManager).orientation)

@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trivialnavidad.R
 import com.example.trivialnavidad.app.MainActivity
 import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
-import com.example.trivialnavidad.core.feature.seleccionJugadores.view.SeleccionJugador
 import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
 
 class ListaAdapterSeleccion(
     private val jugadores: MutableList<Jugador>,
     var contexto: Context,
-    val seleccionJugador: UnirseOnline
+    private val seleccionJugador: UnirseOnline
 ) : RecyclerView.Adapter<ListaAdapterSeleccion.PostViewHolder>()  {
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

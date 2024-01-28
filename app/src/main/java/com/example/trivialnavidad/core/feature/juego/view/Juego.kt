@@ -43,7 +43,7 @@ class Juego : Fragment() {
     private var jugador: Int = 0
     private var cargar: Boolean = false
     private var jugadorActual: JugadorEnPartida? = null
-    var jugadoresEnPartida: MutableList<JugadorEnPartida> = mutableListOf<JugadorEnPartida>()
+    var jugadoresEnPartida: MutableList<JugadorEnPartida> = mutableListOf()
     var partidaActual: Int = 1
     private lateinit var metodosTablero: Tablero
     private var avatarImages : TypedArray? = null
@@ -104,7 +104,6 @@ class Juego : Fragment() {
         (contexto as? AppCompatActivity)?.lifecycleScope?.launch(Dispatchers.Main) {
             withContext(Dispatchers.Main) {
                 socket?.on("ganador") { args ->
-                    Log.d("DEBUG", "Evento partidaGanada recibido")
                     val jugadorjson = args[0]
                     val jugador = JugadorEnPartida.fromJson(jugadorjson.toString())
                     jugador.jugador =
@@ -112,12 +111,14 @@ class Juego : Fragment() {
 
 
                     val popup = AlertDialog.Builder(contexto as AppCompatActivity)
-                    popup.setTitle("Partida ganada")
+                    popup.setTitle(getString(R.string.partida_ganada))
                     popup.setCancelable(false)
-                    popup.setMessage("jugador" + jugador.jugador?.nombre + "ha ganado la partida")
-                    popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, which ->
+                    popup.setMessage(getString(R.string.jugador) + jugador.jugador?.nombre + getString(
+                        R.string.ha_ganado_la_partida
+                    ))
+                    popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, _ ->
                         MainActivity.jugadorActual?.partida = 0
-                        socket?.emit("desloggear",jugadorActual?.toJson())
+                        socket.emit("desloggear",jugadorActual?.toJson())
                         comunicador?.salir(contexto!!)
                         dialog.dismiss()
                     }
@@ -161,7 +162,7 @@ class Juego : Fragment() {
 
         }
     }
-    fun actualizarJugadorOnline(jugador: JugadorEnPartida){
+    private fun actualizarJugadorOnline(jugador: JugadorEnPartida){
         if (jugadorTemp !=null && !cargarOnline){
             return
         }
@@ -301,7 +302,7 @@ class Juego : Fragment() {
     }
     fun resultadoMiniJuego(ganado :Boolean){
         val conexion = Conexion(contexto!!)
-        var jugadorenviar : JugadorEnPartida? = null
+        val jugadorenviar : JugadorEnPartida?
         val dado = view?.findViewById<Button>(R.id.bt_dado)
         cargarOnline = true
         if(tipo=="offline"){

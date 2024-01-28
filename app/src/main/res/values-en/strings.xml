@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ChristmasTrivia</string>
+
+    <!-- Menu texts -->
+    <string name="mItm_GuardarSalir">Save and exit</string>
+    <string name="mItm_guardar">Save Game</string>
+    <string name="mItm_numJugadores">Choose the number of players</string>
+    <string name="mItm_instrucciones">Game Instructions</string>
+    <string name="intrucciones">To win the game, it is necessary to answer at least one question of each color correctly, reach the purple square, and answer all questions correctly. When you answer a question correctly, you can roll the dice again; if you fail, it will be the next player\'s turn.</string>
+    <string name="mItm_acerca">About...</string>
+    <string name="acercaDe">Game developed by Sergio Ramiro and Carlos Montequi</string>
+
+    <!-- Text fields -->
+    <string name="t_tunroJugador">Player\'s turn: </string>
+
+    <!-- Main view buttons -->
+    <string name="bt_dado">roll</string>
+    <string name="bt_clasificacion">leaderboard</string>
+    <string name="nombre_juego">Trivia</string>
+    <string name="bt_offline">offline</string>
+    <string name="bt_online">online</string>
+    <string name="acierto">you have answered the question correctly</string>
+    <string name="fallo">you missed the question</string>
+    <string name="partidas">Games:</string>
+    <string name="nueva_partida">New Game</string>
+    <string name="cargar_partida">Load Game</string>
+    <string name="mItm_configuracion">Settings</string>
+    <string name="mItm_inicio">Home</string>
+    <string name="ganado">You have won the game</string>
+    <string name="turno_del_jugador">"Player's turn: "</string>
+    <string name="tira_el_dado">Roll the dice</string>
+    <string name="datos_guardados">Saved data</string>
+    <string name="juego">Game</string>
+    <string name="internet_mensaje">You need internet to play, the game will close</string>
+    <string name="aceptar">Accept</string>
+    <string name="mensaje_no_minijuego">You don\'t have enough tokens, roll again</string>
+    <string name="juego_final">Final game</string>
+    <string name="bt_volver">Back</string>
+    <string name="has_acertado_sigue_jugando">You\'ve guessed it, keep playing</string>
+    <string name="partida">Game</string>
+    <string name="finalizada">Finished</string>
+    <string name="nombre">Name</string>
+    <string name="clasificacion">Leaderboard:</string>
+    <string name="volver">Back</string>
+    <string name="mover">Move</string>
+    <string name="contrasena">Password</string>
+    <string name="musica">Music</string>
+    <string name="vibracion">Vibration</string>
+    <string name="sonido">Sound</string>
+    <string name="cambiar_tema">Change Theme</string>
+    <string name="empezar_a_jugar">Start playing</string>
+    <string name="anadir_jugador">Add player</string>
+    <string name="error_tema">Theme can only be changed on the home screen</string>
+    <string name="configuracion">Settings</string>
+    <string name="partida_ganada">Game won</string>
+    <string name="jugador">Player</string>
+    <string name="ha_ganado_la_partida">has won the game</string>
+    <string name="error">Error</string>
+    <string name="error_server">Could not connect to the server</string>
+    <string name="fallo_login_usuario">Incorrect username or password</string>
+    <string name="usuario_loggeado">User is already logged in</string>
+    <string name="rellenar_campos">Fill in all fields</string>
+    <string name="requisitos_contrasena">Password must be at least 5 characters long and include one uppercase letter and one number</string>
+    <string name="error_registro">A user with that name already exists</string>
+    <string name="limite_jugadores">Cannot add more players</string>
+    <string name="nombre_vacio">Player name cannot be empty</string>
+    <string name="nombre_repetido">Player name cannot be repeated</string>
+    <string name="guardar">Save</string>
+    <string name="cancelar">Cancel</string>
+</resources>

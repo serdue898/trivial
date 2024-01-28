@@ -19,7 +19,7 @@ class MetodosTest : ComunicadorTest {
                     val socket = MainActivity.socket
                     socket?.emit("partidaGanada", jugadorEnPartida)
                 }else{
-                        if (context is AppCompatActivity) {
+
                             val jugadores =
                                 MainActivity.juego?.jugadoresEnPartida as List<JugadorEnPartida>
                             fragment = Clasifiaccion(jugadores, true)
@@ -28,7 +28,7 @@ class MetodosTest : ComunicadorTest {
                                 conexion.obtenerPartida(MainActivity.juego?.partidaActual!!)
                             partida.finalizada = true
                             conexion.actualizarPartida(partida)
-                        }
+
                     }
             } else {
                 fragment = MainActivity.juego as Juego

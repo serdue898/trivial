@@ -1,4 +1,4 @@
-package com.example.trivialnavidad.core.feature.juego
+package com.example.trivialnavidad.core.feature.minijuegos.test.view
 
 import android.content.Context
 import android.os.Bundle
@@ -23,13 +23,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
-class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val final :Boolean,val tipo:String): Fragment() {
-    private var comunicador: ComunicadorTest? =MetodosTest();
+class Test(private val preguntas: List<Pregunta>, val  jugador: JugadorEnPartida, private val final :Boolean, private val tipo:String): Fragment() {
+    private var comunicador: ComunicadorTest? =MetodosTest()
     private var contexto: Context? = null
     private var puntos = 0
     private var opciones = mutableListOf(0, 1, 2, 3)
     private var botones = listOf<Button>()
-    private var mostradoFinal = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,13 +40,12 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
     }
 
     private fun empezarJuego(pregunta: Pregunta, view: View) {
-        var correcto = false
 
          botones = listOf(
-            view.findViewById<Button>(R.id.bt_opcionA),
-            view.findViewById<Button>(R.id.bt_opcionB),
-            view.findViewById<Button>(R.id.bt_opcionC),
-            view.findViewById<Button>(R.id.bt_opcionD)
+            view.findViewById(R.id.bt_opcionA),
+            view.findViewById(R.id.bt_opcionB),
+            view.findViewById(R.id.bt_opcionC),
+            view.findViewById(R.id.bt_opcionD)
         )
 
         val texto = view.findViewById<TextView>(R.id.tx_enunciado)
@@ -66,7 +64,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
         if (correcto) puntos++
 
         if (final) {
-            terminarJuego(false, true)
+            terminarJuego(resultado = false, final = true)
         } else {
             if (puntos == 5) {
                 terminarJuego(correcto, false)
@@ -89,7 +87,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
                 val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
                 msnEmergente.setCancelable(false)
                 msnEmergente.setMessage(getString(R.string.has_acertado_sigue_jugando))
-                msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+                msnEmergente.setPositiveButton("Aceptar") { _, _ ->
                     opciones = mutableListOf(0, 1, 2, 3)
                     empezarJuego(preguntas[puntos], view)
                 }
@@ -120,7 +118,7 @@ class Test(val preguntas: List<Pregunta> ,val  jugador: JugadorEnPartida ,val fi
         val msnEmergente = AlertDialog.Builder(contexto as AppCompatActivity)
         msnEmergente.setCancelable(false)
         msnEmergente.setMessage(getString(acercaDe))
-        msnEmergente.setPositiveButton("Aceptar") { dialog, which ->
+        msnEmergente.setPositiveButton((contexto as AppCompatActivity).getString(R.string.aceptar)) { _, _ ->
             comunicador?.volver(contexto!!,ganado,final,jugador, tipo)
         }
         msnEmergente.show()

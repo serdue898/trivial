@@ -29,7 +29,7 @@ import com.example.trivialnavidad.core.feature.unirseOnline.adapter.SpinnerAdapt
 import com.example.trivialnavidad.core.feature.unirseOnline.viewModel.MetodosUnirse
 import org.json.JSONArray
 
-class UnirseOnline(var id_partida :Int) : Fragment() {
+class UnirseOnline(private var idPartida :Int) : Fragment() {
 
     private var comunicador: MetodosUnirse = MetodosUnirse()
     private var contexto: Context? = null
@@ -37,7 +37,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     private var avatarImages : TypedArray? = null
     private var emepzar = false
     var host = false
-    var eligiendo = false
+    private var eligiendo = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,21 +45,13 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.seleccion_jugadores, container, false)
         contexto = container?.context
-        MainActivity.jugadorActual?.partida = id_partida
+        MainActivity.jugadorActual?.partida = idPartida
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar3)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
 
-        /*
-        // codigo de clasificacion y no se si es necesario o no
-
-      val b_guardar = view.findViewById<Button>(R.id.bt_volver)
-        bt_volver.setOnClickListener {
-            comunicador?.volver(contexto!!)
-          }
-    */
         return view
     }
 
@@ -95,7 +87,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val bGuardarjugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val nombreJugador = view.findViewById<EditText>(R.id.eT_nombreJugador)
         nombreJugador.isEnabled = false
         nombreJugador.setText(MainActivity.jugadorActual?.nombre)
@@ -106,10 +98,10 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
-        val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
+        val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
         val socket = MainActivity.socket
-        if (!host)socket?.emit("actualizarJugadores",id_partida)
+        if (!host)socket?.emit("actualizarJugadores",idPartida)
         socket?.on("listaJugadores") { args ->
             val listaJugadores = args[0] as JSONArray
             // Manejar la lista de jugadores en tu aplicación Android
@@ -118,7 +110,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             jugadoresEnPartida.clear()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = Jugador.fromJson(listaJugadores[i].toString())
-                if (jugador.partida == id_partida)jugadoresEnPartida.add(jugador)
+                if (jugador.partida == idPartida)jugadoresEnPartida.add(jugador)
             }
             val hostPreparado  = jugadoresEnPartida.find { it.nombre == MainActivity.jugadorActual?.nombre}?.host
             if (hostPreparado!=null) {
@@ -127,9 +119,9 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
             activity?.runOnUiThread {
                 if (jugadoresEnPartida.size >=2 && host) {
-                    bt_empezarPartida?.visibility = View.VISIBLE
+                    btEmpezarpartida?.visibility = View.VISIBLE
                 }else{
-                    bt_empezarPartida?.visibility = View.INVISIBLE
+                    btEmpezarpartida?.visibility = View.INVISIBLE
                 }
                 actualizarLista()
             }
@@ -140,7 +132,7 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             emepzar = true
             // Manejar la lista de jugadores en tu aplicación Android
             // Por ejemplo, puedes actualizar la interfaz de usuario con la nueva lista
-            var jugadores:MutableList<JugadorEnPartida> = mutableListOf()
+            val jugadores:MutableList<JugadorEnPartida> = mutableListOf()
             for (i in 0 until listaJugadores.length()) {
                 val jugador = JugadorEnPartida.fromJson(listaJugadores[i].toString())
                 jugador.jugador = jugadoresEnPartida.find { it.id_jugador == jugador.id_jugador }
@@ -148,28 +140,28 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
             }
             empezarPartida(jugadores)
         }
-        b_guardarJugador?.setOnClickListener {
+        bGuardarjugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
-                Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.limite_jugadores), Toast.LENGTH_SHORT).show()
             }else{
                 eligiendo = true
                 agregarJugadorLista( )
 
-                b_guardarJugador.isEnabled = false
+                bGuardarjugador.isEnabled = false
             }
 
         }
-        bt_empezarPartida?.setOnClickListener {
-            val socket = MainActivity.socket
-            socket?.emit("empezarPartida", id_partida)
+        btEmpezarpartida?.setOnClickListener {
+            
+            socket?.emit("empezarPartida", idPartida)
         }
     }
 
 
 
-    fun addJugadorOnline(jugador: Jugador){
+    private fun addJugadorOnline(jugador: Jugador){
         val socket = MainActivity.socket
         jugador.host = host
         val jugadorJson = jugador.toJson()
@@ -177,12 +169,12 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     }
 
 
-    fun actualizarSpinner(){
+    private fun actualizarSpinner(){
         val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
 
         spinerAvatares?.adapter = listaspinner()
     }
-    fun listaspinner(): SpinnerAdapter {
+    private fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
         jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
         val avatares: MutableList<Int> = mutableListOf()
@@ -204,27 +196,27 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
 
-        popup.setPositiveButton("Guardar") { dialog, which ->
+        popup.setPositiveButton(getString(R.string.guardar)) { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
-                Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
 
             }else{
 
-                val view = avatarJugador?.selectedView
-                val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
+                val viewSeleccionada = avatarJugador?.selectedView
+                val avatar=   viewSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
                 val posicion =avatar?.tag.toString().toInt()
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
-                nuevoJugador.partida = id_partida
+                nuevoJugador.partida = idPartida
                 val socket = MainActivity.socket
                 socket?.emit("actualizarJugador", nuevoJugador.toJson())
             }
         }
-        popup.setNegativeButton("Cancelar") { dialog, which ->
+        popup.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
         popup.show()
     }
-    fun actualizarLista(){
+    private fun actualizarLista(){
         val listajugadores = view?.findViewById<RecyclerView>(R.id.ryV_listaJugadores)
 
         val layoutManager = LinearLayoutManager(contexto)
@@ -236,20 +228,20 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
 
     }
 
-    fun agregarJugadorLista() {
+    private fun agregarJugadorLista() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
         if (nombreJugador?.text.toString().isEmpty()) {
-            Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+            Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
             return
         }
         val view = avatarJugador?.selectedView
         val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
-        var posicion =avatar?.tag.toString().toInt()
+        val posicion =avatar?.tag.toString().toInt()
 
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
-        jugadorNuevo.partida = id_partida
+        jugadorNuevo.partida = idPartida
         jugadoresEnPartida.add(jugadorNuevo)
 
         // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
@@ -259,12 +251,12 @@ class UnirseOnline(var id_partida :Int) : Fragment() {
     }
     private fun empezarPartida(jugadores: List<JugadorEnPartida>) {
         eligiendo = false
-        comunicador.empezarPartida(contexto!!,id_partida,jugadores)
+        comunicador.empezarPartida(contexto!!,idPartida,jugadores)
     }
     override fun onDestroyView() {
         super.onDestroyView()
         if (eligiendo) {
-            MainActivity.jugadorActual?.partida = id_partida
+            MainActivity.jugadorActual?.partida = idPartida
             MainActivity.socket?.emit("desconectar", MainActivity.jugadorActual?.toJson())
         }
 

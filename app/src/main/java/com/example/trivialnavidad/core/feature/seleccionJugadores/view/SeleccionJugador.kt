@@ -88,7 +88,7 @@ class SeleccionJugador : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val b_guardarJugador = view.findViewById<Button>(R.id.b_guardarJugador)
+        val bGuardarjugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
 
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
@@ -103,13 +103,13 @@ class SeleccionJugador : Fragment() {
 
         // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
         //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
-        val bt_empezarPartida = view.findViewById<Button>(R.id.b_inciarJuego)
+        val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
 
-        b_guardarJugador?.setOnClickListener {
+        bGuardarjugador?.setOnClickListener {
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
             if (jugadoresEnPartida.size >= 6) {
-                Toast.makeText(contexto, "No se pueden añadir mas jugadores", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.limite_jugadores), Toast.LENGTH_SHORT).show()
             }else{
 
                 agregarJugadorLista( )
@@ -117,12 +117,12 @@ class SeleccionJugador : Fragment() {
                 actualizarLista()
 
                 if (jugadoresEnPartida.size >=2) {
-                    bt_empezarPartida?.visibility = View.VISIBLE
+                    btEmpezarpartida?.visibility = View.VISIBLE
                 }
             }
 
         }
-        bt_empezarPartida?.setOnClickListener {
+        btEmpezarpartida?.setOnClickListener {
             empezarPartida()
         }
     }
@@ -152,9 +152,9 @@ class SeleccionJugador : Fragment() {
         avatarJugador.adapter = listaspinner()
         avatarJugador.setSelection(jugador.avatar.toInt())
 
-        popup.setPositiveButton("Guardar") { _, _ ->
+        popup.setPositiveButton(getString(R.string.guardar)) { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
-                Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
 
             }else{
 
@@ -167,7 +167,7 @@ class SeleccionJugador : Fragment() {
                 actualizarSpinner()
             }
         }
-        popup.setNegativeButton("Cancelar") { dialog, _ ->
+        popup.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
         popup.show()
@@ -188,12 +188,12 @@ class SeleccionJugador : Fragment() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
         if (nombreJugador?.text.toString().isEmpty()) {
-            Toast.makeText(contexto, "El nombre del jugador no puede estar vacío", Toast.LENGTH_SHORT).show()
+            Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
             return
         }
         if (nombreJugador?.text.toString() in jugadoresEnPartida.map { it.nombre }) {
             nombreJugador?.setText("")
-            Toast.makeText(contexto, "El jugador no puede estar repetido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(contexto, getString(R.string.nombre_repetido), Toast.LENGTH_SHORT).show()
             return
         }
         val view = avatarJugador?.selectedView
