@@ -13,7 +13,7 @@ import com.example.trivialnavidad.core.feature.unirseOnline.view.UnirseOnline
 
 class MetodosPrincipal: ComunicadorPrincipal {
 
-    override fun abrir_juego(datos: String, context: Context) {
+    override fun abrirJuego(datos: String, context: Context) {
         if (context is AppCompatActivity) {
             when (datos) {
                 "cargar" -> {

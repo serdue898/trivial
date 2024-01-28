@@ -39,4 +39,14 @@
     <string name="partida">Partida</string>
     <string name="finalizada">Finalizada</string>
     <string name="nombre">Nombre</string>
+    <string name="clasificacion">Clasificacion:</string>
+    <string name="volver">volver</string>
+    <string name="mover">Mover</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="musica">Musica</string>
+    <string name="vibracion">Vibración</string>
+    <string name="sonido">Sonido</string>
+    <string name="cambiar_tema">Cambiar Tema</string>
+    <string name="empezar_a_jugar">Empezar a jugar</string>
+    <string name="anadir_jugador">Añadir jugador</string>
 </resources>

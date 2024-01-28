@@ -26,7 +26,7 @@ class Parejas (val pregunta: Pregunta, val jugador: JugadorEnPartida): Fragment(
     private var contexto: Context? = null
     private var comunicador: ComunicadorParejas= MetodosParejas()
     private var imagenesBase :MutableList<Drawable> = mutableListOf()
-    var seleccionado : FrameLayout? = null
+    private var seleccionado : FrameLayout? = null
     private var aciertos = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

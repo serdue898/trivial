@@ -1,12 +1,8 @@
 package com.example.trivialnavidad.core.conexion.onffline
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Jugador
-import com.example.trivialnavidad.core.conexion.onffline.modelo.Partida
 
 class BaseDatos(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 

@@ -9,37 +9,39 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/nombre"
+        app:layout_constraintEnd_toStartOf="@+id/et_contrasena"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/ed_nombre"
-        android:layout_width="253dp"
+        android:layout_width="254dp"
         android:layout_height="42dp"
         android:ems="10"
+        android:hint="@string/nombre"
         android:inputType="text"
-        android:text="Name"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/et_contrasena"
+        app:layout_constraintStart_toStartOf="@+id/et_contrasena"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_contrasena"
         android:layout_width="254dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:ems="10"
+        android:hint="@string/contrasena"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/ed_nombre"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/ed_nombre"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/ed_nombre" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/contrasena"
         app:layout_constraintBottom_toBottomOf="@+id/et_contrasena"
-        app:layout_constraintEnd_toStartOf="@+id/et_contrasena"
-        app:layout_constraintTop_toBottomOf="@+id/ed_nombre" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ed_nombre"
+        app:layout_constraintVertical_bias="0.448" />
 </androidx.constraintlayout.widget.ConstraintLayout>

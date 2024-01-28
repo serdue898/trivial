@@ -47,10 +47,10 @@ class Principal : Fragment() {
 
 
         botonNuevaPartida.setOnClickListener {
-            comunicador?.abrir_juego(botonNuevaPartida.tag.toString(),contexto!!)
+            comunicador?.abrirJuego(botonNuevaPartida.tag.toString(),contexto!!)
         }
         botonCargarPartida.setOnClickListener {
-            comunicador?.abrir_juego(botonCargarPartida.tag.toString(),contexto!!)
+            comunicador?.abrirJuego(botonCargarPartida.tag.toString(),contexto!!)
         }
         botonOff.setOnClickListener {
 

@@ -1,15 +1,12 @@
-package com.example.t8_ej03_persistenciaapi.api
+package com.example.trivialnavidad.core.conexion.online.api
 
 import android.util.Log
 import com.example.t8_ej03_persistenciaapi.model.Pregunta
-import com.example.t8_ej03_persistenciaapi.model.PreguntasResponse
-import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.coroutines.resume
 
 object RetrofitClient {
     // URL base de la API.
@@ -17,7 +14,7 @@ object RetrofitClient {
 
     // Inicialización perezosa del ApiService. Se crea una instancia de Retrofit con la URL base
     // y el convertidor Gson para la serialización y deserialización automática de los datos.
-    val instance: ApiService by lazy {
+    private val instance: ApiService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -28,7 +25,7 @@ object RetrofitClient {
     }
 
     fun obtenerTodasLasPreguntas(callback: (preguntas:List<Pregunta>?, error: String?) -> Unit) {
-        val apiService = RetrofitClient.instance
+        val apiService = instance
         val call = apiService.getPreguntas()
         call.enqueue(object : Callback<List<Pregunta>> {
             override fun onResponse(call: Call<List<Pregunta>>, response: Response<List<Pregunta>>) {
