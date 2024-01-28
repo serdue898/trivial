@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TrivialNavidad" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/botones</item>
+        <item name="android:colorBackground">@color/fondo</item>
+        <!-- Agrega el color del texto para el tema claro -->
+    </style>
+    <style name="Estilo1" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/negro</item>
+    </style>
+    <style name="Theme.TrivialNavidad" parent="Base.Theme.TrivialNavidad" />
+</resources>

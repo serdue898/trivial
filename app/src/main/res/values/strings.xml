@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">TrivialNavidad</string>
+    <!-- textos del menu-->
+    <string name="mItm_GuardarSalir">Guardar y salir</string>
+    <string name="mItm_guardar">Guardar Partida</string>
+    <string name="mItm_numJugadores">Elegir el número de jugadores</string>
+    <string name="mItm_instrucciones">Intrucciones del juego</string>
+    <string name="intrucciones">Para poder ganar el juego es necesario resonder al menos una pregunta de cada color correctamente y llegar a la casilla morada y acertar todas las perguntas. Cuando aciertes una pregunta podrás volver a lanzar, si fallas será el turno del siguiente jugador.</string>
+    <string name="mItm_acerca">Acerca de...</string>
+    <string name="acercaDe">Juego desarrollado por Sergio Ramiro y Carlos Montequi</string>
+
+    <!-- campos de texto -->
+    <string name="t_tunroJugador">Turno del jugador: </string>
+
+    <!-- botones de la vista principal -->
+    <string name="bt_dado">tirar</string>
+    <string name="bt_clasificacion">clasificacion</string>
+    <string name="nombre_juego">Trivial</string>
+    <string name="bt_offline">offline</string>
+    <string name="bt_online">online</string>
+    <string name="acierto">has acertado la pregunta</string>
+    <string name="fallo">fallaste la pregunta</string>
+    <string name="partidas">Partidas:</string>
+    <string name="nueva_partida">Nueva Partida</string>
+    <string name="cargar_partida">Cargar Partida</string>
+    <string name="mItm_configuracion">Configuracion</string>
+    <string name="mItm_inicio">Inicio</string>
+    <string name="ganado">Has ganado el juego</string>
+    <string name="turno_del_jugador">"Turno del jugador: "</string>
+    <string name="tira_el_dado">Tira el dado</string>
+    <string name="datos_guardados">Datos guardados</string>
+    <string name="juego">Juego</string>
+    <string name="internet_mensaje">Necesitas internet para jugar,se cerrara el juego</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="mensaje_no_minijuego">No tienes suficientes quesitos , tira de nuevo</string>
+    <string name="juego_final">Juego final</string>
+    <string name="bt_volver">volver</string>
+    <string name="has_acertado_sigue_jugando">Has acertado, sigue jugando</string>
+</resources>

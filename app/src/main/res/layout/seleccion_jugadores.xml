@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/fondo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/eT_nombreJugador"
+        android:layout_width="241dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="152dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.205"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/sp_avatares"
+        android:layout_width="81dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/eT_nombreJugador"
+        app:layout_constraintStart_toEndOf="@+id/eT_nombreJugador"
+        app:layout_constraintTop_toTopOf="@+id/eT_nombreJugador"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/b_guardarJugador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Añadir jugador"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/sp_avatares"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/eT_nombreJugador"
+        app:layout_constraintTop_toBottomOf="@+id/eT_nombreJugador" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ryV_listaJugadores"
+        android:layout_width="359dp"
+        android:layout_height="153dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.673"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/b_guardarJugador"
+        app:layout_constraintVertical_bias="0.038" />
+
+    <Button
+        android:id="@+id/b_inciarJuego"
+        android:layout_width="193dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="48dp"
+        android:text="Empezar a jugar"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ryV_listaJugadores" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

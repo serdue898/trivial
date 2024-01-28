@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!-- colores botones-->
+    <color name="blanquillo">#E1AC9C</color>
+    <color name="negro">#DD000000</color>
+    <color name="magenta">#8B008B</color>
+    <color name="azul">#1E90FF</color>
+    <color name="amarillo">#FFD700</color>
+    <color name="verde">#008000</color>
+    <color name="rojo">#DC143C</color>
+    <!-- colores claro
+    <color name="fondo">#E5F9F9</color>
+    <color name="botones">#00c5bd</color>
+    -->
+    <color name="fondo">#E5F9F9</color>
+    <color name="botones">#00c5bd</color>
+</resources>
