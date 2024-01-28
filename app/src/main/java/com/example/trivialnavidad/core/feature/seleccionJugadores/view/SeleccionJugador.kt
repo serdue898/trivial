@@ -35,52 +35,51 @@ class SeleccionJugador : Fragment() {
     private var comunicador: MetodosSeleccion = MetodosSeleccion()
     private var contexto: Context? = null
     private var jugadoresEnPartida = mutableListOf<Jugador>()
-    private var avatarImages :TypedArray? = null
+    private var avatarImages: TypedArray? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        avatarImages = resources.obtainTypedArray(R.array.avatar_images)
+        // Inflar el diseño de la vista
         val view = inflater.inflate(R.layout.seleccion_jugadores, container, false)
         contexto = container?.context
+
+        // Configurar la barra de herramientas (toolbar)
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar3)
         (contexto as? AppCompatActivity)?.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         (contexto as AppCompatActivity).supportActionBar?.title = null
 
-        /*
-        // codigo de clasificacion y no se si es necesario o no
-
-      val b_guardar = view.findViewById<Button>(R.id.bt_volver)
-        bt_volver.setOnClickListener {
-            comunicador?.volver(contexto!!)
-          }
-    */
         return view
     }
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_general_view, menu)// OJO- se pasa la vista que se quiere inflar
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // Inflar el menú de opciones
+        inflater.inflate(R.menu.menu_general_view, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         return when (item.itemId) {
             R.id.mItm_configuracion -> {
+                // Abrir la configuración de la aplicación
                 MainActivity.configuracion?.mostrarConfiguracion(contexto!!)
                 true
             }
             R.id.mItm_inicio -> {
+                // Volver a la pantalla de inicio
                 comunicador.volver(contexto!!)
                 true
             }
             R.id.mItm_acerca -> {
+                // Mostrar información acerca de la aplicación
                 val msnEmergente = androidx.appcompat.app.AlertDialog.Builder(contexto as AppCompatActivity)
                 msnEmergente.setMessage(getString(R.string.acercaDe))
                 msnEmergente.show()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -88,9 +87,10 @@ class SeleccionJugador : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Obtener referencias a las vistas necesarias
         val bGuardarjugador = view.findViewById<Button>(R.id.b_guardarJugador)
         val spinerAvatares = view.findViewById<Spinner>(R.id.sp_avatares)
-
+        val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
         avatarImages = resources.obtainTypedArray(R.array.avatar_images)
         val avatares = List(avatarImages!!.length()) { i -> i }
         val adapterspinner = SpinnerAdapter(contexto!!, avatares)
@@ -99,38 +99,41 @@ class SeleccionJugador : Fragment() {
         // Configurar el adaptador en el Spinner
         spinerAvatares.adapter = adapterspinner
 
-
-
-        // el botton editar me sobra ya que si se quiere editar algo sera mas sencillo pinchar en el elemento y que se ponga en edittext y el spinner
-        //val b_guardarModificar = view?.findViewById<Button>(R.id.b_editarJugador)
-        val btEmpezarpartida = view.findViewById<Button>(R.id.b_inciarJuego)
-
+        // Configurar el evento de clic para el botón de guardar jugador
         bGuardarjugador?.setOnClickListener {
+            // Ocultar el teclado virtual
             val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+
             if (jugadoresEnPartida.size >= 6) {
+                // Mostrar un mensaje si se alcanza el límite de jugadores
                 Toast.makeText(contexto, getString(R.string.limite_jugadores), Toast.LENGTH_SHORT).show()
-            }else{
-
-                agregarJugadorLista( )
-
+            } else {
+                // Agregar el jugador a la lista y actualizar la interfaz
+                agregarJugadorLista()
                 actualizarLista()
 
-                if (jugadoresEnPartida.size >=2) {
+                if (jugadoresEnPartida.size >= 2) {
+                    // Mostrar el botón de empezar partida si hay al menos 2 jugadores
                     btEmpezarpartida?.visibility = View.VISIBLE
                 }
             }
-
         }
+
+        // Configurar el evento de clic para el botón de empezar partida
         btEmpezarpartida?.setOnClickListener {
+            // Iniciar la partida
             empezarPartida()
         }
     }
-    fun actualizarSpinner(){
-        val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
 
+    // Método para actualizar el contenido del Spinner
+    fun actualizarSpinner() {
+        val spinerAvatares = view?.findViewById<Spinner>(R.id.sp_avatares)
         spinerAvatares?.adapter = listaspinner()
     }
+
+    // Método para obtener un nuevo adaptador para el Spinner
     private fun listaspinner(): SpinnerAdapter {
         val avataresUsados = mutableListOf<Int>()
         jugadoresEnPartida.forEach { jugador -> avataresUsados.add(jugador.avatar.toInt()) }
@@ -142,6 +145,8 @@ class SeleccionJugador : Fragment() {
         }
         return SpinnerAdapter(contexto!!, avatares)
     }
+
+    // Método para editar la información de un jugador en la lista
     fun editarJugadorLista(jugador: Jugador) {
         val popup = AlertDialog.Builder(contexto)
         val view = layoutInflater.inflate(R.layout.editar_jugador, null)
@@ -154,76 +159,104 @@ class SeleccionJugador : Fragment() {
 
         popup.setPositiveButton(getString(R.string.guardar)) { _, _ ->
             if (nombreJugador.text.toString().isEmpty()) {
+                // Mostrar un mensaje si el nombre está vacío
                 Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
-
-            }else{
-
+            } else {
+                // Obtener la vista seleccionada en el Spinner
                 val vistaSeleccionada = avatarJugador?.selectedView
-                val avatar=   vistaSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
-                val posicion =avatar?.tag.toString().toInt()
+                val avatar = vistaSeleccionada?.findViewById<ImageView>(R.id.iv_avatar)
+                val posicion = avatar?.tag.toString().toInt()
+
+                // Crear un nuevo jugador con la información actualizada
                 val nuevoJugador = Jugador(jugador.id_jugador, nombreJugador.text.toString(), posicion.toString())
                 jugadoresEnPartida[jugadoresEnPartida.indexOf(jugador)] = nuevoJugador
+
+                // Actualizar la interfaz
                 actualizarLista()
                 actualizarSpinner()
             }
         }
+
         popup.setNegativeButton(getString(R.string.cancelar)) { dialog, _ ->
             dialog.dismiss()
         }
+
         popup.show()
     }
-    fun actualizarLista(){
+
+    // Método para actualizar la lista de jugadores en la interfaz
+    fun actualizarLista() {
         val listajugadores = view?.findViewById<RecyclerView>(R.id.ryV_listaJugadores)
 
         val layoutManager = LinearLayoutManager(contexto)
         listajugadores?.layoutManager = layoutManager
-        val adapter = ListaAdapterSeleccion(jugadoresEnPartida, contexto!!,this)
+        val adapter = ListaAdapterSeleccion(jugadoresEnPartida, contexto!!, this)
         listajugadores?.adapter = adapter
 
+        // Actualizar el Spinner con la lista actualizada de avatares disponibles
         actualizarSpinner()
-
     }
 
+    // Método para agregar un jugador a la lista
     private fun agregarJugadorLista() {
         val nombreJugador = view?.findViewById<EditText>(R.id.eT_nombreJugador)
         val avatarJugador = view?.findViewById<Spinner>(R.id.sp_avatares)
+
         if (nombreJugador?.text.toString().isEmpty()) {
+            // Mostrar un mensaje si el nombre está vacío
             Toast.makeText(contexto, getString(R.string.nombre_vacio), Toast.LENGTH_SHORT).show()
             return
         }
+
         if (nombreJugador?.text.toString() in jugadoresEnPartida.map { it.nombre }) {
+            // Mostrar un mensaje si el nombre ya está en uso
             nombreJugador?.setText("")
             Toast.makeText(contexto, getString(R.string.nombre_repetido), Toast.LENGTH_SHORT).show()
             return
         }
+
+        // Obtener la vista seleccionada en el Spinner
         val view = avatarJugador?.selectedView
-         val avatar=   view?.findViewById<ImageView>(R.id.iv_avatar)
-        val posicion =avatar?.tag.toString().toInt()
+        val avatar = view?.findViewById<ImageView>(R.id.iv_avatar)
+        val posicion = avatar?.tag.toString().toInt()
 
         // Crear un nuevo jugador
         val jugadorNuevo = Jugador(0, nombreJugador?.text.toString(), posicion.toString())
 
         // Agregar el nuevo jugador a la lista
-          jugadoresEnPartida.add(jugadorNuevo)
+        jugadoresEnPartida.add(jugadorNuevo)
 
         // Limpiar el campo de nombre y restablecer el Spinner a la primera posición
         nombreJugador?.setText("")
         avatarJugador?.setSelection(0)
     }
+
+    // Método para comenzar la partida
     private fun empezarPartida() {
         val conexion = Conexion(contexto!!)
-        val idPartida = conexion.agregarPartida(Partida(0,"partida",false))
-        val juegos = MutableList(4){ _ -> false}
+        val idPartida = conexion.agregarPartida(Partida(0, "partida", false))
+        val juegos = MutableList(4) { _ -> false }
+
         for (jugador in jugadoresEnPartida) {
+            // Agregar cada jugador a la base de datos
             conexion.agregarJugador(jugador)
-            val jugadorEnPartida = JugadorEnPartida(jugador.id_jugador, idPartida, "4_4",
-                jugadoresEnPartida[0]==jugador, juegos, jugador.avatar)
+
+            // Crear un objeto JugadorEnPartida
+            val jugadorEnPartida = JugadorEnPartida(
+                jugador.id_jugador,
+                idPartida,
+                "4_4",
+                jugadoresEnPartida[0] == jugador,
+                juegos,
+                jugador.avatar
+            )
             jugadorEnPartida.jugador = jugador
+
+            // Agregar el jugador a la partida
             conexion.agregarJugadorEnPartida(jugadorEnPartida)
         }
-        comunicador.empezarPartida(contexto!!,idPartida)
+
+        // Comunicar al fragmento padre que la partida ha comenzado
+        comunicador.empezarPartida(contexto!!, idPartida)
     }
-
-
-
 }
