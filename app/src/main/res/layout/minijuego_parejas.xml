@@ -8,33 +8,34 @@
 
     <FrameLayout
         android:id="@+id/fr_1"
-        android:layout_width="99dp"
-        android:layout_height="99dp"
-        android:layout_marginStart="84dp"
+        android:layout_width="119dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="64dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.363" />
 
     <FrameLayout
         android:id="@+id/fr_2"
-        android:layout_width="99dp"
-        android:layout_height="99dp"
-        android:layout_marginStart="64dp"
+        android:layout_width="117dp"
+        android:layout_height="116dp"
+        android:layout_marginStart="40dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/fr_1"
         app:layout_constraintStart_toEndOf="@+id/fr_1"
         app:layout_constraintTop_toTopOf="@+id/fr_1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <FrameLayout
         android:id="@+id/fr_3"
         android:layout_width="99dp"
         android:layout_height="99dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="28dp"
         android:foregroundGravity="center"
         app:layout_constraintEnd_toEndOf="@+id/fr_1"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="@+id/fr_1"
         app:layout_constraintTop_toBottomOf="@+id/fr_1" />
 

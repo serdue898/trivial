@@ -17,10 +17,13 @@
 
         <TextView
             android:id="@+id/t_enunciadoRepaso"
-            android:layout_width="0dp"
-            android:layout_height="378dp"
+            android:layout_width="360dp"
+            android:layout_height="277dp"
+            android:layout_marginTop="108dp"
             android:text="jdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiurjdkgrweilb luktwelri bwetrlo vkjweyrtl kgwl i7ert kgfwilert wuetri utghmf riwtrl ñurtñwelrot fglkurt kfgqweilr gsdfgweil7rt sdkfhgqweuilrt jkfgawuiletyl ylertl woergwleiur"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,7 +85,7 @@
             android:layout_width="145dp"
             android:layout_height="25dp"
             android:layout_marginTop="24dp"
-            android:text="Tcercer hueco"
+            android:text="Tercer hueco"
             app:layout_constraintEnd_toStartOf="@+id/sp_hueco2"
             app:layout_constraintStart_toStartOf="@+id/t_hueco2"
             app:layout_constraintTop_toBottomOf="@+id/t_hueco2" />

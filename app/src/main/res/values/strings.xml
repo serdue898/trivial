@@ -5,7 +5,7 @@
     <string name="mItm_guardar">Guardar Partida</string>
     <string name="mItm_numJugadores">Elegir el número de jugadores</string>
     <string name="mItm_instrucciones">Intrucciones del juego</string>
-    <string name="intrucciones">Mira que bien explicado esta el juego</string>
+    <string name="intrucciones">Para poder ganar el juego es necesario resonder al menos una pregunta de cada color correctamente y llegar a la casilla morada y acertar todas las perguntas. Cuando aciertes una pregunta podrás volver a lanzar, si fallas será el turno del siguiente jugador.</string>
     <string name="mItm_acerca">Acerca de...</string>
     <string name="acercaDe">Juego desarrollado por Sergio Ramiro y Carlos Montequi</string>
 
