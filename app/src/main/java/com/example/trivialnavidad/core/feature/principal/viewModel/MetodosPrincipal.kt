@@ -75,6 +75,7 @@ class MetodosPrincipal: ComunicadorPrincipal {
 
                     val partidas = Partidas("online")
                     partidas.cogerPartidas()
+                    Thread.sleep(200)
                     val fragmentManager = context.supportFragmentManager
                     fragmentManager.beginTransaction()
                         .replace(R.id.contenedor, partidas)
