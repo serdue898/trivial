@@ -78,7 +78,7 @@ class Principal : Fragment() {
             if (MainActivity.socket == null || !MainActivity.socket?.connected()!!) {
                 try {
                     // Intentar conectar el socket a la dirección especificada
-                    MainActivity.socket = IO.socket("http://ec2-18-214-100-33.compute-1.amazonaws.com:5000")
+                    MainActivity.socket = IO.socket("http://ec2-3-84-200-206.compute-1.amazonaws.com:5000")
                     MainActivity.socket?.connect()
                     sleep(100)
                 } catch (e: Exception) {
