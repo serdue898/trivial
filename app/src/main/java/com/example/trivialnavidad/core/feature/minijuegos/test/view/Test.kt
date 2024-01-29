@@ -102,7 +102,7 @@ class Test(
         if (correcto) puntos++
 
         if (final) {
-            terminarJuego(resultado = false, final = true)
+            terminarJuego(resultado = correcto, final = true)
         } else {
             if (puntos == 5) {
                 terminarJuego(correcto, false)
