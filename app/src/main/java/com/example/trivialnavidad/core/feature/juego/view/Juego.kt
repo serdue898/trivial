@@ -136,9 +136,9 @@ class Juego : Fragment() {
 
                     // Muestra un popup informando del ganador y permite salir de la partida.
                     val popup = AlertDialog.Builder(contexto as AppCompatActivity)
-                    popup.setTitle(getString(R.string.partida_ganada))
+                    popup.setTitle(contexto?.getString(R.string.partida_ganada))
                     popup.setCancelable(false)
-                    popup.setMessage(getString(R.string.jugador) + jugador.jugador?.nombre + getString(
+                    popup.setMessage(contexto?.getString(R.string.jugador) + jugador.jugador?.nombre + contexto?.getString(
                         R.string.ha_ganado_la_partida
                     ))
                     popup.setPositiveButton(contexto?.getString(R.string.aceptar)) { dialog, _ ->
